@@ -3,13 +3,13 @@
 <!-- config.xml reference: https://build.phonegap.com/docs/config-xml -->
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
-        id        = "com.digitalverve.APPinaut"
+        id        = "com.digitalverve.20002"
         version   = "1.0.1">
 
-    <name>APPinaut</name>
+    <name>20002</name>
 
     <description>
-        Der APPinaut ist eine Mobile Learning App. Im Multimediaformat und über Lernsets/Lernkarten kann Wissen den wissensdurstigen Nutzern des APPinaut angeboten werden.
+        Dies ist eine Mobile Learning App. Wissensdurstigen Nutzern werden Wissensinhalte im Multimediaformat und über Lernsets/Lernkarten angeboten.
     </description>
 
     <author href="http://www.digitalverve.de" email="info@digitalverve.de">
@@ -62,12 +62,12 @@
 	
 	<!--- DOCS: https://github.com/EddyVerbruggen/LaunchMyApp-PhoneGap-Plugin#4-url-scheme-hints -->
 	<gap:plugin name="nl.x-services.plugins.launchmyapp">
-	  <param name="URL_SCHEME" value="appinaut" />
+	  <param name="URL_SCHEME" value="20002" />
 	</gap:plugin>
 	<!--
 	<gap:plugin name="com.phonegap.plugins.facebookconnect">
 		<param name="APP_ID" value="608776825852280" />
-		<param name="APP_NAME" value="appinautmobilelogin" />
+		<param name="APP_NAME" value="20002mobilelogin" />
 	</gap:plugin>
 	-->
 	<!--
