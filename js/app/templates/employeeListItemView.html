@@ -1,0 +1,8 @@
+<table>
+	<% _.each(profiles, function(data) { %>
+	<tr>
+		<td><a href=""><%= data.get('firstName') %></a></td>
+		<td><a href=""><%= data.get('lastName') %></a></td>
+	</tr>
+	<% }); %>
+</table>

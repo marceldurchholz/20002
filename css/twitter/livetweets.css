@@ -1,0 +1,148 @@
+/* 
+	Important styles - (used by this app) 
+*/
+
+.tweet {
+	overflow: hidden;
+	clear: both;
+	text-align: left;
+	margin-bottom: 20px;
+	color: #55555;
+	
+	
+}
+.tweet.first {
+	border: none;
+	margin-bottom: 0px;
+}
+.tweet_foto {
+	float: left;
+	margin-right: 12px;
+}
+.tweet_text {
+	
+	line-height: normal;
+	font-size: 12px;
+}
+.tweet_text a {
+	color: #55555!important;
+}
+.tweet_text a:link {
+	color: #55555!important;
+}
+.tweet_text a:hover {
+	color: #55555!important;
+}
+.tweet_text a:active {
+	color: #55555!important;
+}
+.tweet_text a.profile {
+	color: #55555!important;
+	text-decoration: none;
+	font-weight: bold;
+}
+.tweet_text span {
+	display: block;
+	color: #55555!important;
+}
+/* 
+	General styling 
+*/
+
+
+
+#tweet_box {
+	margin: auto;
+	text-align: left;
+	height: 300px;
+	overflow: hidden;
+	
+	padding-top: 20px;
+	padding-bottom: 30px;
+}
+#box h1 {
+	text-transform: uppercase;
+	font-weight: bold;
+	font-size: 14px;
+	border: 1px solid #d4d4d4;
+	height: 38px;
+	background-image: url(img/title_bg.gif);
+	background-repeat: repeat-x;
+	line-height: 42px;
+	padding-left: 8px;
+	color: #5d5c5a;
+}
+.holder {
+	border: 1px solid #d4d4d4;
+	padding-top: 8px;
+	border-top: none;
+	max-height: 403px;
+	padding-bottom: 8px;
+}
+.customizeWindow {
+	font-size: 12px;
+	text-transform: none;
+	color: #000;
+	text-decoration: none;
+	float: right;
+	padding-right: 8px;
+}
+.customizeMe {
+	width: 280px;
+	height: 280px;
+	font-size: 12px;
+	border: 1px solid #d4d4d4;
+	padding: 8px;
+	line-height: 16px;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	background-color: #fff;
+	display: none;
+}
+.customizeMe h2 {
+	font-weight: bold;
+	font-size: 14px;
+	padding-bottom: 4px;
+}
+.customizeMe h2 a {
+	text-decoration: none;
+	float: right;
+	color: #000;
+}
+.customizeMe label {
+	color: #B64926;
+	margin-right: 7px;
+	display: inline-block;
+}
+.customizeMe input[type=text] {
+	border: 1px solid #d4d4d4;
+	font-size: 14px;
+	padding: 2px;
+	line-height: 17px;
+	width: 185px;
+	margin-bottom: 8px;
+}
+.customizeMe input[type=button] {
+	margin-top: 8px;
+}
+.customizeMe strong {
+	margin-top: 28px;
+	display: block;
+	font-weight: bold;
+	color: #333;
+}
+.customizeMe ul {
+	margin-bottom: 8px;
+}
+.customizeMe ul li {
+	border-bottom: 1px solid #d4d4d4;
+	line-height: 24px;
+	font-size: 11px;
+	position: relative;
+}
+.customizeMe ul li span {
+	color: #666;
+	position: absolute;
+	left: 100px;
+}

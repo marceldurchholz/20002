@@ -1,0 +1,39 @@
+<h3 class="ui-bar ui-bar-b" style="border-top-width:0px;text-align:center;">Media hinzufügen (Schritt 1 von 2)</h3>
+
+<div id="videobox" style="width:100px;height:100px;">
+	<video id='video_player' controls style='width:100px;height:100px;'></video>
+</div>
+<div style="clear:both;float:none;">
+
+<div style="padding:15px;overflow:visible;z-index:999;text-align:center;">
+
+	<!-- 
+	<p><b>Los geht's!</b></p>
+	<p>Über diese Funktion können Sie eine neue Video- oder Audiodatei aufnehmen, direkt in die Mobile Learning Community hochladen und über den APPinaut anbieten.</p> 
+	-->
+	
+		<!--
+		<div id="uploadstatusbar" style="font-size:18px;">0 %</div>
+		-->
+		<br>
+		
+		<a id="captureVideoRecordButton" name="captureVideoRecordButton" data-theme="d" data-role="button">Video aufnehmen</a>
+		<!-- <br> -->
+		<!--
+		<a id="downloadVideoToggleButton" name="downloadVideoToggleButton" class="downloadVideoToggleButton" data-theme="a" data-role="button">Media verknüpfen</a>
+		<div id="downloadVideoInputDiv">
+			<a id="downloadVideoButton" name="downloadVideoButton" data-theme="d" data-role="button">Download starten</a>
+			<input style="text-align:center;" value="" data-mini="true" type="text" name="downloadVideoUrl" id="downloadVideoUrl" placeholder="http://www.domain.com/pfad/videodatei.mp4"/>
+			<a id="downloadVideoToggleButton" name="downloadVideoToggleButton" class="downloadVideoToggleButton" data-theme="a" data-role="button">Abbrechen</a>
+		</div>
+		-->
+		<a id="submitbutton" name="submitbutton" data-theme="b" data-role="button">Weiter</a>
+		
+		<form id="submitform" action="#videos/record" method="post">
+			<input type="hidden" id="camera_file" name="camera_file" value=""></span>
+		</form>
+		
+		<span id="camera_status" style="width:0px;height:0px;overflow:hidden;"></span>
+		<div id="debugdiv" style="width:0px;height:0px;overflow:hidden;"></div>
+			
+</div>

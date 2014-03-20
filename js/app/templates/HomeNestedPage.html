@@ -1,0 +1,33 @@
+<!-- HTML Template -->
+<div class="app">
+	<h1>Homepage</h1>
+	<div id="devicereadydiv" class="blink">
+		<p class="event listening">Connecting to Device</p>
+		<p class="event received">Device is Ready</p>
+	</div>
+</div>
+
+<div id='tests'>
+
+	<input type='button' onclick="test_SplashScreen()" value='SplashScreen'/>
+	<input type='button' class="fblogin" value='fblogin()'/>
+	
+	<h4>CAMERA</h4>
+	<input type='button' onclick="getPicture();" value='camera.getPicture()'/>
+	<div style='width:100%; height:100px;'>
+		<img width="100" id="camera_image">
+		<img width="100" id="camera_image_b">
+	</div>
+	<h4>VIDEO</h4>
+	<input type='button' onclick="captureVideoAction();" value='captureVideoAction()'/>
+	<div id="videobox">
+		<video id='video_player' controls style='width:100%; height:100px;'></video>
+	</div>
+	<h4>Width: <span id="width"></span>, Height: <span id="height"></span>, Color Depth: <span id="colorDepth"></span></h4>
+	<h4>User-Agent: <span id="user_agent"></span></h4>
+	<h4>canvas: <canvas id="canvas" width="1" height="1"></canvas></h4>
+	<h4>camera_status: <span id="camera_status"></span></h4>
+	<h4>imgage-options:</h4>
+	<div id="image-options"></div>	
+	<input type='button' onclick="test_SplashScreen()" value='SplashScreen'/>
+</div>

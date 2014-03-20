@@ -1,0 +1,35 @@
+<h3 class="ui-bar ui-bar-c" style="border-top-width:0px;text-align:center;">Termin- und Seminarinformationen</h3>
+
+<div style="margin-bottom:50px;padding:15px;width;100%;">
+
+<h3><%= plan.title %></h3>
+
+<div class="ui-grid-b" style="width:100%;">
+	<div class="ui-block-a" style="width:50%;">Wissensanbieter</div>
+	<div class="ui-block-b" style="width:50%;"><%= plan.uploader %></div>
+</div>
+<div class="ui-grid-b" style="width:100%;">
+	<div class="ui-block-a" style="width:50%;">Veranstaltungsbeginn</div>
+	<div class="ui-block-b" style="width:50%;"><%= plan.start %></div>
+</div>
+<div class="ui-grid-b" style="width:100%;">
+	<div class="ui-block-a" style="width:50%;">Veranstaltungsende</div>
+	<div class="ui-block-b" style="width:50%;"><%= plan.end %></div>
+</div>
+<div class="ui-grid-b" style="width:100%;">
+	<div class="ui-block-a" style="width:50%;">Themengebiet</div>
+	<div class="ui-block-b" style="width:50%;"><%= plan.topic %></div>
+</div>
+<div class="ui-grid-b" style="width:100%;">
+	<div class="ui-block-a" style="width:50%;">Kosten/Teilnahmegebühr</div>
+	<div class="ui-block-b" style="width:50%;"><%= plan.pricetext %></div>
+</div>
+
+<p><strong><%= plan.subtitle %></strong></p>
+
+<p><img src="<%= plan.thumbnailurl %>" style="width:100%;"></p>
+
+<p><%= plan.description %></p>
+
+<p><a id="submitbutton" name="submitbutton" data-theme="c" data-role="button" rel="external" target="_blank" href="<%= plan.planurl %>">Informationen und Anmeldung</a></p>
+</div>

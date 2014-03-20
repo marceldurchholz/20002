@@ -1,0 +1,69 @@
+<h3 class="ui-bar ui-bar-a" style="border-top-width:0px;text-align:center;">Benutzerinformationen</h3>
+
+<div style="margin-bottom:50px;padding:15px;width;100%;">
+
+	<h3><%= user.fullname %></h3>
+
+	<div class="ui-grid-b" style="width:100%;">
+		<div class="ui-block-a" style="width:30%;"><img src="<%= user.pictureurl %>" style="width:90%;"></div>
+		<div class="ui-block-b" style="width:70%;">
+			<p><%= user.slogan %> &nbsp;</p>
+			<p><%= user.username %> &nbsp;</p>
+			<!-- <p><%= user.registered %> &nbsp;</p> -->
+			<!-- <p><%= user.active %> &nbsp;</p> -->
+			<div class="containing-element">
+				<select name="activeslider" id="activeslider" data-role="slider">
+					<option value="off">Zugang deaktiviert</option>
+					<option value="on">Zugang aktiv</option>
+				</select>
+			</div>
+		</div>
+	</div>
+	<p><%= user.perstext %></p>
+
+	<fieldset data-role="controlgroup">
+		<legend><h5>Interessen</h5></legend>
+		
+		<% _.each(user.interests, function(interests) { %>
+			<input <%= interests.status %> data-mini="true" type="checkbox" name="checkbox-v-<%= interests.id %>" id="checkbox-v-<%= interests.id %>"><label for="checkbox-v-<%= interests.id %>"><%= interests.name %></label>
+		<% }); %>
+		
+		<!--
+		<% _.each(user.interests, function(interests) { %>
+			<input data-mini="true" type="checkbox" name="interest-<%= user.id %>-<%= interests.id %>" id="interest-<%= user.id %>-<%= user.page %>-<%= interests.id %>">
+			<label for="interest-<%= user.id %>-<%= user.page %>-<%= interests.id %>" style="font-weight:normal;"><%= interests.text %></label>
+			<button data-mini="true"><%= interests.text %></button>
+		<% }); %>
+		-->
+	</fieldset>
+
+	<!--
+	<div class="ui-grid-b" style="width:100%;">
+		<div class="ui-block-a" style="width:50%;">Wissensanbieter</div>
+		<div class="ui-block-b" style="width:50%;"><%= user.uploader %></div>
+	</div>
+	<div class="ui-grid-b" style="width:100%;">
+		<div class="ui-block-a" style="width:50%;">Themengebiet</div>
+		<div class="ui-block-b" style="width:50%;"><%= user.topic %></div>
+	</div>
+
+	<p><strong><%= user.subtitle %></strong></p>
+
+	<p><img src="<%= user.pictureurl %>" style="width:100%;"></p>
+
+	<p><%= user.description %></p>
+	-->
+
+	<!--
+	<p><a data-userid="<%= user.id %>" id="deletebutton" name="deletebutton" data-theme="d" data-role="button" href="#cards/start/view/<%= user.id %>/1">Benutzer und Zugang löschen</a></p>
+	-->
+	
+	<div class="clear"></div>
+	<hr>
+	<div class="clear"></div>
+	<ul data-role="listview" data-inset="true" data-theme="d" data-dividertheme="d">
+		<li><a href="#">Benutzer und Daten löschen</a></li>
+	</ul>
+	<strong>Achtung! Hiernach werden diese Daten unwiderruflich gelöscht. Auch ein Zugang zum System ist nicht mehr möglich!</strong>
+
+</div>

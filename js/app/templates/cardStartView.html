@@ -1,0 +1,53 @@
+<h3 class="ui-bar ui-bar-f" style="border-top-width:0px;text-align:center;">Lernkarte</h3>
+
+<div style="margin-bottom:50px;padding:15px;width;100%;">
+
+	<h3><%= card.title %></h3>
+	<p><strong><%= card.subtitle %></strong></p>
+
+
+	<div class="ui-grid-b" style="width:100%;">
+		<div class="ui-block-a" style="width:50%;">Wissensanbieter</div>
+		<div class="ui-block-b" style="width:50%;"><%= card.uploader %></div>
+	</div>
+	<div class="ui-grid-b" style="width:100%;">
+		<div class="ui-block-a" style="width:50%;">Themengebiet</div>
+		<div class="ui-block-b" style="width:50%;"><%= card.topic %></div>
+	</div>
+	
+	<!--
+	<p>>> <%= card.page_id %></p>
+	<p>>> <%= card.id %></p>
+	<p>>> <%= card.page %></p>
+	<p>>> <%= card.question %></p>
+	-->
+	
+	<br>
+	
+	<form id="submitform" action="#cards/start/view/<%= card.cardid %>/<%= card.nextpage %>" method="post" class="ui-body ui-body-a ui-corner-all" style="b/order:0;">
+		<input type="hidden" id="id" name="id" value="<%= card.id %>">
+		<input type="hidden" id="page" name="page" value="<%= card.page %>">
+		<p>
+		<!--
+		<div data-role="fieldcontain">
+			<label for="name">Textfeld:</label>
+			<input type="text" name="textfeld" id="textfeld" value=""/>
+		</div>
+		-->
+		<div data-role="controlgroup" style="border:0;">
+			<legend style="font-weight:bold;"><%= card.question %></legend>
+			<% console.log(card.answers) %>
+			<% _.each(card.answers, function(answers) { %>
+				<input type="checkbox" name="answer-<%= card.id %>-<%= card.page %>-<%= answers.id %>" id="answer-<%= card.id %>-<%= card.page %>-<%= answers.id %>">
+				<label for="answer-<%= card.id %>-<%= card.page %>-<%= answers.id %>" style="font-weight:normal;"><%= answers.text %></label>
+			<% }); %>
+		</div>
+		</p>
+		<fieldset class="ui-grid-a">
+			<div class="ui-block-a"><a data-cardid="<%= card.id %>" id="backbutton" name="backbutton" data-theme="f" data-role="button" href="#cards/start/view/<%= card.cardid %>/<%= card.lastpage %>">Zurück</a></p></div>
+			<div class="ui-block-b"><a data-cardid="<%= card.id %>" id="submitanswer" name="submitanswer" data-theme="b" data-role="button">Weiter</a></p></div>	   
+		</fieldset>
+		<!-- <button type="submit" data-theme="b" name="submit" value="submit-value">Absenden</button> -->
+	</form>
+	
+</div>

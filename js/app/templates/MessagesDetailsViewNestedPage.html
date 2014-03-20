@@ -1,0 +1,32 @@
+<div id="dyndiv">
+
+<% _.each(messages.data, function(message) { %>
+	<div id="MessagesDetailsNestedViewDiv_<%= message.id %>">
+		<ul id="<%= message.id %>" class="MessagesDetailsViewListItem noswipeToDelete nofadeWhenOffsite" data-role="listview" data-inset="true" data-icon="false" <% if(message.sender!=me.id) { %> data-theme="b" <% } %> style="height:auto;display:block;<% if(message.sender!=me.id) { %> padding-right:20%; <% } else { %> padding-left:20%; <% } %> b/order:10px solid #000;" >
+			<% if(message.fullname!=undefined && message.fullname.trim()!="") { %>
+				<li style="font-size:9px;opacity:0.5;">
+					<%= message.fullname %>
+				</li>
+			<% } %>
+			<li style="<% if (message.unread!=1) { %> opacity:0.75 !important; <% } %> ">
+				<!-- <a href="javascript:void(0);"> -->
+					<!--<h2>Stephen Weber</h2>-->
+					<p style="white-space:normal;padding:0px;margin:0px;font-size:14px;" class="no-resizetext" >
+						<%= message.content %>
+					</p>
+					<!-- <p class="ui-li-aside"><strong>6:24</strong>PM</p> -->
+				<!-- </a> -->
+			</li>
+		</ul>
+	</div>
+	<script type="text/javascript">
+	   $(function() {
+			// alert('<%= message.id %>');
+			$('#MessagesDetailsNestedViewDiv_<%= message.id %>').trigger('create');
+			$('#MessagesDetailsNestedViewDiv').find("ul").listview().listview('refresh');
+			// $('#page-content').animate({scrollTop:scrollTo},'fast');
+	   });
+	</script>
+<% }); %>
+
+</div>

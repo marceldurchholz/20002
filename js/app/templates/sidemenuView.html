@@ -1,0 +1,11 @@
+<li class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-li-has-count ui-li-has-icon ui-first-child <% if (sidemenu.userfriendly=="Abmelden") { %>ui-btn-hover-d<% } else {  %>ui-btn-up-e<% } %>" data-id="<%= sidemenu.id %>" data-theme="e" data-wrapperels="div" data-iconshadow="false" data-shadow="false" data-corners="false">
+	<div class="ui-btn-inner ui-li">
+		<div class="ui-btn-text">
+			<a data-href="#<%= sidemenu.urloffline %>" class="ui-link-inherit contentLink" style="font-size:0.8em;font-weight:normal;">
+				<img class="ui-li-icon ui-li-thumb" alt="<%= sidemenu.userfriendly %>" title="<%= sidemenu.userfriendly %>" src="<%= sidemenu.icon %>">
+				<% if (sidemenu.id=="f105e6f931f1482a") { %><%= me.fullname %><% } else { %><%= sidemenu.userfriendly %><% } %>
+			</a>
+		</div>
+		<span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span>
+	</div>
+</li>

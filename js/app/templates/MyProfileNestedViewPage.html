@@ -1,0 +1,152 @@
+<div style="width:100%;display:inline-block;float:none;clear:both;">
+	<div style="width:30%;float:left;clear:none;display:inline-block;padding-right:3%;">
+		<img style="width:100%;max-height:100%;max-width:160px;" src="images/avatar.jpg">
+	</div>
+	<div style="width:50%;float:left;clear:none;display:inline-block;padding-right:2%;">
+		<input style="width:100%;" data-theme="a" data-mini="true" type="text" name="fullname" id="fullname" value="<%= user.fullname %>" placeholder="Name erforderlich..."/>
+		<div class="clear resizetext emptyWarningDiv" style="color:red;display:none;">Es muss ein Name hinterlegt werden.</div>
+		<div class="clear"></div>
+		<div style="color:#606060;font-size:14px;font-weight:normal;padding:5px 5px;line-height:1.5em;" class="resizetext"><!--<%= user.username %>--><% if( user.provider > -1 ) { %>Anbieter-ID:<br><%= user.id %><% } %></div>
+		<div class="clear"></div>
+		<!-- <input style="width:100%;" data-theme="a" no-data-role="none" data-mini="true" type="text" name="username" id="username" value="<%= user.username %>" placeholder="Ihr Benutzername/E-Mail"/> -->
+		<!-- <p><%= user.username %></p> -->
+		<div style="display:none;">
+			<input style="width:100%;" data-theme="a" no-data-role="none" data-mini="true" type="text" name="slogan" id="slogan" value="<%= user.slogan %>" placeholder="Motto oder Slogan"/>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div style="width:9%;float:right;clear:none;display:inline-block;">
+		<div style="line-height:1.3em;width:100%;height:auto;max-height:165px;float:left;clear:both;display:inline-block;">
+			<!-- <img style="width:100%;height:auto;max-height:50px;max-width:50px;display:block;clear:both;" src="images/star-half-gold.png"> -->
+			<img style="width:100%;height:auto;max-height:50px;max-width:50px;display:block;clear:both;float:none;" src="images/star-<% if(user.level<3) { %>grey<% } else { %>gold<% } %>.png">
+			<img style="width:100%;height:auto;max-height:50px;max-width:50px;display:block;clear:both;float:none;" src="images/star-<% if(user.level<2) { %>grey<% } else { %>gold<% } %>.png">
+			<img style="width:100%;height:auto;max-height:50px;max-width:50px;display:block;clear:both;float:none;" src="images/star-<% if(user.level<1) { %>grey<% } else { %>gold<% } %>.png">
+		</div>
+	</div>
+</div>
+
+<div class="clear"></div>
+<div class="resizetext" style="font-size:12px;">Helfen Sie den APPinaut® Wissensanbietern:</div>
+<div class="clear"></div>
+<textarea style="width:100%;height:<%= Math.round($(window).height()/5) %>px;max-height:300px;min-height:80px;" data-theme="a" no-data-role="none" data-mini="false" type="text" placeholder="Welche Themen begeistern Sie und welches Wissen interessiert Sie?" name="perstext" id="perstext"><%= user.perstext %></textarea>
+<div class="clear"></div>
+<hr>
+
+<!--
+<%= user.id %> <br>
+<%= user.pictureurl %> <br>
+<%= user.fullname %> <br>
+
+<div class="clear"></div>
+-->
+<!-- <div id="listRow" class="listRow" data-id="<%= user.id %>"> -->
+<!--
+<div data-id="<%= user.id %>">
+	<div style="float:left;border:1px solid #909090;width:20%;">
+		<img style="width:100%;" src="<%= user.pictureurl %>">
+	</div>
+	<div style="float:right;padding-left:5px;border:1px solid #909090;width:75%;">
+		<div style="float:left;clear:both;font-size:10px;width:100%;"><%= user.fullname %></div>
+		<div style="float:left;clear:both;font-size:10px;width:100%;"><%= user.slogan %></div>
+		<div style="float:left;clear:both;font-size:10px;width:100%;"><%= user.perstext %></div>
+	</div>
+</div>
+-->
+<!-- </div> -->
+
+<div class="clear"></div>
+<ul style="display:none;" data-role="listview" data-inset="true" data-theme="a" data-dividertheme="a">
+	<!-- 
+	<li><a href="#connections"><img src="images/icon-flat-connect.png" style="height:14px;" alt="Verbindungen" class="ui-li-icon">Verbindungen <span class="ui-li-count">68</span></a></li>
+	-->
+	<li><a href="#videos"><!--<img src="images/icon-multimedia-bw-16.png" style="height:14px;" alt="Mediathek" class="ui-li-icon">-->Mediathek<!--<span class="ui-li-count">4</span>--></a></li>
+	<li><a href="#cards"><!--<img src="images/icon-calendar-bw-16.png" style="height:14px;" alt="Lernsets" class="ui-li-icon">-->Lernsets<!--<span class="ui-li-count">18</span>--></a></li>
+	<li><a href="#planer"><!--<img src="images/icon-calendar-bw-16.png" style="height:14px;" alt="Veranstaltungen" class="ui-li-icon">-->Veranstaltungen<!--<span class="ui-li-count">8</span>--></a></li>
+</ul>
+
+<!--
+<input type="button" value="Anbieter-Statusupgrade" data-icon="plus" data-theme="b">
+<input type="button" value="Ihr Personal APPinaut®" data-icon="plus" data-theme="b">
+-->
+
+<div data-role="collapsible" data-theme="b" data-content-theme="a">
+	<h6>Interessensbereiche filtern</h6>
+	<!--<legend><h6>Interessengebiete</h6></legend>-->
+	<% _.each(user.interests, function(interests) { %>
+		<input data-inset="false" <%= interests.checked %> <%= interests.status %> data-mini="true" type="checkbox" name="checkbox-v-<%= interests.id %>" id="checkbox-v-<%= interests.id %>">
+		<label for="checkbox-v-<%= interests.id %>"><%= interests.name %></label>
+	<% }); %>
+
+	<!--
+	<input data-mini="true" type="checkbox" name="checkbox-v-2h" id="checkbox-v-2h"><label for="checkbox-v-2h">Marketing</label>
+	<input checked data-mini="true" type="checkbox" name="checkbox-v-2a" id="checkbox-v-2a"><label for="checkbox-v-2a">Humor</label>
+	<input checked data-mini="true" type="checkbox" name="checkbox-v-2d" id="checkbox-v-2d"><label for="checkbox-v-2d">Persönlichkeitsentwicklung</label>
+	<input data-mini="true" type="checkbox" name="checkbox-v-2f" id="checkbox-v-2f"><label for="checkbox-v-2f">Rhetorik</label>
+	<input checked data-mini="true" type="checkbox" name="checkbox-v-2e" id="checkbox-v-2e"><label for="checkbox-v-2e">Selbstbewußtsein</label>
+	<input data-mini="true" type="checkbox" name="checkbox-v-2b" id="checkbox-v-2b"><label for="checkbox-v-2b">Stimme</label>
+	<input data-mini="true" type="checkbox" name="checkbox-v-2g" id="checkbox-v-2g"><label for="checkbox-v-2g">Suchmaschinenoptimierung</label>
+	<input checked data-mini="true" type="checkbox" name="checkbox-v-2c" id="checkbox-v-2c"><label for="checkbox-v-2c">Verkauf</label>
+	-->
+</div>
+
+<div class="clear"></div>
+
+<div id="restrictedArea">
+
+	<div data-role="collapsible" data-theme="b" data-content-theme="a">
+		<h2>APPinaut Coins erwerben</h2>
+		<ul data-iconpos="left" data-role="listview" data-filter="false">
+			<li data-iconpos="left" data-icon="info"><a style="font-size:0.8em;font-weight:bold;">Sie besitzen <%= user.credits %> APPinaut® Coins</a></li>
+			<li data-iconpos="left" data-icon="plus"><a class="purchasebtn" data-iapid="com.digitalverve.APPinaut.250APP359T4" style="font-size:0.8em;font-weight:normal;">250 APPinaut® Coins (3,59 Euro)</a></li>
+			<li data-iconpos="left" data-icon="plus"><a class="purchasebtn" data-iapid="com.digitalverve.APPinaut.750APP799T9" style="font-size:0.8em;font-weight:normal;">750 APPinaut® Coins (7,99 Euro)</a></li>
+			<li data-iconpos="left" data-icon="plus"><a class="purchasebtn" data-iapid="com.digitalverve.APPinaut.2500APP2499T28" style="font-size:0.8em;font-weight:normal;">2.500 APPinaut® Coins (24,99 Euro)</a></li>
+			<li data-iconpos="left" data-icon="plus"><a class="purchasebtn" data-iapid="com.digitalverve.APPinaut.6500APP4999T51" style="font-size:0.8em;font-weight:normal;">6.500 APPinaut® Coins (49,99 Euro)</a></li>
+			<li data-iconpos="left" data-icon="plus"><a class="purchasebtn" data-iapid="com.digitalverve.APPinaut.25000APP17999T72" style="font-size:0.8em;font-weight:normal;">25.000 APPinaut® Coins (179,99 Euro)</a></li>
+		</ul>
+	</div>
+	
+	<div class="clear"></div>
+
+	<% if( user.provider < 0 ) { %>
+		<div data-role="collapsible" data-theme="b" data-content-theme="a">
+			<h2>Sie sind Wissensanbieter?<!-- <%= user.provider %> - Upgrades und Personal APPinaut®--></h2>
+			<ul data-iconpos="left" data-role="listview" data-filter="false">
+					<li data-iconpos="left" data-icon="info">
+						<!-- <a class="external" href="http://www.appinaut.com/" style="font-size:0.8em;font-weight:bold;">Werden Sie Teil des APPinaut®</a> -->
+						<a style="font-size:0.8em;font-weight:bold;">Besuchen Sie www.appinaut.de</a>
+					</li>					
+				<% if( user.provider < 0 && 1==2 ) { %>
+					<li data-icon="plus"><a class="purchasebtn" data-iapid="com.digitalverve.APPinaut.UPGPROVAPP269T3" style="font-size:0.8em;font-weight:normal;">1 Monat anbieten (2,69 Euro)</a></li>
+					<!--
+					<li data-icon="plus"><a class="purchasebtn" data-iapid="com.digitalverve.APPinaut.UPGPROVAPP1999T22" style="font-size:0.8em;font-weight:normal;">1 Jahr anbieten inkl. 1 Testmonat (19,99 Euro)</a></li>
+					-->
+				<% } else if (1==2) { %>
+					<li data-iconpos="left" data-icon="info"><a class="purchasebtn" style="font-size:0.8em;font-weight:bold;">Sie sind bereits APPinaut® Anbieter</a></li>
+				<% } %>
+				<!--
+				<li data-iconpos="left" data-icon="arrow-r"><a class="purchasebtn" data-iapid="com.digitalverve.APPinaut.UPGPERSAPP12999T66" style="font-size:0.8em;font-weight:normal;">Personal APPinaut® (129,99 Euro qrtl.)</a></li>
+				<li data-iconpos="left" data-icon="arrow-r"><a class="purchasebtn" data-iapid="com.digitalverve.APPinaut.UPGPERSAPP39999T81" style="font-size:0.8em;font-weight:normal;">Personal APPinaut® (399,99 Euro jhrl.)</a></li>
+				<li data-iconpos="left" data-icon="arrow-r"><a class="purchasebtn" data-iapid="com.digitalverve.APPinaut.UPGB2BAPP9999T62" style="font-size:0.8em;font-weight:normal;">APPinaut® B2B Programm (99,99 Euro jhrl.)</a></li>
+				-->
+			</ul>
+		</div>
+	<% } %>
+</div>
+
+<hr>
+<div class="clear"></div>
+
+<div style="float:right;">
+	<a style="color:red;" href="#logout">Abmelden</a>
+</div>
+<div style="float:left;">
+	<a id="showdeletearea" href="#">Zugang löschen</a>
+</div>
+
+<div class="clear"></div>
+<div id="delaccuntarea">
+	<strong>Achtung! Hiernach werden diese Daten unwiderruflich gelöscht. Ein Login ist nicht mehr möglich!</strong>
+	<ul data-role="listview" data-inset="true" data-theme="d" data-dividertheme="d">
+		<li data-icon="alert" data-mini="true"><a id="deletemyaccountbtn" href="#">Ja, meine Daten bitte löschen.</a></li>
+	</ul>
+</div>

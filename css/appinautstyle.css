@@ -1,0 +1,122 @@
+
+/*!
+* APPinaut Mobile CSS 0.9
+* http://appinaut.com
+*
+* Copyright 2013 DigitalVerve - Digital Solutions
+* http://digitalverve.de
+*
+*/
+
+
+/* MAIN */
+/*-----------------------------------------------------------------------------------------------------------*/
+.scrollable {
+	overflow-y: scroll !important;
+	-webkit-overflow-scrolling: touch !important;
+	background: url(../images/quadbg001.jpg) no-repeat center center fixed; 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+/* iOS specific fix, don't use it on Android devices */
+.scrollable > * {
+	-webkit-transform: translateZ(0px) !important;
+}
+
+.modalWindow {
+	width: 100%;
+		height: 100%;
+		position: absolute;
+		z-index: 1500;
+		b/ackground: #26466D;
+		background: url(../images/quadbg001.jpg) no-repeat center center fixed; 
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+		opacity: 1;
+}
+
+.ui-loader{
+	z-index: 1501;
+}
+#body {
+	background-color:#FFF;
+	overflow:hidden !important;
+	-ms-user-select: none;
+	-o-user-select: none;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+}
+#flexiblecontent {
+	b/ackground-color:#333 !important;
+	position:fixed !important;
+	t/op:47px;
+}
+.ui-page-active {
+	position:fixed !important;
+	top:0px !important;
+}
+#menuelementdiv {
+	background-color:#333;
+	position:fixed !important;
+	top:0px !important;
+	margin-top:46px !important;
+	width:220px !important;
+	z-index:0 !important;
+	height:100% !important;
+	overflow-y:auto;
+}
+#page-content {
+	position:fixed !important;
+	t/op:47px;
+	b/ackground-color:#fff;
+	margin:0px !important;
+	padding:0px !important;
+	height:100% !important; 
+	width:100% !important;
+	min-height:100% !important;
+}
+.containing-element .ui-slider-switch { 
+	width: 100%;
+}
+
+.blink_me {
+	-webkit-animation-name: blinker;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation-iteration-count: infinite;
+	
+	-moz-animation-name: blinker;
+	-moz-animation-duration: 1s;
+	-moz-animation-timing-function: linear;
+	-moz-animation-iteration-count: infinite;
+	
+	animation-name: blinker;
+	animation-duration: 1s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+}
+
+@-moz-keyframes blinker {  
+	0% { opacity: 1.0; }
+	50% { opacity: 0.0; }
+	100% { opacity: 1.0; }
+}
+
+@-webkit-keyframes blinker {  
+	0% { opacity: 1.0; }
+	50% { opacity: 0.0; }
+	100% { opacity: 1.0; }
+}
+
+@keyframes blinker {  
+	0% { opacity: 1.0; }
+	50% { opacity: 0.0; }
+	100% { opacity: 1.0; }
+}

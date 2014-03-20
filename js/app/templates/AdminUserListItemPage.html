@@ -1,0 +1,12 @@
+<li data-topic="<%= user.username %>">
+	<a href="#admin/users/details/<%= user.id %>">
+		<img style="padding:5px;width:70px !important;height:70px !important;" src="<%= user.pictureurl %>" />
+		<h3><%= user.username %></h3>
+		<p><%= user.fullname %></p>
+		<!--
+		<p><%= user.registered %>: <%= user.pictureurl %></p>
+		<p><%= user.credits %></p>
+		-->
+		<!-- <p class="ui-li-aside"><strong></strong> <%= user.price %> €</p> -->
+	</a>
+</li>

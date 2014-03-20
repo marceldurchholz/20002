@@ -1,0 +1,22 @@
+<div id="MessagesNestedViewDiv" class="MessagesNestedViewDiv" style="margin-bottom:50px;p/adding:15px;">
+	<ul data-filter="true" data-filter-placeholder="Suchfilter..." data-filter-theme="a" data-count-theme="none" data-role="listview" data-theme="a" data-divider-theme="a" data-role="listview" style="max-height:80px !important;height:80px !important;">
+		<% _.each(messages.data, function(message) { if (message) { %>
+			<% if(message.display==1 && message.fullname!="" && message.fullname!=undefined) { %>
+				<li data-cat="messages" data-id="<%= message.id %>" class="swipeToDelete" style="max-height:60px !important;b/order:10px solid #000;p/adding-top:50px;">
+					<% if(message.unread>0) { %> <span class="ui-li-count" style="font-weight:normal;f/ont-size:12px;"><!--<%= message.unread %> / -->&nbsp;<%= message.anzahl %>&nbsp;</span><% } %>
+					<a class="showMessageDetailsLink" href="#messages/details/view/<%= message.replyto %>" style="padding-left:80px;">
+						<img style="padding:8px 0px 8px 20px;height:40px !important;max-height:40px !important;max-width:40px !important;" src="<% if(message.unread>0) { %>images/icon-message-unread-60.png<% } else { %>images/icon-message-read-60.png<% } %>" />
+						<h6 style="padding:0px 0px 10px 0px;margin:0;"><!-- <%= message.unread %> / <%= message.sender %> / <%= message.receiver %> / --><%= message.fullname %>
+						
+						<!--
+						<% if(message.receiver==me.id) { %>  <%= message.fullname %>  <% } else { %>  <%= me.fullname %>  <% } %>
+						-->
+						
+						</h6>
+						<p><%= message.content %></p>
+					</a>
+				</li>
+			<% } %>			
+		<% }}); %>
+	</ul>
+</div>

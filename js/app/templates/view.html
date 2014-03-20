@@ -1,0 +1,130 @@
+<div class="app">
+	<h1>Homepage</h1>
+	<div id="devicereadydiv" class="blink">
+		<p class="event listening">Connecting to Device</p>
+		<p class="event received">Device is Ready</p>
+	</div>
+</div>
+<div id='tests'>
+
+	<input type='button' class="fblogin" value='fblogin()'/>
+
+	<!--
+	<input type='button' id='updateProfileDataBtn' value='updateProfileData'/>
+	<%= modelData.version %> <br>
+	-->
+
+	<!--
+	<img id="profilePicture" style="height:100px;" src="<%= modelData.src %>">
+	-->
+	<br><br>
+	
+	<ul>
+		<% if (modelData.id) { %>
+			<input type='button' class="logout" value='logout()'/>
+			<!-- <li><a href="#" class="logout">Logout</a></li> -->
+			<li><a href="#me">
+				<img src="https://graph.facebook.com/<%= modelData.id %>/picture?width=150&height=150"/> <br>
+				<%= modelData.lastname %> <br>
+			</a></li>
+			<li>
+				<%= modelData.id %> <br>
+				<%= modelData.first_name %> <br>
+				<%= modelData.last_name %> <br>
+				<%= modelData.src %> <br>
+				<img id="profilePicture" style="height:100px;" src="<%= modelData.src %>"> <br>
+			</li>
+		<% } else { %>
+			<input type='button' class="login" value='login()'/>
+			<!-- <li><a href="#" class="login">Login</a></li> -->
+		<% } %>
+	</ul>
+	
+	<h4>Local Database Storage</h4>
+	<!--
+	<div class="row">
+		<div class="span4">
+			<div class="well">
+				<a id="sync" href="#" class="btn"><i class="icon-refresh"></i> Sync with Server</a>
+				<p>Get changes from server and update local database accordingly. Requires network connectivity.</p>
+			</div>
+		</div>
+		<div class="span4">
+			<div class="well">
+				<a id="reset" href="#" class="btn"><i class="icon-trash"></i> Reset Local Database</a>
+				<p>Drops the employee table in the local SQLite database. Does not require network connectivity.</p>
+			</div>
+		</div>
+		<div class="span4">
+			<div class="well">
+				<a id="create" href="#" class="btn"><i class="icon-trash"></i> Create Local Database</a>
+				<p>Creates a local SQLite database. Does not require network connectivity.</p>
+			</div>
+		</div>
+		<div class="span4">
+			<div class="well">
+				<a id="fill" href="#" class="btn"><i class="icon-fill"></i> Fill Local Database</a>
+				<p>Fill some rows from the employee table in the local SQLite database. Does not require network connectivity.</p>
+			</div>
+		</div>
+		<div class="span4">
+			<div class="well">
+				<a id="render" href="#" class="btn"><i class="icon-list"></i> Render List</a>
+				<p>Render the employee list using the data from the local SQLite database. Does not require network connectivity.</p>
+			</div>
+		</div>
+	</div>
+	-->
+	<div class="row">
+		<div class="span12">
+			<textarea id="log" style="width:100%" rows="20"></textarea>
+			<!-- 
+			<a id="clearLog" class="btn"><i class="icon-remove"></i> Clear</a>
+			-->
+		</div>
+	</div>
+	<div class="row">
+		<div class=span12>
+			<table class="table table-bordered">
+				<thead>
+				<tr>
+					<th>id</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Title</th>
+					<th>Phone</th>
+					<th>Deleted</th>
+					<th>Last Modified</th>
+				</tr>
+				</thead>
+				<tbody id="list"></tbody>
+			</table>
+		</div>
+	</div>
+
+	<h4>CAMERA</h4>
+	<input type='button' onclick="getPicture();" value='camera.getPicture()'/>
+	<div style='width:100%; height:100px;'>
+		<img width="100" id="camera_image">
+		<img width="100" id="camera_image_b">
+	</div>
+	<h4>VIDEO</h4>
+	<input type='button' onclick="captureVideoAction();" value='captureVideoAction()'/>
+	<div id="videobox">
+		<video id='video_player' controls style='width:100%; height:100px;'></video>
+	</div>
+	<h4>device_internet: <span id="device_internet"><%= modelData.device_internet %></span></h4>
+	<h4>device_conn: <span id="device_conn"></span></h4>
+	<h4>Platform: <span id="platform"><%= modelData.platform %></span></h4>
+	<h4>Version: <span id="version"><%= modelData.version %></span></h4>
+	<h4>UUID: <span id="uuid"><%= modelData.uuid %></span></h4>
+	<h4>Name: <span id="name"><%= modelData.name %></span></h4>
+	<h4>Model: <span id="model"><%= modelData.model %></span></h4>
+	<h4>Width: <span id="width"></span>, Height: <span id="height"></span>, Color Depth: <span id="colorDepth"></span></h4>
+	<h4>User-Agent: <span id="user_agent"></span></h4>
+	<h4>canvas: <canvas id="canvas" width="1" height="1"></canvas></h4>
+	<h4>camera_status: <span id="camera_status"></span></h4>
+	<h4>imgage-options:</h4>
+	<div id="image-options"></div>	
+	<input type='button' onclick="test_SplashScreen()" value='SplashScreen'/>
+</div>

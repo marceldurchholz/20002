@@ -1,0 +1,23 @@
+<h3 class="ui-bar ui-bar-f" style="border-top-width:0px;text-align:center;">Lernsetinformationen</h3>
+
+<div style="margin-bottom:50px;padding:15px;width;100%;">
+
+<h3><%= card.title %></h3>
+
+<div class="ui-grid-b" style="width:100%;">
+	<div class="ui-block-a" style="width:50%;">Wissensanbieter</div>
+	<div class="ui-block-b" style="width:50%;"><%= card.uploader %></div>
+</div>
+<div class="ui-grid-b" style="width:100%;">
+	<div class="ui-block-a" style="width:50%;">Themengebiet</div>
+	<div class="ui-block-b" style="width:50%;"><%= card.topic %></div>
+</div>
+
+<p><strong><%= card.subtitle %></strong></p>
+
+<p><img src="<%= card.thumbnailurl %>" style="width:100%;"></p>
+
+<p><%= card.description %></p>
+
+<p><a data-cardid="<%= card.id %>" id="submitbutton" name="submitbutton" data-theme="f" data-role="button" href="#cards/start/view/<%= card.id %>/1">Lernset <%= card.pricetext %> laden</a></p>
+</div>

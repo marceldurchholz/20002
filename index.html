@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+	<!--[if IE]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7 ui-mobile-rendering" lang="en"> <![endif]-->
+	<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8 ui-mobile-rendering" lang="en"> <![endif]-->
+	<!--[if IE 8]>    <html class="no-js lt-ie9 ui-mobile-rendering" lang="en"> <![endif]-->
+	<!--[if gt IE 8]><!--> <html class="no-js ui-mobile-rendering" lang="en"> <!--<![endif]-->
+	<head>
+		<base href="">
+		<title>APPinaut</title>
+		<meta name="description" content="Der APPinaut ist eine Mobile Learning App. Im Multimediaformat kann den wissensdurstigen Nutzern des APPinaut Wissen angeboten werden." />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="format-detection" content="telephone=no" />
+		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+		<meta http-equiv="cache-control" content="no-cache"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		
+		<!-- <script src="http://debug.build.phonegap.com/target/target-script-min.js#appinaut633241"></script> -->
+		<script type="text/javascript" src="cordova-loader.js"></script>
+		<script src="js/detectmobile.js"></script>
+		<script type="application/javascript" src="js/libs/fastclick.js"></script>
+		
+		<link rel="stylesheet" type="text/css" href="js/video-js/video-js.css">
+		<link rel="stylesheet" type="text/css" href="css/result-light.css">
+		<link rel="stylesheet" href="css/jquery.expander.css" type="text/css"/>
+		<link rel="stylesheet" href="css/jreadmore.css" type="text/css"/>
+		<link rel="stylesheet" href="css/menu/main.css?v=31"/>
+		<link rel="stylesheet" href="css/themerollerdata.css">
+		<link rel="stylesheet" href="css/jquery.mobile.structure-1.3.2.min.css" />
+		<link rel="stylesheet" href="css/appinautstyle.css" />
+	</head>
+
+	<body id="body" style="display:hidden;">
+		<div style="position:fixed;">
+			<div data-role="popup" id="welcomepopup" name="welcomepopup" data-overlay-theme="a" class="ui-corner-all" style="text-align:center;z-index:9999;">
+				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="arrow-r" data-iconpos="notext" class="ui-btn-right"></a>
+				<div data-role="content" class="ui-corner-bottom ui-content">
+				  <h3 class="ui-title">Herzlich willkommen!</h3>
+					<p>Vielen herzlichen Dank für Ihr Interesse an unserer Mobile (Video) Learning App.</p>
+					<p>Nach und nach werden weitere Inhalte verfügbar sein. Sollte für Sie derzeit nichts passendes dabei sein, seien Sie nicht traurig. Stöbern Sie einfach hin und wieder wieder in Ihrer Mediathek.</p>
+					<p>Ihr Robert Spengler.</p>
+					<br>
+					<a id="closewelcomepopupbtn" class="closewelcomepopupbtn" data-theme="b" data-role="button"><span>Weiter</span></a>
+				</div>
+			</div>
+			
+			<div data-role="popup" id="tutorialpopup" name="tutorialpopup" data-overlay-theme="a" class="ui-corner-all" style="z-index:9999;">
+				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="check" data-iconpos="notext" class="ui-btn-right"></a>
+				<div data-role="content" class="ui-corner-bottom ui-content">
+				  <h3 class="ui-title">Auch wenn es ganz einfach ist.</h3>
+					<p><div style="float:left;width:55px;"><img src="images/icon-menu.png"></div>
+					<div style="float:left;"><strong>Sidebar-Icon (oben links)</strong><br>Öffnet das Seitenmenü</div></p>
+					<div style="float:none;clear:both;"></div>
+					<p><div style="float:left;width:55px;"><img src="images/icon-down.png"></div>
+					<div style="float:left;"><strong>Top-Down-Icon (oben rechts)</strong><br>Öffnet das Funktionsmenü</div></p>
+					<div style="float:none;clear:both;"></div>
+					<p><div style="float:left;width:55px;"><img style="height:38px;" src="images/icon-swipe-right.png"></div>
+					<div style="float:left;"><strong>Nach rechts streichen</strong><br>Zurück / zur vorherigen Seite</div></p>
+					<div style="float:none;clear:both;"></div>
+					<p><div style="float:left;width:55px;"><img style="height:38px;" src="images/icon-swipe-left.png"></div>
+					<div style="float:left;"><strong>Nach links streichen</strong><br>Eintrag/-verlauf löschen</div></p>
+					<div style="float:none;clear:both;"></div>
+					<br>
+					<a id="closepopupbtn" class="closepopupbtn" data-theme="b" data-role="button"><span>Und los geht's!</span></a>
+				</div>
+			</div>
+		</div>
+		
+		<div id="sidebarListViewDiv" class="sidebarListViewDiv" style="position:fixed;top:0px;left:0px;text-align:left;width:auto;"></div>
+			
+		<div data-role="page" data-theme="a" id="flexiblecontent">
+			<div data-role="header" data-theme="b" style="width:100%;border-top:0px;height:46px;">
+				<div style="text-align:center;">
+					<img style="max-height:46px;max-width:100%;" alt="APPinaut" src="images/logo.png">
+				</div>
+				<div id="showMenu" style="float:left;clear:none;display:inline-block;position:absolute;top:0px;left:0px;border:0px;padding:4px;margin:0px;">
+					<img id="showMenuIconDeg" border="0" alt="Menu" src="images/icon-menu.png">
+				</div>
+				<div style="float:right;clear:none;display:inline-block;position:absolute;top:0px;right:0px;border:0px;padding:4px;margin:0px;">
+					<div class="showPageOptions" style="display:block;width:auto;height:auto;">
+						<a id="showPageOptionsLink" class="showPageOptionsLink" style="width:100%;height:100%;">
+							<img id="showPageOptionsIcon" border="1" alt="Options" src="images/icon-down.png">
+						</a>
+					</div>
+				</div>
+			</div>
+			<div id="pageOptions" class="pageOptions" style="width:100%;height:auto;display:none;">
+				<ul data-role="listview">
+					<li style="display:none;" data-roles="seeker" 		data-mini="true" data-iconpos="left" data-icon="grid"><a style="font-weight:normal;" href="#dashboard">Dashboard</a></li>
+					<li style="display:none;" data-roles="seeker"		data-mini="true" data-iconpos="left" data-icon="plus"><a style="font-weight:normal;" href="#messages/details/view/0">Nachricht senden</a></li>
+					<li style="display:none;" data-roles="provider" 	data-mini="true" data-iconpos="left" data-icon="plus"><a style="font-weight:normal;" href="#videos/record">Multimediadatei hinzufügen</a></li>
+					<!--
+					<li style="display:none;" data-roles="niemand" 		data-mini="true" data-iconpos="left" data-icon="plus"><a style="font-weight:normal;" href="#cards/edit/">Lernset/Lernkarte hinzufügen</a></li>
+					<li style="display:none;" data-roles="niemand" 		data-mini="true" data-iconpos="left" data-icon="plus"><a style="font-weight:normal;" href="#planer/edit/">Veranstaltung/Termin hinzufügen</a></li>
+					<li style="display:none;" data-roles="superadmin"	data-mini="true" data-iconpos="left" data-icon="bars"><a style="font-weight:normal;" href="#admin/users">Benutzerverwaltung</a></li>
+					-->
+					<li style="display:none;" data-roles="seeker" 		data-mini="true" data-iconpos="left" data-icon="arrow-l"><a style="font-weight:normal;" onClick="javascript:rotatePageOptionsIcon();history.back();return(false);">Zurück</a></li>
+				</ul>
+			</div>
+			
+			<div id="deleteBar" class="deleteBar" style="width:100%;height:auto;display:none;">
+				<ul data-role="listview" data-theme="d">
+					<li data-mini="true" data-iconpos="left" data-icon="minus"><a id="deleteBarLink" class="deleteBarLink" style="font-size:14px;f/ont-weight:normal;margin:2px;" href="#dashboard">Einträge löschen...</a></li>
+				</ul>
+			</div>
+			
+			<div data-role="content" id="page-content" data-theme="a" class="scrollable"></div>
+			
+		</div>
+		
+		<div data-id="pageFooter" id="pageFooter" style="position:fixed;width:100%;height:auto;bottom:0;border:0px;">
+		</div>
+		
+	</body>
+</html>

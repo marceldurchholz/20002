@@ -1,0 +1,56 @@
+<h3 class="ui-bar ui-bar-b" style="border-top-width:0px;text-align:center;">Media hinzufügen (Schritt 2 von 2)</h3>
+<div style="padding:15px;overflow:visible;z-index:999;text-align:center;">
+
+	<!-- <p><b>Weiter geht's!</b></p> -->
+	<!--
+	<p>Geben Sie Informationen zur Multimediadatei ein. Beachten Sie, dass dies wichtige Kriterien für einen Kauf sind.
+	-->
+
+	<div id="uploadstatusbar" style="font-size:18px;visibility:hidden;height:0px;">0 %</div>
+		
+	<form id="submitform" action="#videos/record" method="post">
+			<button data-mini="true" id="formbackbutton" type="button" name="button" data-theme="a">Zurück</button>
+			<br>
+		
+			<input data-mini="false" type="text" name="title" id="title" placeholder="Titel der Multimediadatei"/>
+			
+			<textarea data-mini="false" style="height:35%;" name="description" id="description" placeholder="Fügen Sie hier eine Beschreibung Ihrer Multimediadatei ein."></textarea>
+		
+			<div class="containing-element">
+				<select name="flipactivate" id="flipactivate" data-role="slider">
+					<option value="off">Mediadaten nicht aktivieren</option>
+					<option value="on">Mediadaten bereitstellen</option>
+				</select>
+			</div>
+
+			<label for="sliderprice" style="font-size:11px;">Preis in Coins</label>
+			<input type="range" name="sliderprice" id="sliderprice" value="<%= video.slider_price %>" min="0" max="6000" step="150" data-mini="false" data-theme="a" data-track-theme="b"/>
+
+			<!--
+			<input type="text" name="subtitle" id="subtitle" placeholder="Untertitel der Multimediadatei"/>
+			-->
+			<div class="containing-element">
+				<label for="interest" class="select"></label>
+				<select data-mini="false" name="interest" id="interest">
+					<option value="">Kategorie / Wissensgebiet</option>
+					<% _.each(video.interests, function(interest) { %>
+						<option <%= interest.checked %> value="<%= interest.name %>"><%= interest.name %></option>
+						<!--
+						<option value="standard">Standard: 7 day</option>
+						<option value="rush">Rush: 3 days</option>
+						<option value="express">Express: next day</option>
+						<option value="overnight">Overnight</option>
+						-->
+					<% }); %>
+				</select>
+			</div>
+
+		<input type="hidden" id="camera_file" name="camera_file"></span>
+	</form>
+	
+	<button type="button" id="recordMediaUploadButton" name="recordMediaUploadButton" data-theme="b">Mediadaten hochladen</button>
+
+	<span id="camera_status" style="width:0px;height:0px;"></span>
+	<div id="debugdiv" style="width:0px;height:0px;overflow:hidden;"></div>
+
+</div>

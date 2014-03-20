@@ -1,0 +1,89 @@
+<!-- http://player.vimeo.com/video/85061946 -->
+
+<div style="padding:20px 20px 40px 20px;text-align:center;">
+
+	<!--
+	<iframe id=="video_player_1" src="http://player.vimeo.com/video/88444287" style="background-color:#000;width:<%= $(window).width()-60 %>px;height:<%= ($(window).width()-60)/16*9 %>px;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+	<div style="float:none;clear:both;"></div>
+	<img src="images/shadow.png" style="width:100%;height:20px;">
+	<div style="float:none;clear:both;"></div>
+	-->
+
+	<img src="images/appicon.png" style="max-height:30%;max-width:40%;" class="no-elementResizeByScreenHeight" no-data-percentheight="25">
+	<div style="float:none;clear:both;"></div>
+	
+<!--
+	<div id="videocontainer" style="b/order:10px solid red;b/ackground-color:#000000;">
+		<a id="videocontainerlink" style="width:100%;height:100%;">
+			<video id="video_player_1" class="video-js vjs-default-skin" data-setup="{}"></video>
+		</a>
+		<img src="images/shadow.png" style="width:100%;height:20px;">
+	</div>
+-->
+	
+	
+	<div class="dynspace_small" style="height:1%;"></div>
+	<!-- <h5>APPinaut</h5> -->
+	<div class="resizetext" style="font-size:12px;">
+		<strong>Robert Spengler | Stärke Deinen Auftritt!</strong><br>
+		Registrieren oder Einloggen um zu entdecken
+	</div>
+	<br>
+	<div style="float:none;clear:both;"></div>
+	<div class="dynspace_small" style="height:1%;"></div>
+	<form style="p/adding-top:10px;text-align:left;">
+		<!-- <label for="username">Ihr Benutzername:</label> -->
+		<div style="float:none;clear:both;"></div>
+		<input type="text" style="text-align:center;" value="" id="username" name="username" placeholder="E-Mail-Adresse / Benutzername"/>
+		<div style="float:none;clear:both;"></div>
+		<!-- <label for="password">Ihr Passwort:</label> -->
+		<input type="password" style="text-align:center;" value="" id="password" name="password" placeholder="Passwort"/>
+		<div id="giftcodeDiv">
+			<input type="text" style="text-align:center;font-family:Trebuchet MS;text-transform: uppercase;letter-spacing:1px;" value="" id="giftcodeInput" name="giftcodeInput" placeholder="Anbietercode eingeben"/>
+		</div>
+				
+		<div style="float:none;clear:both;"></div>
+		<p style="padding:2px 0px;">
+			<a id="sendLoginBtn" class="sendLoginBtn" data-theme="b" data-role="button"><span>Login</span></a>
+			<a id="sendRegisterBtn" class="sendRegisterBtn" data-theme="a" data-role="button"><span>Neuen Zugang anlegen</span></a>
+		</p>
+		
+		<!-- <a href="/register.html" class="btn btn-link">sign up</a>
+		<input id="sendLoginBtn" class="sendLoginBtn btn btn-primary" value="Los geht's" type="button">
+		-->
+	</form>
+	
+	<p>
+		<a href="#privacy" class="resizetext">Datenschutz</a>
+		<!--
+		<a href="#help" class="no-resizetext">Hilfe</a>
+		-->
+		 <!-- | <a href="#agb">nutzungsbedingungen</a> 
+		 &nbsp;&nbsp;|&nbsp;&nbsp;
+		 -->
+		 &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;<a href="#support" class="resizetext">Support</a>
+		 
+		 <p><a id="anonymlogin" class="anonymlogin" style="font-weight:normal;">Anonym in der Mediathek stöbern</a></p>
+		 <!--
+		 <a href="#videos" class="no-resizetext">Anonym in der Mediathek stöbern</a>
+		 &nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" id="giftcode" class="no-resizetext">Anbietercode</a>
+		 -->
+		<!-- | <a href="#legal">Impressum</a>-->
+	</p>
+
+	<p style="padding-top:0px;font-weight:normal;font-size:9px;line-height:10px;text-align:justify;opacity:1;color:#888;text-decoration:none;text-align:center;" class="no-resizetext">
+		<% if (1==2) { %>
+			Indem Sie auf "Neuen Zugang anlegen" klicken, akzeptieren Sie die <a onClick="location.href='#agb';" style="font-weight:normal;font-size:9px;line-height:10px;text-align:justify;opacity:1;color:#888;text-decoration:none;" class="no-resizetext">Allgemeinen Geschäftsbedingungen von APPinaut</a>. <a onClick="location.href='#agb';" style="font-weight:normal;font-size:9px;line-height:10px;text-align:justify;opacity:1;color:#888;text-decoration:none;"><!--Kontaktieren</a> Sie uns gerne.--><!-- und bestätigen, dass Sie die Datenschutzrichtlinien und die Bestimmungen zur Cookie-Verwendung gelesen haben. Eventuell erhalten Sie eine E-Mail vom APPinaut Team, die Sie jederzeit abbestellen können.-->
+		<% } %>
+		<br><br><br><br>
+		<!--
+		<a onClick="javascript:openExternalURL('http://www.google.de/');">open google external</a>
+		<br><br><br><br>
+		
+		<a href="http://www.google.com/" onclick="window.open(this.href,'_system'); return false;">Google</a>
+		<br><br><br><br>
+		-->
+		
+	</p>
+	
+</div>

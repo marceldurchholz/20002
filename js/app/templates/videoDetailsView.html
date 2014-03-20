@@ -1,0 +1,131 @@
+<!-- id: <%= video.id %> <br> -->
+<!--
+<h1><%= video.title %></h1>
+-->
+<!--
+<div data-role="popup" id="doppelt" name="doppelt" data-overlay-theme="a" style="max-width:400px;" class="ui-corner-all">
+   <div data-role="header" class="ui-corner-top">
+      <h1>Fehler</h1>
+   </div>
+    <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right"></a>
+   <div data-role="content" class="ui-corner-bottom ui-content">
+      <h3 class="ui-title">irgendwas geht nicht!</h3>
+   </div>
+</div>
+-->
+<h3 class="ui-bar ui-bar-b" style="border-top-width:0px;text-align:center;"><%= video.topic %></h3>
+<div id="videocontainer" style="b/order:10px solid red;b/ackground-color:#000000;">
+	<a id="videocontainerlink" style="width:100%;height:100%;">
+		<video id="video_player_1" class="video-js vjs-default-skin" poster="<%= video.thumbnailurl %>" data-setup="{}"></video>
+	</a>
+	<img src="images/shadow.png" style="width:100%;height:20px;">
+	<!--
+	<div style="padding:0px 20px 0px 20px;">
+		<div id="" style="position:relative;top:-20px;clear:both;float:none;width:100%;height:0px;boder:5px solid #909090;">
+			<img src="images/icon-flat-connect-18.png">
+		</div>
+	</div>
+	-->
+</div>
+
+<% if( _.indexOf(video.purchases, video.id)==-1 && video.uploaderid != me.id) { %>
+	<div style="padding:0px 20px 0px 20px;"><a data-videoid="<%= video.id %>" id="loadvideobutton" class="loadvideobutton" data-theme="b" data-role="button"><%= video.pricetext %></a></div>
+<% } else  { %>
+		<% if (video.offlineurl=="") { %>
+			<!-- <div style="padding:0px 20px 0px 20px;"><a data-videoid="<%= video.id %>" id="downloadvideobutton" class="downloadvideobutton" data-theme="b" data-role="button">Video offline speichern</a></div> -->
+		<% } %>
+<% } %>
+
+<div style="padding:0px 20px 60px 20px;">
+	
+	<div class="title">
+			<h5 class="resizetext" style="font-size:18px;line-height:1.3em;" >
+				<div class="readmoretitle"><%= video.title %></div>
+			</h5>
+	</div>
+	<div class="clear"></div>
+	
+
+	<div class="description resizetext" style="line-height:1.5em;">
+		<!--
+		<a href="" id="connectToLink" class="connectToLink" data-id="<%= video.uploaderdata.id %>">
+			<img src="images/icon-flat-connect-18.png" style="padding-right:10px;">
+		</a>
+		-->
+		<strong><div class="readmorename"><%= video.uploader %></div></strong>
+		<div class="clear"></div>
+		
+		<div style="padding-top:10px;">
+			<a id="detailsvideolink" class="detailsvideolink" style="font-weight:normal;" data-videoid="<%= video.id %>">
+				Videodetails anzeigen
+			</a>
+			<div id="videodetailsdiv" style="display:none;">
+				<!-- Länge: <% if( _.indexOf(video.purchases, video.id)==-1 && video.uploaderid != me.id) { %>max. 60 Sekunden (Vorschau)<% } else  { %><%= video.vlength %><% } %> -->
+				Länge: ca. <%= Math.ceil(video.vlength/60) %> Minuten
+				<div class="clear"></div>
+				Dateigröße: <%= Math.round(video.vsize*100/1024/1024)/100 %> Mbyte
+				<div class="clear"></div>
+				Bereitgestellt am: <%= video.cdate %>
+				<div class="clear"></div>
+				<div class="clear" style="padding-bottom:10px;"></div>
+			</div>
+		</div>	
+		<div class="clear"></div>
+
+		<div class="readmore"><%= video.description %></div>
+		<div class="clear"></div>
+		
+		<p>
+			<div style="float:left;">
+				<span><a id="complainvideolink" class="complainvideolink" style="font-weight:normal;" data-videoid="<%= video.id %>">Beschwerde schreiben</a></span>
+			</div>
+			<div style="float:right;">
+				<% if(video.ireported >= 0) { %><% } else { %><span><a id="reportvideolink" class="reportvideolink" style="font-weight:normal;" data-videoid="<%= video.id %>">Verstoß melden<br></a></span><% } %>
+			</div>
+		</p>
+
+	</div>
+	<div class="clear"></div>
+
+	<ul data-role="listview" data-inset="true">
+		<!-- <%= video.related.length %> -->
+		<% if (video.related.length>1) { %>
+			<li data-theme="a" data-role="list-divider">Das könnte interessant sein...</li>
+		<% } %>
+		<% var displayedvideos = 0; %>
+		<% _.each(video.related, function(related) { %>
+			<% if( related.id != video.id ) { %>
+				<% displayedvideos += 1; %>
+				<li style="max-height:60px !important;">
+					<a class="showVideoDetailsLink" href="<%= related.href %>">
+					<img style="padding:8px 0px 8px 25px;height:40px !important;max-height:40px !important;max-width:40px !important;" src="<%= related.icon %>" />
+					<h6 style="padding:0px 0px 10px 0px;margin:0;"><%= related.title %></h6>
+					<p><%= related.description %></p>
+					</a>
+				</li>
+			<% } %>
+		<% }); %>
+		<% if( video.provider < 0  && 1==2) { %>
+			<li style="max-height:60px !important;">
+				<a class="showVideoDetailsLink" href="#myprofile">
+				<img style="padding:8px 0px 8px 25px;height:40px !important;max-height:40px !important;max-width:40px !important;" src="images/avatar.jpg" />
+				<h6 style="padding:0px 0px 10px 0px;margin:0;">Wissensanbieter werden</h6>
+				<p>Bieten Sie jetzt Ihr Wissen an.</p>
+				</a>
+			</li>
+		<% } else { %>
+			<% if (displayedvideos<5 && 1==2) { %>
+				<li style="max-height:60px !important;">
+					<a class="showVideoDetailsLink" href="#videos/record">
+					<img style="padding:8px 0px 8px 25px;height:40px !important;max-height:40px !important;max-width:40px !important;" src="images/avatar.jpg" />
+					<h6 style="padding:0px 0px 10px 0px;margin:0;">Sie auf diesem Platz?</h6>
+					<p>Stellen Sie hier Ihr Video ein...</p>
+					</a>
+				</li>
+			<% } %>
+		<% } %>
+	</ul>
+
+</div>
+
+<br><br><br>

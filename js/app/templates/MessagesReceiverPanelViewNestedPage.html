@@ -1,0 +1,9 @@
+<ul data-filter="true" data-filter-theme="a" data-filter-placeholder="Namen suchen..." data-role="listview" data-mini="false" data-icon="false" data-inset="false" data-shadow="false" data-corners="false" data-theme="a" style="margin:-15px -35px;">
+	<% _.each(contacts.data, function(contact) { %>
+		<li style="padding: 0px -20px; margin: 0px 20px;" style="font-size:16px !important;" class="resizetext">
+			<a data-id="<%= contact.id %>" href="#messages/details/view/<%= contact.id %>" style="font-weight:normal;">
+				<%= contact.fullname %><!-- <%= contact.id %> / <%= me.id %> -->
+			</a>
+		</li>
+	<% }); %>
+</ul>
