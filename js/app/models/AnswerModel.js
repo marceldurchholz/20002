@@ -7,10 +7,10 @@ function($, Backbone, MobileRouter) {
         var AnswerModel = Backbone.Model.extend({
 		
 			defaults: {
-				'question': {},
-				'answers': {}
-			},
-		
+				// question : '',
+				// answer : ''
+			}
+	
 		});
 		
 		return AnswerModel;

@@ -1,175 +1,143 @@
 // CardView.js
 // -------
-define(["jquery", "backbone", "models/CardModel", "collections/cardsCollection", "text!templates/cardView.html", "text!templates/sidemenusList.html", "views/SidemenuView"],
+define(["jquery", "backbone", "collections/cardsCollection", "text!templates/cardView.html"],
 
-    function($, Backbone, CardModel, cardsCollection, cardPage, sidemenusList, SidemenuView){
+    function($, Backbone, cardsCollection, cardPage){
 		
 		var CardViewVar = Backbone.View.extend({
 			
 			el: "#CardsNestedViewDiv",
 			initialize: function() {
-				console.log('initializing CardView.js');
+				// console.log('initializing CardView.js');
 			},
 			initializeme: function() {
-				console.log('initializing ME in CardView.js');
+				// console.log('initializing ME in CardView.js');
 				// $(this.el).html('loading...');
 				$.when( this.fetchMe() ).then(
 				  function( status ) {
-					_thisViewCard.me = status;
-					_thisViewCard.render();
+					_thisViewVideo.me = status;
+					_thisViewVideo.render();
 				  },
 				  function( status ) {
-					console.log( "you fail this time" );
+					alert( "Benutzer konnte nicht erkannt werden." );
 				  },
 				  function( status ) {
-					console.log('still fetchWorking');
+					// console.log('still fetchWorking');
 				  }
 				);
 			},
 			fetchWorking: function() {
 				var setTimeoutWatcher = setTimeout(function foo() {
-					if ( _thisViewCard.dfd.state() === "pending" ) {
-						_thisViewCard.dfd.notify( "working... " );
-						setTimeout( _thisViewCard.fetchWorking, 100 );
+					if ( _thisViewVideo.dfd.state() === "pending" ) {
+						_thisViewVideo.dfd.notify( "working... " );
+						setTimeout( _thisViewVideo.fetchWorking, 100 );
 					}
 				}, 1 );
 			},
 			fetchMe: function() {
-				_thisViewCard = this;
-				console.log('fetchMe CardView.js');
-				_thisViewCard.dfd = new jQuery.Deferred();
-				_thisViewCard.fetchWorking();
-				dpd.users.me(function(user) {
-					if (user) {
+				_thisViewVideo = this;
+				// console.log('fetchMe CardView.js');
+				_thisViewVideo.dfd = new $.Deferred();
+				_thisViewVideo.fetchWorking();
+				// dpd.users.me(function(me) {
+				dpd('users').get(window.system.uid, function(me, err) {
+					if (me) {
 						var fetchMe = setTimeout ( function() {
-							_thisViewCard.dfd.resolve(user);
+							_thisViewVideo.dfd.resolve(me);
 						}, 0 );
 					}
 					else {
-						console.log('You are not logged in!');
-						window.location.href = "#noaccess";
+						// console.log('You are not logged in!');
+						// window.location.href = "#noaccess";
+						var meid = getRandomID().toString();
+						var me = new Object();
+						me.id = meid;
+						_thisViewVideo.dfd.resolve(me);
 					}
 				});
 				return this.dfd.promise();
 			},
 			fetch: function() {	
-				// alert('bla');
-				_thisViewCard = this;
-				console.log('fetching CardView.js');
+				_thisViewVideo = this;
 				this.$el.hide();
+				showModal();
+				
 				this._cardsCollection = new cardsCollection();
 				this._cardsCollection.fetch({
 					success: function(coll, jsoncoll) {
-						console.log(_thisViewCard);
-						// _thisViewCard.render();
-						_thisViewCard.initializeme();
+						_thisViewVideo.initializeme();
 					},
 					error: function(action, coll) {
 						console.log('ERROR fetching _cardsCollection');
-						console.log(action);
-						console.log(coll);
-						// _thisViewCard.render();
 					}
 				});
 			},
 			bindEvents: function() {
-				var _thisViewCard = this;
-				// this.$el.off('click','.clickRow').on('click','.clickRow',function(){_thisViewCard.clicked(e);});
-				this.$el.off('click','.showCardDetailsLink').on('click','.showCardDetailsLink',function(event){
+				var _thisViewVideo = this;
+				// this.$el.off('click','.clickRow').on('click','.clickRow',function(){_thisViewVideo.clicked(e);});
+				this.$el.off('click','.showVideoDetailsLink').on('click','.showVideoDetailsLink',function(event){
 					event.preventDefault();
 					window.location.href = event.currentTarget.hash;
 				});
-				this.$el.off('click','.isCardToFavourites').on('click','.isCardToFavourites',function(event){
-					event.preventDefault();
-					alert('isCardToFavourites');
-				});
-				this.$el.off('click','.addCardToFavourites').on('click','.addCardToFavourites',function(event){
-					event.preventDefault();
-					console.log(event);
-					$(this).removeClass("addCardToFavourites");
-					$(this).addClass("isCardToFavourites");
-					var cardid = $(event.currentTarget).attr('data-link');
-					var _cardid = cardid;
-					console.log(_cardid);
-					dpd.users.get({id:_thisViewCard.me.id,following:_cardid}, function(result, error) {
-						if (result) {
-							console.log(result);
-							}
-						else {
-							// console.log(error);
-							dpd.users.put(_thisViewCard.me.id, {following:{$push:_cardid}}, function(result, error) {
-								if (result) {
-									console.log(result);
-									}
-								else {
-									// console.log(error);
-								}
-							});
-						}
-					});
-				});
 			},
 			insertData: function(model) {
-				_thisViewCard = this;
+				_thisViewVideo = this;
 				var uploader = model.get('uploader');
-				if ( typeof( _thisViewCard.uploaderdata ) == "undefined") {
-					$.ajax({
-						url: "http://dominik-lohmann.de:5000/users/?id="+uploader,
-						async: false
-					}).done(function(uploaderdata) {
-						// $( this ).addClass( "done" );
-						console.log(uploaderdata);
-						_thisViewCard.uploaderdata = uploaderdata;
-					});
+				rowContent = '';
+				if (window.system.aoid=='' || model.get('uploader') == window.system.aoid) {
+					rowContent = _.template(cardPage, {
+						id: model.get('id'),
+						// uploader: model.get('uploader'),
+						uploader: model.get('uploaderdata').fullname,
+						url: model.get('url'),
+						title: model.get('title'),
+						description: model.get('description'),
+						price: model.get('price'),
+						thumbnailurl: model.get('thumbnailurl'),
+						topic: model.get('topic')
+					},{variable: 'card'});
 				}
-				console.log(jQuery.inArray(model.id, _thisViewCard.me.following));
-				if (jQuery.inArray(model.id, _thisViewCard.me.following)==-1) {
-					model.set("favclass","addCardToFavourites");
-				}
-				else {
-					model.set("favclass","isCardToFavourites");
-				}
-				console.log(model);
-				var rowContent = _.template(cardPage, {
-					id: model.get('id'),
-					uploader: _thisViewCard.uploaderdata.fullname,
-					cardurl: model.get('cardurl'),
-					title: model.get('title'),
-					subtitle: model.get('subtitle'),
-					description: model.get('description'),
-					price: model.get('price'),
-					start: model.get('start'),
-					topic: model.get('topic'),
-					end: model.get('end')
-				},{variable: 'card'});
 				return(rowContent);
 			},
 			render: function() {
 				this.bindEvents();
-				var _thisViewCard = this;
-				console.log('DOING render CardView.js called');
-				_thisViewCard.htmlContent = '';
-				_thisViewCard.rowContent = '';
-				$(this.el).html(_thisViewCard.htmlContent);
+				var _thisViewVideo = this;
+				_thisViewVideo.htmlContent = '';
+				_thisViewVideo.rowContent = '';
 				_.each(this._cardsCollection.models, function(model) {
-					this.id = model.get('id');
-					_thisViewCard.rowContent = _thisViewCard.rowContent + _thisViewCard.insertData(model);
+					var uploader = model.attributes.uploader; // "ed568841af69d94d";
+					$.ajax({
+						url: 'http://dominik-lohmann.de:5000/users/?id='+uploader,
+						async: false,
+						success: function(data, textStatus, XMLHttpRequest){
+							model.attributes.uploaderdata = data;
+							_thisViewVideo.rowContent = _thisViewVideo.rowContent + _thisViewVideo.insertData(model);
+						},
+						error:function (xhr, ajaxOptions, thrownError) {
+							if (xhr.responseText=='{"message":"not found","statusCode":404,"status":404}') {
+								dpd.cards.put(model.attributes.id, {"active":false}, function(result, err) {
+								  if(err) return console.log(err);
+								});
+							}
+						}
+					});
 				});
-				_thisViewCard.htmlContent = '<ul data-filter="true" data-filter-placeholder="Suchfilter..." data-role="listview" data-theme="a" data-divider-theme="f" data-filter-theme="a" data-autodividers="true" id="cardsListView">'+_thisViewCard.rowContent+'</ul>';
-				$(this.el).html(_thisViewCard.htmlContent);
+				_thisViewVideo.htmlContent = '<ul id="cardsListView" data-filter="true" data-filter-placeholder="Suchfilter..." data-filter-theme="a" data-role="listview" data-theme="a" data-divider-theme="f" data-autodividers="true">'+_thisViewVideo.rowContent+'</ul>';
+				$(this.el).html(_thisViewVideo.htmlContent);
 				$("#cardsListView").listview({
 				  autodividers: true,
 				  autodividersSelector: function ( li ) {
-					console.log(li);
+					// console.log(li);
 					var rowTopic = li.data( "topic" );
 					var out = rowTopic;
 					return out;
 				  }
 				});				
+				hideModal();
 				this.$el.trigger('create');
 				new FastClick(document.body);
 				this.$el.fadeIn( 500, function() {
-					$('.ui-content').scrollTop(0);
+					// $('.ui-content').scrollTop(0);
 					new FastClick(document.body);
 				});
 				return this;				

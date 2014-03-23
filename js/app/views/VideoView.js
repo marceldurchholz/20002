@@ -158,8 +158,7 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videosCollection
 						description: model.get('description'),
 						price: model.get('price'),
 						thumbnailurl: model.get('thumbnailurl'),
-						topic: model.get('topic'),
-						favclass: model.get('favclass')
+						topic: model.get('topic')
 					},{variable: 'video'});
 				}
 				return(rowContent);

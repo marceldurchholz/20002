@@ -1,149 +1,205 @@
 // CardStartView.js
 // -------
-define(["jquery", "backbone", "models/CardModel", "collections/cardsCollection", "collections/answersCollection", "models/AnswerModel", "views/CardView", "text!templates/cardStartView.html", "text!templates/sidemenusList.html", "views/SidemenuView"],
+define(["jquery", "backbone", "models/CardModel", "collections/cardsCollection", "collections/answersCollection", "models/AnswerModel", "views/CardView", "text!templates/cardStartView.html", "text!templates/cardFinishView.html", "text!templates/sidemenusList.html", "views/SidemenuView"],
 
-    function($, Backbone, CardModel, cardsCollection, answersCollection, AnswerModel, CardListViewItems, cardsStartViewHTML, sidemenusList, SidemenuView){
+    function($, Backbone, CardModel, cardsCollection, answersCollection, AnswerModel, CardListViewItems, cardsStartViewHTML, cardsFinishViewHTML, sidemenusList, SidemenuView){
 		
 			var CardStartViewVar = Backbone.View.extend({
 			
 				el: "#page-content",
 				attributes: {"data-role": 'content'},
-				createCard: function (event) {
-					event.preventDefault();
-					if (this._cardsCollection.online==0) {
-						alert('in offline mode you can not add data');
-					}
-					else {
-						var username = ''+Math.floor((Math.random()*10000)+1);
-						var password = ''+Math.floor((Math.random()*10000)+1);
-						this.create(new CardModel({"uploader": "042cb1572ffbea5d", "cardurl": "http://xyz.de.com.uk", "title": "This is a card title", "description": "This is a description", "price": "35", "thumbnailurl": "http://www.cbr250r.com.au/images/card-thumbnail.jpg"}));
-					}
-					return(false);
-				},
-				create: function(model) {
+				initialize: function(options) {
 					_thisViewCardStart = this;
-					$.ajax('http://dominik-lohmann.de:5000/cards', {
-					  type: "POST",
-					  contentType: "application/json",
-					  data: JSON.stringify(model.attributes),
-					  success: function(todo) {
-						_thisViewCardStart.fetch();
-					  }, 
-					  error: function(xhr,b) {
-						console.log(xhr);
-						alert(xhr);
-					  }
-					});
-					return(false);
+					_thisViewCardStart.displayPage = cardsStartViewHTML;
+					_thisViewCardStart.fetch(options);
+					_thisViewCardStart._AnswerModel = new AnswerModel();
+					_thisViewCardStart._answersCollection = new answersCollection();
+					_thisViewCardStart.failures = 0;
+					_thisViewCardStart.lastquestion = "";
+					// _thisViewCardStart._answersCollection.set(_thisViewCardStart._AnswerModel);
+					// _thisViewCardStart.listenTo(_thisViewCardStart._answersCollection, 'change', _thisViewCardStart.alarm);
+				},
+				alarm: function() {
+					alert('alarm');
 				},
 				submitAnswer: function (event) {
 					event.preventDefault();
-					console.log(this._answersCollection);
 					_thisViewCardStart = this;
-					if (this._answersCollection.online==0) {
-						alert('in offline mode you can not add data');
-					}
-					else {
-						var $this = $(this);
-						console.log($('#submitform').serializeArray());
-						var submitFormData = $('#submitform').serializeArray();
-						// alert('you are online SUBMIT');
-						// console.log(submitFormData.id);
-						// var obj = jQuery.parseJSON( submitFormData );
-						
-						_.each(submitFormData, function(obj) {
-							// this.id = model.get('id');
-							// _thisViewCardStart.insertVariables(model);
-							var n = obj.name;
-							var v = obj.value;
-							_thisViewCardStart._AnswerModel.set({n:v});
-							_thisViewCardStart._answersCollection.set(this._AnswerModel);
-							_thisViewCardStart._answersCollection.localStorage.save();
-						});
-						
-						// console.log(submitFormData);
-						// this._AnswerModel.set({'question': 'bla','answers' : 'foo'});
-						// this._answersCollection.set(this._AnswerModel);
-						// this._answersCollection.localStorage.save();
-						console.log(this._answersCollection);
-						// this.create(new CardModel({"uploader": "042cb1572ffbea5d", "cardurl": "http://xyz.de.com.uk", "title": "This is a card title", "description": "This is a description", "price": "35", "thumbnailurl": "http://www.cbr250r.com.au/images/card-thumbnail.jpg"}));
-					}
-					return(false);
-				},
-				submitForm: function (event) {
 					var $this = $(this);
-					event.preventDefault();
-					console.log($this);
-					console.log(event);
-					console.log($this.serialize());
-					/*
-					$.post($this.attr('action'), $this.serialize(), function (responseData) {
-						//in here you can analyze the output from your server-side script (responseData) and validate the user's login without leaving the page
+					var submitFormData = $('#submitform').serializeArray();
+					_.each(submitFormData, function(obj) {
+						var n = obj.name;
+						var v = obj.value;
+						_thisViewCardStart._AnswerModel = new AnswerModel({question: n, answer: v});
+						if (n.substr(0,6)=='answer') { _thisViewCardStart._answersCollection.add(_thisViewCardStart._AnswerModel); }
 					});
-					*/
-					return(false);
-					if (this._answersCollection.online==0) {
-						alert('in offline mode you can not add data');
+					_thisViewCardStart.options.page = parseInt(_thisViewCardStart.cardpagedata.page)+1;					
+					if (_thisViewCardStart.options.page > _thisViewCardStart.cardcount) {
+						_thisViewCardStart.displayPage = cardsFinishViewHTML;
 					}
-					else {
-						alert('you are online FORM');
-						// this.create(new CardModel({"uploader": "042cb1572ffbea5d", "cardurl": "http://xyz.de.com.uk", "title": "This is a card title", "description": "This is a description", "price": "35", "thumbnailurl": "http://www.cbr250r.com.au/images/card-thumbnail.jpg"}));
-					}
+					_thisViewCardStart.render();
 					return(false);
 				},
+
+				retryCard: function (event) {
+					event.preventDefault();
+					_thisViewCardStart = this;
+					window.location.href = "#cards/details/view/"+_thisViewCardStart.options.cardid;
+					return(false);
+				},
+
+				cardsLink: function (event) {
+					event.preventDefault();
+					_thisViewCardStart = this;
+					window.location.href = "#cards";
+					return(false);
+				},
+				
 				bindEvents: function(event) {
 					var _thisViewCardStart = this;
-					this.$el.off('click','.createCard').on('click','.createCard',function(){_thisViewCardStart.createCard();});
-					this.$el.off('submit','#submitform').on('submit','#submitform',function(event){_thisViewCardStart.submitForm(event);});
 					this.$el.off('click','#submitanswer').on('click','#submitanswer',function(event){_thisViewCardStart.submitAnswer(event);});
+					this.$el.off('click','#retrycard').on('click','#retrycard',function(event){_thisViewCardStart.retryCard(event);});
+					this.$el.off('click','#cardslink').on('click','#cardslink',function(event){_thisViewCardStart.cardsLink(event);});
 				},
-				initializeCollection:function(options) {
-					this._cardsCollection = new cardsCollection([], options);
-					this._answersCollection = new answersCollection();
-					this._AnswerModel = new AnswerModel();					
-				},
+				
 				fetch: function(options) {
-					var _thisViewCardStart = this;
-					this.$el.hide();
-					console.log(options);
-					this.initializeCollection(options);
-					this._cardsCollection.fetch({
-						error: function(action, coll) {
-							console.log(action);
-							console.log(coll);
-						},
-						success: function(coll, jsoncoll) {
-							console.log(coll);
-							console.log(jsoncoll);
-							// _thisViewCardStart.render();
-							_thisViewCardStart._answersCollection.fetch({
-								error: function(action, coll) {
-									console.log(action);
-									console.log(coll);
-								},
-								success: function(coll, jsoncoll) {
-									console.log(coll);
-									console.log(jsoncoll);
-									_thisViewCardStart.render();
+					_thisViewCardStart = this;
+					_thisViewCardStart.options = options;
+					_thisViewCardStart.render();
+					
+				},
+				
+				insertResult: function(options) {
+					_thisViewCardStart = this;
+					// console.log(_thisViewCardStart.options);
+					// console.log(_thisViewCardStart.allcardpages);
+					_thisViewCardStart.resultArray = new Array();
+					_.each(_thisViewCardStart.allcardpages, function(cardpage) {
+						
+						this.cardpage = cardpage;
+						// console.log(this.cardpage);
+						console.log('---------------------------------------');
+						console.log('---------------------------------------');
+						console.log('checking cardpageid ' + cardpage.id);
+						console.log(cardpage);
+						console.log('***************************************');
+						
+						console.log(cardpage.id);
+						console.log(cardpage.question);
+						console.log('running through potential answers');
+						console.log('+++++++++++++++++++++++++++++++++++++++');
+						
+						_.each(cardpage.answers, function(answer) {
+							// var correctanswer = model.get('');
+							// console.log('answer.id ' +answer.id);
+							console.log('answer.text ' +answer.text + ' >> ' + answer.solution);
+							// console.log('answer.solution '+answer.solution);
+							var found = 0;
+							
+							_.each(_thisViewCardStart._answersCollection.models, function(model) {
+								if (
+									cardpage.id == model.get('question').split("-")[1] 
+									&& cardpage.page == model.get('question').split("-")[2]
+									&& answer.id == model.get('question').split("-")[3]
+									) {
+									found = 1;
+									console.log('FOUND GIVEN ANSWER: ' + model.get('answer'));
+									if (answer.solution != model.get('answer')) {
+										console.log('FAILURE !!!');
+										_thisViewCardStart.failures = _thisViewCardStart.failures+1;
+										var fo = new Object();
+										fo.question = cardpage.question;
+										fo.answer = answer.text;
+										fo.solution = answer.solution;
+										fo.lastquestion = _thisViewCardStart.lastquestion;
+										_thisViewCardStart.lastquestion = fo.question;
+										_thisViewCardStart.resultArray.push(fo);
+									}
+									// console.log(model.get('answer'));
+									return(false);
 								}
 							});
-						}
+							if (answer.solution == 1 && found==0) {
+								console.log('FAILURE !!!');
+								_thisViewCardStart.failures = _thisViewCardStart.failures+1;
+								var fo = new Object();
+								fo.question = cardpage.question;
+								fo.answer = answer.text;
+								fo.solution = answer.solution;
+								fo.lastquestion = _thisViewCardStart.lastquestion;
+								_thisViewCardStart.lastquestion = fo.question;
+								_thisViewCardStart.resultArray.push(fo);
+							}
+							
+						});
+
 					});
+					
+					_template = _.template(_thisViewCardStart.displayPage, {
+						id: _thisViewCardStart.carddata.id,
+						uploader: _thisViewCardStart.uploaderdata.fullname,
+						results: _thisViewCardStart._answersCollection.models,
+						/*
+						cardid: _thisViewCardStart.carddata.cardid,
+						answers: _thisViewCardStart.cardpagedata.answers,
+						question: _thisViewCardStart.cardpagedata.question,
+						page_id: _thisViewCardStart.cardpagedata.id,
+						page: _thisViewCardStart.cardpagedata.page,
+						lastpage: (parseInt(_thisViewCardStart.cardpagedata.page)-1),
+						nextpage: (parseInt(_thisViewCardStart.cardpagedata.page)+1),
+						*/
+						failures: _thisViewCardStart.failures,
+						topic: _thisViewCardStart.carddata.topic,
+						cardurl: _thisViewCardStart.carddata.cardurl,
+						description: _thisViewCardStart.carddata.description,
+						resultArray: _thisViewCardStart.resultArray,
+						
+						title: _thisViewCardStart.carddata.title
+					},{variable: 'card'});
+					$(this.el).html(_template);
 				},
-				initialize: function(options) {
-					// console.log('search post data');
-					// console.log(this);
-					// this.initializeCollection(options);
-					this.fetch(options);
-				},
-				insertVariables: function(model) {
+				
+				insertVariables: function(options) {
 					_thisViewCardStart = this;
-					// console.log(this.id);
-					// console.log('model');
-					// console.log(model.collection.options.cardid);
-					// console.log(model.collection.options.page);
+					console.log(_thisViewCardStart.options);
+					
+					if ( typeof( _thisViewCardStart.carddata ) == "undefined") {
+						var query = "http://dominik-lohmann.de:5000/cards/?id="+_thisViewCardStart.options.cardid;
+						$.ajax({
+							url: query,
+							async: false
+						}).done(function(carddata) {
+							_thisViewCardStart.carddata = carddata;
+						});
+					}
+					// console.log(_thisViewCardStart.carddata);
+					
+					var query = "http://dominik-lohmann.de:5000/cardpages/?cardid="+_thisViewCardStart.options.cardid;
+					$.ajax({
+						url: query,
+						async: false
+					}).done(function(allcardpages) {
+						_thisViewCardStart.allcardpages = allcardpages;
+						_thisViewCardStart.allcardpages.sort(function(a, b){
+							return a.page-b.page
+						});
+						_thisViewCardStart.cardcount = allcardpages.length;
+						// console.log(_thisViewCardStart.cardcount);
+					});					
+					
+					var query = "http://dominik-lohmann.de:5000/cardpages/?cardid="+_thisViewCardStart.options.cardid+"&page="+_thisViewCardStart.options.page; // +"&uploader?"+model.get('uploader')
+					console.log(query);
+					$.ajax({
+						url: query,
+						async: false
+					}).done(function(cardpagedata) {
+						_thisViewCardStart.cardpagedata = cardpagedata[0];
+						// console.log(_thisViewCardStart.cardpagedata);
+					});
+					console.log(_thisViewCardStart.cardpagedata);
+					
 					if ( typeof( _thisViewCardStart.uploaderdata ) == "undefined") {
-						var uploader = model.get('uploader');
+						var uploader = _thisViewCardStart.carddata.uploader;
 						$.ajax({
 							url: "http://dominik-lohmann.de:5000/users/?id="+uploader,
 							async: false
@@ -152,68 +208,53 @@ define(["jquery", "backbone", "models/CardModel", "collections/cardsCollection",
 							_thisViewCardStart.uploaderdata = uploaderdata;
 						});
 					}
-					if ( typeof( _thisViewCardStart.carddata ) == "undefined") {
-						$.ajax({
-							url: "http://dominik-lohmann.de:5000/cardpages/?cardid="+model.collection.options.cardid+"&page="+model.collection.options.page+"&uploader?"+model.get('uploader'),
-							async: false
-						}).done(function(carddata) {
-							// console.log(carddata);
-							_thisViewCardStart.carddata = carddata[0];
-						});
-					}
-					
+					// console.log(_thisViewCardStart.uploaderdata);
 					// console.log('_thisViewCardStart.carddata');
 					// console.log(_thisViewCardStart.carddata);
 					
 					var pricetext = '';
-					if (model.get('price')==0) pricetext = 'kostenlos';
-					else pricetext = 'für '+model.get('price')+' Coins';
-					_template = _.template(cardsStartViewHTML, {
-						id: model.get('id'),
+					if (_thisViewCardStart.carddata.price==0) pricetext = 'kostenlos';
+					else pricetext = 'für '+_thisViewCardStart.carddata.price+' Coins';
+					_template = _.template(_thisViewCardStart.displayPage, {
+						id: _thisViewCardStart.carddata.id,
 						uploader: _thisViewCardStart.uploaderdata.fullname,
 						cardid: _thisViewCardStart.carddata.cardid,
-						answers: _thisViewCardStart.carddata.answers,
-						question: _thisViewCardStart.carddata.question,
-						page_id: _thisViewCardStart.carddata.id,
-						page: _thisViewCardStart.carddata.page,
-						lastpage: (parseInt(_thisViewCardStart.carddata.page)-1),
-						nextpage: (parseInt(_thisViewCardStart.carddata.page)+1),
-						topic: model.get('topic'),
-						cardurl: model.get('cardurl'),
-						title: model.get('title'),
-						subtitle: model.get('subtitle'),
-						description: model.get('description'),
-						price: model.get('price'),
-						pricetext: pricetext,
-						start: model.get('start'),
-						end: model.get('end')
+						answers: _thisViewCardStart.cardpagedata.answers,
+						question: _thisViewCardStart.cardpagedata.question,
+						cardpageid: _thisViewCardStart.cardpagedata.id,
+						page: _thisViewCardStart.cardpagedata.page,
+						lastpage: (parseInt(_thisViewCardStart.cardpagedata.page)-1),
+						nextpage: (parseInt(_thisViewCardStart.cardpagedata.page)+1),
+						topic: _thisViewCardStart.carddata.topic,
+						cardurl: _thisViewCardStart.carddata.cardurl,
+						title: _thisViewCardStart.carddata.title,
+						description: _thisViewCardStart.carddata.description,
+						price: _thisViewCardStart.carddata.price,
+						pricetext: pricetext
 					},{variable: 'card'});
 					$(this.el).html(_template);
 				},
 				render: function() {
 					_thisViewCardStart = this;
-					console.log('rendering CardStartView.js');
 					$(window).resize(function() {
 						window.resizeElement('#card_player_1')
 					});
-					console.log('DOING render CardStartView.js called');
 					$('#sidebarListViewDiv').html(_.template(sidemenusList, {}));
 					_thisViewCardStart.nestedView = new SidemenuView().fetch();
 					var htmlContent = '';
 					$(this.el).html(htmlContent);
-					// _thisViewCardStart.uploaderdata.id = '';
-					// _thisViewCardStart.carddata = '';
-					_.each(this._cardsCollection.models, function(model) {
-						this.id = model.get('id');
-						_thisViewCardStart.insertVariables(model);
-					});
 					
-					console.log('this._cardsCollection.models.attributes.cardurl');
-					console.log(this._cardsCollection);
-					// console.log(this._cardsCollection.models.attributes.cardurl);
+					if (_thisViewCardStart.options.page > _thisViewCardStart.cardcount) {
+						// doAlert('finish');
+						_thisViewCardStart.insertResult(_thisViewCardStart.options);
+					} else {
+						_thisViewCardStart.insertVariables(_thisViewCardStart.options);
+					}
 					
 					_thisViewCardStart.$el.trigger('create');
+					hideModal();
 					new FastClick(document.body);
+					fontResize();
 					_thisViewCardStart.$el.fadeIn( 500, function() {
 						$('.ui-content').scrollTop(0);
 						new FastClick(document.body);

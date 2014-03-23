@@ -1,0 +1,57 @@
+<h3 class="ui-bar ui-bar-f" style="border-top-width:0px;text-align:center;"><%= card.title %></h3>
+
+<div style="margin-bottom:50px;padding:15px;width;100%;">
+
+	<h3>Auswertung</h3>
+	
+	<form id="submitform" action="#cards/start/view/<%= card.cardid %>/<%= card.nextpage %>" method="post" class="no-ui-body no-ui-body-a no-ui-corner-all" style="border:0;">
+		
+		<input type="hidden" id="id" name="id" value="<%= card.id %>">
+		<input type="hidden" id="page" name="page" value="<%= card.page %>">
+		
+			<p><div style="font-size:16px;" class="resizetext"><%= card.title %></div></p>
+			<% if (card.failures==0) { %>
+				<p><div style="font-size:14px;padding-top:20px;padding-bottom:20px;" class="resizetext">
+					Herzlichen Glückwunsch. <br>
+					Das war absolut fehlerfrei.
+				</div></p>
+			<% } else { %>
+				<p><div style="color:red;font-size:14px;" class="resizetext">Sie haben <%= card.failures %> Fehler gemacht.</div></p>
+			<% } %>
+			
+		<!-- <% console.log(card.resultArray) %> -->
+		
+		<% _.each(card.resultArray, function(resultElement) { %>
+			<p style="font-size:14px;font-weight:bold;" class="resizetext">
+				
+				<% if (resultElement.lastquestion!=resultElement.question) { %> 
+					<p style="font-size:16px;padding-top:20px;" class="resizetext"><strong><%= resultElement.question %></strong></p>
+				<% } %>
+				
+				<div style="font-size:14px;" class="resizetext"><%= resultElement.answer %> </div> <br>
+				<% if (resultElement.solution==0) { %>
+					<div style="color:red;font-size:14px;" class="resizetext">Diese Antwort ist leider falsch.</div> <br>
+				<% } else { %>
+					<div style="color:red;font-size:14px;" class="resizetext">Diese Antwort wäre wäre richtig gewesen.</div> <br>
+				<% } %>
+			</p>
+			
+		<% }); %>
+		
+		<!--
+		<p>
+			<div data-role="controlgroup" style="border:0;">
+				
+			</div>
+		</p>
+		-->
+		
+		<% if (card.resultArray.length>0) { %>
+			<input id="retrycard" name="retrycard" data-theme="d" type="button" value="Nochmal versuchen" />
+		<% } else { %>
+			<input id="cardslink" name="cardslink" data-theme="f" type="button" value="Neues Lernset starten" />
+		<% } %>
+		
+	</form>
+	
+</div>
