@@ -9,7 +9,9 @@
 </ul>
 <br><br>
 -->
-<h3 class="ui-bar ui-bar-a" style="border-top-width:0px;text-align:center;">Willkommen, <%= user.fullname %></h3>
+<h3 class="ui-bar ui-bar-a" style="border-top-width:0px;text-align:center;">Willkommen
+	<% if(parseInt(user.fullname)>0) { } else { %>, <%= user.fullname %> <% } %>
+</h3>
 <div style="padding:15px;overflow:hidden;z-index:700;height:100%;">
 	<ul data-role="listview" data-theme="a" data-icon="false">
 		<li>
