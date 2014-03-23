@@ -14,6 +14,12 @@
 		<meta http-equiv="cache-control" content="no-cache"/>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		
+		<script type="text/javascript">
+			window.onerror = function(message, url, lineNumber) {
+				console.log("Error: "+message+" in "+url+" at line "+lineNumber);
+			}
+		</script>
+		
 		<!-- <script src="http://debug.build.phonegap.com/target/target-script-min.js#appinaut633241"></script> -->
 		<script type="text/javascript" src="cordova-loader.js"></script>
 		<script src="js/detectmobile.js"></script>
