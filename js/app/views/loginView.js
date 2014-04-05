@@ -48,14 +48,17 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 										// alert(me.username);
 										$('#showMenu').show();
 										$('#showPageOptionsIcon').show();
-										var newlogincount = 0;
 										var logincount = _thisViewLogin.me.logincount;
 										if (logincount==undefined) logincount=0;
+										var newlogincount = 0;
 										var newlogincount = logincount+1;
 										dpd.users.put(_thisViewLogin.me.id, {"logincount":newlogincount}, function(result, err) { 
 											if(err) { 
 												hideModal();
 											}
+											// alert(username);
+											// alert(password);
+											window.dao.rememberUserData(username, password);
 											// alert('redirecting');
 											// system.redirectToUrl(targetUrl);
 											window.location.href="#dashboard";
@@ -113,6 +116,7 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 				},
 				initialize: function() {
 					var _thisViewLogin = this;
+					_thisViewLogin.autologin = false;
 					_thisViewLogin.redirecturl = '#myprofile';
 					showModal();
 					this.$el.hide();
@@ -122,6 +126,22 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 					_thisViewLogin = this;
 					_thisViewLogin.username = "";
 					_thisViewLogin.password = "";
+					// window.dao.rememberUserDataGet(_thisViewLogin.render);
+					// alert('first');
+					window.dao.rememberUserDataGet(_thisViewLogin.rememberUserDataCallback);
+				},
+				rememberUserDataCallback: function(userdata) {
+					// alert('second');
+					_thisViewLogin.userdata = userdata;
+					// alert(_thisViewLogin.userdata.username);
+					if (_thisViewLogin.userdata.username!='') {
+						// alert(_thisViewLogin.userdata);
+						// alert(_thisViewLogin.userdata.username);
+						_thisViewLogin.username = _thisViewLogin.userdata.username;
+						_thisViewLogin.password = _thisViewLogin.userdata.password;						
+						_thisViewLogin.autologin = true;
+					}
+					// alert('third');
 					_thisViewLogin.render();
 				},
 				toggleGiftcodeInput: function() {
@@ -141,6 +161,9 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 					this.$el.off('click','.anonymlogin').on('click','.anonymlogin',function(event){event.preventDefault();_thisViewLogin.sendAnonymlogin();});
 					$('#username').val(_thisViewLogin.username);
 					$('#password').val(_thisViewLogin.password);
+					if (_thisViewLogin.autologin==true) {
+						_thisViewLogin.sendLogin('#dashboard');
+					}
 				},
 				sendAnonymlogin: function() {
 					_thisViewLogin = this;

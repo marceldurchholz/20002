@@ -207,7 +207,6 @@ try {
 		},
 			
 		findVideoById: function(id) {
-			// alert('outer searching for id: ' + id);
 			var deferred = $.Deferred();
 			if (isPhoneGap()) {
 				this.db.transaction(
@@ -224,11 +223,6 @@ try {
 			}
 			else {
 				deferred.resolve();
-				/*
-				setTimeout(function() {
-					deferred.resolve();
-				}, 3000);
-				*/
 			}
 			return deferred.promise();
 		},
@@ -236,11 +230,37 @@ try {
 		createTables: function() {
 			this.db.transaction(
 				function(tx) { 
-					// tx.executeSql("CREATE TABLE IF NOT EXISTS users ( username VARCHAR(255) PRIMARY KEY, password VARCHAR(255))");
 					tx.executeSql("CREATE TABLE IF NOT EXISTS videos ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "videoid VARCHAR(255), " + "videourl VARCHAR(255))");
 				},
-				function() { 
+				function(error) { 
 					// alert('ERROR ON Tables CREATE local SQLite database'); 
+					// alert(error);
+				},
+				function() { 
+					window.system.showtutorial = true;
+					// alert('SUCCESS Tables CREATE local SQLite database'); 
+					// websqlReady.resolve("initialize done"); 
+				}
+				/*
+				function(tx) { 
+					var sql1 = 'CREATE TABLE IF NOT EXISTS metbl ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "username VARCHAR(255), password VARCHAR(255))';
+					tx.executeSql(sql1,[], function (tx, results) {
+					});
+				}
+				function(tx) { 
+					var sql2 = 'CREATE TABLE IF NOT EXISTS videos ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "videoid VARCHAR(255), " + "videourl VARCHAR(255))';
+					tx.executeSql(sql2,[], function (tx, results) {
+					});
+				}
+				*/
+			);
+			this.db.transaction(
+				function(tx) { 
+					tx.executeSql("CREATE TABLE IF NOT EXISTS metbl ( " + "id INTEGER PRIMARY KEY, " + "username VARCHAR(255), " + "password VARCHAR(255))");
+				},
+				function(error) { 
+					// alert('ERROR ON Tables CREATE local SQLite database'); 
+					// alert(error);
 				},
 				function() { 
 					window.system.showtutorial = true;
@@ -249,7 +269,84 @@ try {
 				}
 			);
 		},
-
+		rememberUserDataDelete: function(callback) {
+			// alert('rememberUserDataDelete');
+			if (isPhoneGap()) {
+				this.db.transaction(
+					function (tx) {
+						var id = 1;
+						var sql = "DELETE FROM metbl WHERE id=:id";
+						tx.executeSql(sql, [id], function (tx, results) {
+							callback();
+						});
+					},
+					function (error) {
+						// alert('error');
+						// alert(error.message);
+						// deferred.reject("Transaction Error: " + error.message);
+						callback();
+					}
+				);
+			}
+			else {
+				callback();
+			}
+		},
+		rememberUserDataGet: function(callback) {
+			// var deferred = $.Deferred();
+			var userdata = new Object();
+			userdata.username = "";
+			userdata.password = "";
+			if (isPhoneGap()) {
+				this.db.transaction(
+					function (tx) {
+						var id = 1;
+						var sql = "SELECT m.username, m.password FROM metbl m WHERE m.id=:id";
+						tx.executeSql(sql, [id], function (tx, results) {
+							// alert('found');
+							// alert(results.username);
+							// alert(results[0].username);
+							// alert('length '+results.rows.length);
+							// alert('results.row... '+results.rows.item(0).username);
+							// deferred.resolve(results.rows.length === 1 ? results.rows.item(0) : null);
+							callback(results.rows.item(0));
+						});
+					},
+					function (error) {
+						// alert('error');
+						// alert(error.message);
+						// deferred.reject("Transaction Error: " + error.message);
+						callback(userdata);
+					}
+				);
+			}
+			else {
+				callback(userdata);
+			}
+			// return deferred.promise();
+			// callback();
+		},
+		rememberUserData: function(username, password) {
+			if (isPhoneGap()) {
+				this.db.transaction(
+					function(tx) {
+						// alert('filling table INSERT START');
+						var sql3 = "INSERT OR REPLACE INTO metbl (id, username, password) VALUES (1, '"+username+"', '"+password+"')";
+						// alert(sql3);
+						tx.executeSql(sql3);
+						// alert('filling table INSERT END');
+					},
+					function() {
+						// alert('ERROR ON Table metbl FILLING WITH SAMPLES in local SQLite database');
+					},
+					function() {
+						// alert('Table metbl successfully FILLED WITH SAMPLES in local SQLite database');
+						// callback();
+					}
+				);
+			}
+			// if (!isPhoneGap()) websqlReady.resolve("initialize done");
+		},
 		fillTable: function() {
 			// alert('filling table');
 			if (isPhoneGap()) {
@@ -1971,7 +2068,7 @@ try {
 					// console.log("Code = " + r.responseCode);
 					// console.log("Response = " + r.response);
 					// console.log("Sent = " + r.bytesSent);
-					alert(r.bytesSent);
+					// alert(r.bytesSent);
 					dpd.videos.post({"vsize":Math.ceil(r.bytesSent).toString(),"vlength":window.system.videolength.toString(),"uploader":""+_this._thisViewRecordVideoNested.me.id,"videourl":""+options.fileName,"active":true,"cdate":""+dateYmdHis(),"topic":""+formValues.interest,"title":""+formValues.title,"subtitle":""+formValues.subtitle,"description":""+formValues.description,"price":formValues.sliderprice}, function(result, err) {
 						if(err) {
 							hideModal();
@@ -2258,6 +2355,7 @@ try {
 				  }
 			);
 		},
+		/*
 		onResume: function() {
 			// alert('app resumed');
 			// dpd.users.me(function(user) {
@@ -2270,6 +2368,7 @@ try {
 			});
 
 		},
+		*/
 		fetchWorking: function() {
 			var setTimeoutWatcher = setTimeout(function foo() {
 				if ( _thisApp.dfd.state() === "pending" ) {
