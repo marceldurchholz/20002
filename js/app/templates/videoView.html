@@ -1,7 +1,15 @@
-<li data-id="<%= video.id %>" class="swipeToDelete" data-topic="<%= video.topic %>">
-	<a href="#videos/details/view/<%= video.id %>">
-		<h3><%= video.title %></h3>
-		<p><%= video.uploader %></p>
-		<p><%= video.description %></p>
-	</a>
-</li>
+<ul id="videosListView" data-filter="true" data-filter-placeholder="Suchfilter..." data-filter-theme="a" data-role="listview" data-theme="a" data-divider-theme="b" data-autodividers="true">
+
+	<% _.each(videos.data, function(video) { %>
+		
+		<li data-id="<%= video.id %>" class="swipeToDelete" data-topic="<%= video.topic %>">
+			<a href="#videos/details/view/<%= video.id %>">
+				<h3><%= video.title %></h3>
+				<p><%= video.uploaderdata.fullname %></p>
+				<p><%= video.description %></p>
+			</a>
+		</li>		
+		
+	<% }); %>
+
+</ul>
