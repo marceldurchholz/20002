@@ -1,16 +1,5 @@
-<!--
-<ul data-role="listview">
-	<li data-role="list-divider">A</li>
-	<li><a href="index.html">Adam Kinkaid</a></li>
-	<li><a href="index.html">Alex Wickerham</a></li>
-	<li><a href="index.html">Avery Johnson</a></li>
-	<li data-role="list-divider">B</li>
-	<li><a href="index.html">Bob Cabot</a></li>
-</ul>
-<br><br>
--->
 <h3 class="ui-bar ui-bar-a" style="border-top-width:0px;text-align:center;">Willkommen
-	<% if(parseInt(user.fullname)>0) { } else { %>, <%= user.fullname %> <% } %>
+	<% if(parseInt(user.username)>0) { } else { %>, <%= user.username %> <% } %>
 </h3>
 <div style="padding:15px;overflow:hidden;z-index:700;height:100%;">
 	<ul data-role="listview" data-theme="a" data-icon="false">
@@ -41,27 +30,27 @@
 			</a>
 		</li>
 		
-		<li>
-			<a href="#cards" style="padding-top:0px;padding-bottom:0px;">
-				<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-cards-60.png" /></div>
-				<h5 style="padding-top:2px;padding-bottom:4px;margin-left:80px;">Lernsets</h5>
-				<p style="margin-left:80px;">Lernkarten zum interaktiven Lernen</p>
-				<!-- <p class="ui-li-aside"><strong>6:24</strong>PM</p> -->
-			</a>
-		</li>
-
-		<% if (checkRole("seeker")==true) { %>
+		<% if (checkRole("cards")==true) { %>
 			<li>
-				<a href="#messages" style="padding-top:0px;padding-bottom:0px;">
-					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-message-<% if(user.newmsgs>0) { %>unread<% } else { %>read<% } %>-60.png" /></div>
-					<h5 style="padding-top:2px;padding-bottom:4px;margin-left:80px;">Nachrichten <% if(user.newmsgs>0) { %>(<%= user.newmsgs %>) <% } %></h5>
-					<p style="margin-left:80px;">Mitteilungen (an und von Wissensanbietern)</p>
+				<a href="#cards" style="padding-top:0px;padding-bottom:0px;">
+					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-cards-60.png" /></div>
+					<h5 style="padding-top:2px;padding-bottom:4px;margin-left:80px;">Lernsets</h5>
+					<p style="margin-left:80px;">Lernkarten zum interaktiven Lernen</p>
 					<!-- <p class="ui-li-aside"><strong>6:24</strong>PM</p> -->
 				</a>
 			</li>
 		<% } %>
 		
-		<% if (checkRole("superadmin")==true) { %>
+		<li>
+			<a href="#messages" style="padding-top:0px;padding-bottom:0px;">
+				<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-message-<% if(user.newmsgs>0) { %>unread<% } else { %>read<% } %>-60.png" /></div>
+				<h5 style="padding-top:2px;padding-bottom:4px;margin-left:80px;">Nachrichten <% if(user.newmsgs>0) { %>(<%= user.newmsgs %>) <% } %></h5>
+				<p style="margin-left:80px;">Mitteilungen an und von Wissensanbieter</p>
+				<!-- <p class="ui-li-aside"><strong>6:24</strong>PM</p> -->
+			</a>
+		</li>
+		
+		<% if (checkRole("events")==true) { %>
 			<li>
 				<a href="#planer" style="padding-top:0px;padding-bottom:0px;">
 					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-calendar-002-resized-60.png" /></div>

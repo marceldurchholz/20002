@@ -1,8 +1,8 @@
 // LearningStreamNestedView.js
 // -------
-define(["jquery", "backbone", "text!templates/LearningStreamNestedPage.html", "text!templates/sidemenusList.html", "views/SidemenuView"],
+define(["jquery", "backbone", "models/VideoModel", "collections/videosCollection", "text!templates/LearningStreamNestedPage.html", "text!templates/sidemenusList.html", "views/SidemenuView"],
 
-    function($, Backbone, LearningStreamNestedPage, sidemenusList, SidemenuView){
+    function($, Backbone, VideoModel, videosCollection, LearningStreamNestedPage, sidemenusList, SidemenuView){
 		
 		var LearningStreamNestedViewVar = Backbone.View.extend({
 			
@@ -92,72 +92,58 @@ define(["jquery", "backbone", "text!templates/LearningStreamNestedPage.html", "t
 				}).done(function(me) {
 					// alert(me.id);
 					_thisViewLearningStreamNested.me = me;
+				if (_thisViewLearningStreamNested.me.interests == undefined) _thisViewLearningStreamNested.me.interests = new Array();
 				});
 
 				
+				var requestUrl = "http://dominik-lohmann.de:5000/videos?active=true&deleted=false&public=true";
+				if (window.system.master!=true) requestUrl = requestUrl + "&uploader="+window.system.aoid;
 				$.ajax({
-					url: "http://dominik-lohmann.de:5000/videos?active=true&deleted=false",
+					url: requestUrl,
 					async: false
 				}).done(function(videoData) {
 					_.each(videoData, function(value, index, list) {
 						var exists = $.inArray( value.topic, _thisViewLearningStreamNested.me.interests );
 						if (_thisViewLearningStreamNested.me.interests == undefined) exists=1;
 						else if (_thisViewLearningStreamNested.me.interests.length==0) exists=1;
-						if ((exists>-1 || value.uploader == me.id) && (window.system.aoid=='' || window.system.aoid==value.uploader)) {
+						if (exists>-1 || value.uploader == me.id) {
 							value.ccat = 'video';
 							value.icon = 'images/icon-multimedia-60.png';
 							value.href = '#videos/details/view/'+value.id;
-							
-							
-							/*
-							// _.each(_thisViewLearningStreamNested.streamData, function(value, index, list) {
-								var uploader = value.uploader; // "ed568841af69d94d";
-								$.ajax({
-									// type: 'get',
-									// timeout: 5000,
-									url: 'http://dominik-lohmann.de:5000/users/?id='+uploader,
-									async: false,
-									success: function(data, textStatus, XMLHttpRequest){
-										// console.log('Error: ' + textStatus);
-										_thisViewLearningStreamNested.streamData.push(value);
-										// console.log(data);
-									},
-									error:function (xhr, ajaxOptions, thrownError){
-										// console.log('error');
-										// console.log(index);
-										// alert(xhr.status);
-										// alert(xhr.statusText);
-										// alert(xhr.responseText);
-									}
-								});
-							// });
-							*/
 							_thisViewLearningStreamNested.streamData.push(value);
 						}
 					});
 				});
 				// console.log(_thisViewLearningStreamNested.streamDatairefire);
-				/*
+				
+				var requestUrl = "http://dominik-lohmann.de:5000/cards?active=true&deleted=false&public=true";
+				if (window.system.master!=true) requestUrl = requestUrl + "&uploader="+window.system.aoid;
 				$.ajax({
-					url: "http://dominik-lohmann.de:5000/cards?active=true&deleted=false",
+					url: requestUrl,
 					async: false
 				}).done(function(cardData) {
 					_.each(cardData, function(value, index, list) {
-						var exists = $.inArray( value.topic, _thisViewLearningStreamNested.me.interests )
-						if (exists>-1) {
+						var exists = $.inArray( value.topic, _thisViewLearningStreamNested.me.interests );
+						if (_thisViewLearningStreamNested.me.interests == undefined) exists=1;
+						else if (_thisViewLearningStreamNested.me.interests.length==0) exists=1;
+						if (exists>-1 || value.uploader == me.id) {
 							value.ccat = 'card';
 							value.icon = 'images/icon-cards-60.png';
 							value.href = '#cards/details/view/'+value.id;
-							// _thisViewLearningStreamNested.streamData.push(value);
+							_thisViewLearningStreamNested.streamData.push(value);
 						}
 					});
 				});
+				/*
 				$.ajax({
 					url: "http://dominik-lohmann.de:5000/planer?active=true&deleted=false",
 					async: false
 				}).done(function(planData) {
 					_.each(planData, function(value, index, list) {
-						var exists = $.inArray( value.topic, _thisViewLearningStreamNested.me.interests )
+						var exists = $.inArray( value.topic, _thisViewLearningStreamNested.me.interests );
+						if (_thisViewLearningStreamNested.me.interests == undefined) exists=1;
+						else if (_thisViewLearningStreamNested.me.interests.length==0) exists=1;
+						if (exists>-1 || value.uploader == me.id) {
 						if (exists>-1) {
 							value.ccat = 'plan';
 							value.icon = 'images/icon-planer-60.png';
@@ -199,6 +185,9 @@ define(["jquery", "backbone", "text!templates/LearningStreamNestedPage.html", "t
 			render: function() {
 				this.bindEvents();
 				var _thisViewLearningStreamNested = this;
+				
+				console.log(_thisViewLearningStreamNested.streamData);
+				
 				// console.log(_thisViewLearningStreamNested);
 				// console.log('DOING render LearningStreamNestedView.js called');
 				// _thisViewLearningStreamNested.reload();

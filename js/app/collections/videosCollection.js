@@ -17,7 +17,9 @@ define(["jquery", "backbone", "models/VideoModel"],
 			this.localStorage = this._localStorage_videos;
 			if (_thisCollectionVideos.online==1) {
 				// this.url = 'http://dominik-lohmann.de:5000/videos?{"$orderby":"topic"}';
+				// alert(window.system.aoid);
 				this.url = 'http://dominik-lohmann.de:5000/videos/?active=true&deleted=false';
+				if (window.system.master!=true) this.url = this.url + "&uploader=" + window.system.aoid;
 				// this.url = 'http://dominik-lohmann.de:5000/videos/d6c9268c49a139bf';
 				this.localStorage = null;
 			}

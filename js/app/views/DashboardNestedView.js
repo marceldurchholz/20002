@@ -111,6 +111,7 @@ define(["jquery", "backbone", "text!templates/DashboardNestedViewPage.html"],
 					id: _thisViewDashboardNested.me.id
 					, pictureurl: _thisViewDashboardNested.me.pictureurl
 					, fullname: _thisViewDashboardNested.me.fullname
+					, username: _thisViewDashboardNested.me.username
 					// , newmsgs: _thisViewDashboardNested.me.newmsgs
 					, newmsgs: 0
 				},{variable: 'user'});

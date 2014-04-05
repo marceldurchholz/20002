@@ -18,7 +18,7 @@ define(["jquery", "backbone", "text!templates/MessagesDetailsViewNestedPage.html
 				var contactsArray = new Array;
 				// var query = {$or:[{"sponsor":me.id},{"followers":me.id}],  "followers" : {"$in" : [me.id]}   , id:{$ne: me.id}, active:true,deleted:false,messageble:true,$sort:{fullname:1}};
 				// var query = { "following" : {"$in" : [me.id]}   };
-				var query = {  $or:[{"sponsor":window.me.id},{"following":{"$in":[window.me.id]}},{"followers":{"$in":[window.me.id]}}] , id:{$ne: window.me.id} , active:true,deleted:false,messageble:true,$sort:{fullname:1} };
+				var query = {  $or:[{"sponsor":window.me.id},{"id":window.system.aoid},{"following":{"$in":[window.me.id]}},{"followers":{"$in":[window.me.id]}}] , id:{$ne: window.me.id} , active:true,deleted:false,messageble:true,$sort:{fullname:1} };
 				dpd.users.get(query, function (contactsArray,err) {
 					if(err) {
 						_thisMessagesDetailsViewNested.render();

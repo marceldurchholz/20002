@@ -84,19 +84,21 @@ define(["jquery", "backbone", "collections/cardsCollection", "text!templates/car
 				_thisViewVideo = this;
 				var uploader = model.get('uploader');
 				rowContent = '';
-				if (window.system.aoid=='' || model.get('uploader') == window.system.aoid) {
-					rowContent = _.template(cardPage, {
-						id: model.get('id'),
-						// uploader: model.get('uploader'),
-						uploader: model.get('uploaderdata').fullname,
-						url: model.get('url'),
-						title: model.get('title'),
-						description: model.get('description'),
-						price: model.get('price'),
-						thumbnailurl: model.get('thumbnailurl'),
-						topic: model.get('topic')
-					},{variable: 'card'});
-				}
+				// if (model.get('uploader') == window.system.aoid) {
+				//	if (window.system.master!=true) {
+						rowContent = _.template(cardPage, {
+							id: model.get('id'),
+							// uploader: model.get('uploader'),
+							uploader: model.get('uploaderdata').fullname,
+							url: model.get('url'),
+							title: model.get('title'),
+							description: model.get('description'),
+							price: model.get('price'),
+							thumbnailurl: model.get('thumbnailurl'),
+							topic: model.get('topic')
+						},{variable: 'card'});
+				//	}
+				// }
 				return(rowContent);
 			},
 			render: function() {

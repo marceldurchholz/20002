@@ -468,6 +468,10 @@ try {
 				addcredits = "6500";
 				// alert("Gehen Sie auf allen Vieren und werden Sie bescheidener");
 				break;
+			  case "com.digitalverve.APPinaut.16000APP9999T60":
+				addcredits = "16000";
+				// alert("Gehen Sie auf allen Vieren und werden Sie bescheidener");
+				break;
 			  case "com.digitalverve.APPinaut.25000APP17999T72":
 				addcredits = "25000";
 				// alert("Gehen Sie auf allen Vieren und werden Sie bescheidener");
@@ -571,6 +575,7 @@ try {
 					"com.digitalverve.APPinaut.250APP359T4", 
 					"com.digitalverve.APPinaut.750APP799T9", 
 					"com.digitalverve.APPinaut.6500APP4999T51", 
+					"com.digitalverve.APPinaut.16000APP9999T60",
 					"com.digitalverve.APPinaut.25000APP17999T72"
 				];
 				window.storekit.load(productIds, function(validProducts, invalidProductIds) {
@@ -646,9 +651,13 @@ try {
 	/ ----------------------------------------------------------- */
 	function modifyiOS7StatusBar(){
 		// if (window.device.version) alert('>> '+window.device.version);
-		var doit = false;
+		var doit = true;
 		if (isPhoneGap() && doit==true) {
-			try{
+			try {
+				StatusBar.hide();
+				document.body.style.marginTop = "0px";
+				$("#body").css('top', "0px");
+				/*
 				if (parseFloat(window.device.version) === 7.0) {
 					// StatusBar.overlaysWebView(false);
 					// StatusBar.styleLightContent();
@@ -667,6 +676,7 @@ try {
 					// document.body.style.marginTop = "20px";
 				}
 				// StatusBar.backgroundColorByHexString("#3e8fd9");
+				*/
 			} catch(e){ 
 				// catchError('modifyiOS7StatusBar()',e); 
 			}
@@ -2277,7 +2287,7 @@ try {
 				window.setTimeout(function blay() {
 					// alert('resolve');
 					_thisApp.dfd.resolve(true);
-				}, 5000);
+				}, 1000);
 			}
 			else {
 				// document.addEventListener('load', this.onDeviceReady, false);
@@ -2806,7 +2816,8 @@ try {
 
 	var system = {
 		uid: "0",
-		aoid: "c11d0992874f5855",
+		aoid: "3a499b457111f803",
+		master: false,
 		showtutorial: false,
 		contentHelper: 0,
 		timestamp: 0,
