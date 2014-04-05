@@ -14,22 +14,33 @@ define(["jquery", "backbone", "text!templates/MessagesDetailsViewNestedPage.html
 			},
 			showReceiverPanel: function() {
 				_thisMessagesDetailsViewNested = this;
-				$('#innerHeader').html('Empfänger auswählen...');
-				var contactsArray = new Array;
-				// var query = {$or:[{"sponsor":me.id},{"followers":me.id}],  "followers" : {"$in" : [me.id]}   , id:{$ne: me.id}, active:true,deleted:false,messageble:true,$sort:{fullname:1}};
-				// var query = { "following" : {"$in" : [me.id]}   };
-				var query = {  $or:[{"sponsor":window.me.id},{"id":window.system.aoid},{"following":{"$in":[window.me.id]}},{"followers":{"$in":[window.me.id]}}] , id:{$ne: window.me.id} , active:true,deleted:false,messageble:true,$sort:{fullname:1} };
-				dpd.users.get(query, function (contactsArray,err) {
-					if(err) {
-						_thisMessagesDetailsViewNested.render();
-						return console.log(err);
+				
+				dpd('users').get(window.system.uid, function(me, err) { 
+					if (me) {
+						window.me = me;
+						$('#innerHeader').html('Empfänger auswählen...');
+						var contactsArray = new Array;
+						// var query = {$or:[{"sponsor":me.id},{"followers":me.id}],  "followers" : {"$in" : [me.id]}   , id:{$ne: me.id}, active:true,deleted:false,messageble:true,$sort:{fullname:1}};
+						// var query = { "following" : {"$in" : [me.id]}   };
+						var query = {  $or:[{"sponsor":window.me.id},{"id":window.system.aoid},{"following":{"$in":[window.me.id]}},{"followers":{"$in":[window.me.id]}}] , id:{$ne: window.me.id} , active:true,deleted:false,messageble:true,$sort:{fullname:1} };
+						dpd.users.get(query, function (contactsArray,err) {
+							if(err) {
+								_thisMessagesDetailsViewNested.render();
+								return console.log(err);
+							}
+							$('#MessagesDetailsViewDiv').html(_.template(MessagesReceiverPanelViewNestedPage, {
+								data: contactsArray
+							},{variable: 'contacts'}));
+							$('#MessagesDetailsViewDiv').trigger('create');
+							_thisMessagesDetailsViewNested.render();
+						});
 					}
-					$('#MessagesDetailsViewDiv').html(_.template(MessagesReceiverPanelViewNestedPage, {
-						data: contactsArray
-					},{variable: 'contacts'}));
-					$('#MessagesDetailsViewDiv').trigger('create');
-					_thisMessagesDetailsViewNested.render();
+					else {
+						// console.log('Redirecting... You are not logged in!');
+						window.location.href = "#login";				
+					}
 				});
+
 			},
 			fetch: function() {	
 				var _thisMessagesDetailsViewNested = this;
@@ -98,8 +109,8 @@ define(["jquery", "backbone", "text!templates/MessagesDetailsViewNestedPage.html
 								});
 							}
 							else {
-								// console.log('You are not logged in!');
-								window.location.href = "#noaccess";
+								// console.log('Redirecting... You are not logged in!');
+								window.location.href = "#login";
 							}
 						});
 					

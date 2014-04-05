@@ -2816,6 +2816,7 @@ try {
 
 	var system = {
 		uid: "0",
+		app: {title:"Robert Spengler | Stärke Deinen Auftritt", calltoaction:"Registrieren oder Einloggen um zu entdecken"},
 		aoid: "3a499b457111f803",
 		master: false,
 		showtutorial: false,

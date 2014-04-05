@@ -1,5 +1,14 @@
 <div id="MessagesNestedViewDiv" class="MessagesNestedViewDiv" style="margin-bottom:50px;p/adding:15px;">
 	<ul data-filter="true" data-filter-placeholder="Suchfilter..." data-filter-theme="a" data-count-theme="none" data-role="listview" data-theme="a" data-divider-theme="a" data-role="listview" style="max-height:80px !important;height:80px !important;">
+				
+		<li data-cat="messages" class="" style="max-height:60px !important;">
+			<a class="showMessageDetailsLink" href="#messages/details/view/<% if (checkRole("provider")==true) { %>0<% } else { %><%= window.system.aoid %><% } %>" style="padding-left:80px;">
+				<img style="padding:8px 0px 8px 20px;height:40px !important;max-height:40px !important;max-width:40px !important;" src="images/icon-message-unread-60.png" />
+				<h6 style="padding:0px 0px 10px 0px;margin:0;">Neue Nachricht schreiben</h6>
+				<p><% if (checkRole("provider")==true) { %>an einen Wissensdurstigen<% } else { %>an <%= window.system.app.title %><% } %></p>
+			</a>
+		</li>
+				
 		<% _.each(messages.data, function(message) { if (message) { %>
 			<% if(message.display==1 && message.fullname!="" && message.fullname!=undefined) { %>
 				<li data-cat="messages" data-id="<%= message.id %>" class="swipeToDelete" style="max-height:60px !important;b/order:10px solid #000;p/adding-top:50px;">
