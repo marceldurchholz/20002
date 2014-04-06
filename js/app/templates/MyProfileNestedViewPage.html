@@ -6,7 +6,7 @@
 		<input style="width:100%;" data-theme="a" data-mini="true" type="text" name="fullname" id="fullname" value="<%= user.fullname %>" placeholder="Name erforderlich..."/>
 		<div class="clear resizetext emptyWarningDiv" style="color:red;display:none;">Es muss ein Name hinterlegt werden.</div>
 		<div class="clear"></div>
-		<div style="color:#606060;font-size:14px;font-weight:normal;padding:5px 5px;line-height:1.5em;" class="resizetext"><!--<%= user.username %>--><% if( user.provider > -1 ) { %>Anbieter-ID:<br><%= user.id %><% } %></div>
+		<div style="color:#606060;font-size:14px;font-weight:normal;padding:5px 5px;line-height:1.5em;" class="resizetext"><!--<%= user.username %>--><% if( user.provider > -1 ) { %>Anbieter-ID: <%= user.kdnr %><% } %></div>
 		<div class="clear"></div>
 		<!-- <input style="width:100%;" data-theme="a" no-data-role="none" data-mini="true" type="text" name="username" id="username" value="<%= user.username %>" placeholder="Ihr Benutzername/E-Mail"/> -->
 		<!-- <p><%= user.username %></p> -->
@@ -26,9 +26,9 @@
 </div>
 
 <div class="clear"></div>
-<div class="resizetext" style="font-size:12px;">Helfen Sie den APPinaut® Wissensanbietern:</div>
+<div class="resizetext" style="font-size:12px;"><% if( user.provider <= 0 ) { %>Helfen Sie den APPinaut® Wissensanbietern:<% } else { %>Informatieren Sie die APPinaut® Wissensdurstigen:<% } %></div>
 <div class="clear"></div>
-<textarea style="width:100%;height:<%= Math.round($(window).height()/5) %>px;max-height:300px;min-height:80px;" data-theme="a" no-data-role="none" data-mini="false" type="text" placeholder="Welche Themen begeistern Sie und welches Wissen interessiert Sie?" name="perstext" id="perstext"><%= user.perstext %></textarea>
+<textarea style="width:100%;height:<%= Math.round($(window).height()/5) %>px;max-height:300px;min-height:80px;" data-theme="a" no-data-role="none" data-mini="false" type="text" placeholder="<% if( user.provider <= 0 ) { %>Welche Themen begeistern Sie und welches Wissen interessiert Sie?<% } else { %>Zu welchen Expertengebieten werden Sie den Wissensdurstigen des APPinaut® Inhalte bieten?<% } %>" name="perstext" id="perstext"><%= user.perstext %></textarea>
 <div class="clear"></div>
 <hr>
 
@@ -36,7 +36,6 @@
 <%= user.id %> <br>
 <%= user.pictureurl %> <br>
 <%= user.fullname %> <br>
-
 <div class="clear"></div>
 -->
 <!-- <div id="listRow" class="listRow" data-id="<%= user.id %>"> -->
@@ -70,23 +69,28 @@
 -->
 
 <div data-role="collapsible" data-theme="b" data-content-theme="a">
-	<h6>Interessensbereiche filtern</h6>
-	<!--<legend><h6>Interessengebiete</h6></legend>-->
-	<% _.each(user.interests, function(interests) { %>
-		<input data-inset="false" <%= interests.checked %> <%= interests.status %> data-mini="true" type="checkbox" name="checkbox-v-<%= interests.id %>" id="checkbox-v-<%= interests.id %>">
-		<label for="checkbox-v-<%= interests.id %>"><%= interests.name %></label>
-	<% }); %>
-
-	<!--
-	<input data-mini="true" type="checkbox" name="checkbox-v-2h" id="checkbox-v-2h"><label for="checkbox-v-2h">Marketing</label>
-	<input checked data-mini="true" type="checkbox" name="checkbox-v-2a" id="checkbox-v-2a"><label for="checkbox-v-2a">Humor</label>
-	<input checked data-mini="true" type="checkbox" name="checkbox-v-2d" id="checkbox-v-2d"><label for="checkbox-v-2d">Persönlichkeitsentwicklung</label>
-	<input data-mini="true" type="checkbox" name="checkbox-v-2f" id="checkbox-v-2f"><label for="checkbox-v-2f">Rhetorik</label>
-	<input checked data-mini="true" type="checkbox" name="checkbox-v-2e" id="checkbox-v-2e"><label for="checkbox-v-2e">Selbstbewußtsein</label>
-	<input data-mini="true" type="checkbox" name="checkbox-v-2b" id="checkbox-v-2b"><label for="checkbox-v-2b">Stimme</label>
-	<input data-mini="true" type="checkbox" name="checkbox-v-2g" id="checkbox-v-2g"><label for="checkbox-v-2g">Suchmaschinenoptimierung</label>
-	<input checked data-mini="true" type="checkbox" name="checkbox-v-2c" id="checkbox-v-2c"><label for="checkbox-v-2c">Verkauf</label>
-	-->
+	<h6>Interessenbereiche</h6>
+	<table cellspacing="0" cellpadding="0" class="sortabletable" id="interestsanalysetable">
+		<thead>
+			<tr>
+				<th><span>Kategorie</span></th>
+				<th style="width:auto !important; float:right; text-align:right;"><span style="padding-right:0px !important;"><img style="margin-right:20px !important;" src="./images/icon-multimedia-bw-16.png"></span></th>
+			</tr>
+		</thead>
+		<tbody>
+			<% _.each(user.interests, function(interest) { %>
+				<tr>
+					<td>
+						<input data-inset="false" <%= interest.checked %> data-mini="true" type="checkbox" name="checkbox-v-<%= interest.id %>" id="checkbox-v-<%= interest.id %>">
+						<label class="interestcheckbox" for="checkbox-v-<%= interest.id %>"><%= interest.name %></label>
+					</td>
+					<td style="width:auto !important; float:right; text-align:right;font-size:11px;">
+						<div style="margin-top:10px;"><%= interest.quantity %></div>
+					</td>
+				</tr>
+			<% }); %>
+		</tbody>
+	</table>
 </div>
 
 <div class="clear"></div>
@@ -94,7 +98,7 @@
 <div id="restrictedArea">
 
 	<div data-role="collapsible" data-theme="b" data-content-theme="a">
-		<h2>APPinaut Coins erwerben</h2>
+		<h2>APPinaut® Coins kaufen</h2>
 		<ul data-iconpos="left" data-role="listview" data-filter="false">
 			<li data-iconpos="left" data-icon="info"><a style="font-size:0.8em;font-weight:bold;">Sie besitzen <%= user.credits %> APPinaut® Coins</a></li>
 			<li data-iconpos="left" data-icon="plus"><a class="purchasebtn" data-iapid="com.digitalverve.APPinaut.250APP359T4" style="font-size:0.8em;font-weight:normal;">250 APPinaut® Coins (3,59 Euro)</a></li>
@@ -108,7 +112,7 @@
 	
 	<div class="clear"></div>
 
-	<% if( user.provider < 0 ) { %>
+	<% if( user.provider <= 0 ) { %>
 		<div data-role="collapsible" data-theme="b" data-content-theme="a">
 			<h2>Sie sind Wissensanbieter?<!-- <%= user.provider %> - Upgrades und Personal APPinaut®--></h2>
 			<ul data-iconpos="left" data-role="listview" data-filter="false">

@@ -120,3 +120,90 @@
 	50% { opacity: 0.0; }
 	100% { opacity: 1.0; }
 }
+
+
+.ui-slider {
+	width : 100% !important;
+	b/ackground : yellow;
+}
+input.ui-slider-input {
+	display : none !important;
+}
+.ui-slider-handle {
+	b/ackground : red;
+}
+.ui-slider-track {
+	margin-left: 15px !important;
+}
+.ui-br {
+	border:0 !important;
+}
+
+
+
+
+
+
+
+/*** sortable table styles *****/
+
+strong, b { font-weight: bold; } 
+
+table { border-collapse: collapse; border-spacing: 0; border: 0; }
+img { border: 0; max-width: 100%; }
+
+.sortabletable {
+  margin: 0 auto;
+  f/ont-size: 1.2em;
+  m/argin-bottom: 15px;
+}
+
+.sortabletable thead {
+  cursor: pointer;
+  b/ackground: #c9dff0;
+}
+.sortabletable thead tr th { 
+  f/ont-weight: bold;
+  p/adding: 12px 30px;
+  p/adding-left: 42px;
+  p/adding-left: 22px;
+  padding:0px !important;
+}
+.sortabletable thead tr th span { 
+  padding-right: 20px;
+  b/ackground-repeat: no-repeat;
+  b/ackground-position: 100% 100%;
+}
+
+.sortabletable thead tr th.headerSortUp, .sortabletable thead tr th.headerSortDown {
+  padding-right: 20px;
+  padding-left: 20px;
+  b/ackground: #acc8dd;
+}
+
+.sortabletable thead tr th.headerSortUp span {
+  background: url(../images/up-arrow.png);
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+}
+.sortabletable thead tr th.headerSortDown span {
+  background: url(../images/down-arrow.png);
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+}
+
+.sortabletable tbody tr { 
+  c/olor: #555;
+}
+.sortabletable tbody tr td, .sortabletable thead tr td {
+  border:0;
+  text-align: center;
+  p/adding: 15px 10px;
+  width:100% !important;
+  padding: 0px;
+}
+
+.interestcheckbox > * {
+	font-weight:normal !important;
+	font-size:11px !important;
+}

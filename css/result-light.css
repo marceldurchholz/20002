@@ -976,18 +976,18 @@ table caption {
 }
 table thead th {
 	text-align:left;
-	border-bottom-width:1px;
-	border-top-width:1px;
+	border-bottom-width:0px;
+	border-top-width:0px;
 }
 table th,td {
 	text-align:left;
 	padding:6px;
-	border-right-width:1px;
-	border-bottom-width:1px;
-	border-right-style:solid;
-	border-bottom-style:solid;
-	border-right-color:#CCC;
-	border-bottom-color: #CCC;
+	border-right-width:0px;
+	border-bottom-width:0px;
+	b/order-right-style:solid;
+	b/order-bottom-style:solid;
+	b/order-right-color:#CCC;
+	b/order-bottom-color: #CCC;
 }
 #scroll-to-top {
 	text-align: center;

@@ -12,44 +12,51 @@
 			<button data-mini="true" id="formbackbutton" type="button" name="button" data-theme="a">Zurück</button>
 			<br>
 		
+			<div class="containing-element">
+				Preis: <span id="priceincoins">1800</span> Coins (<span id="priceineuro">9,90</span> Euro)
+			</div>
+			<div data-role="fieldcontain" class="ui-hide-label">
+				<label for="sliderprice" style="font-size:11px;"></label>
+				<input type="range" name="sliderprice" id="sliderprice" value="<%= video.slider_price %>" min="0" max="10000" step="50" data-mini="false" data-theme="a" data-track-theme="b"/>
+			</div>
+			
+			<!--
+			<div class="containing-element">
+				<select name="flipactivate" id="flipactivate" data-role="slider">
+					<option value="off">Mediadaten verstecken</option>
+					<option value="on">Mediadaten anzeigen</option>
+				</select>
+			</div>
+			-->
 			<input data-mini="false" type="text" name="title" id="title" placeholder="Titel der Multimediadatei"/>
 			
 			<textarea data-mini="false" style="height:35%;" name="description" id="description" placeholder="Fügen Sie hier eine Beschreibung Ihrer Multimediadatei ein."></textarea>
 		
-			<div class="containing-element">
-				<select name="flipactivate" id="flipactivate" data-role="slider">
-					<option value="off">Mediadaten nicht aktivieren</option>
-					<option value="on">Mediadaten bereitstellen</option>
-				</select>
-			</div>
-
-			<label for="sliderprice" style="font-size:11px;">Preis in Coins</label>
-			<input type="range" name="sliderprice" id="sliderprice" value="<%= video.slider_price %>" min="0" max="6000" step="150" data-mini="false" data-theme="a" data-track-theme="b"/>
-
 			<!--
 			<input type="text" name="subtitle" id="subtitle" placeholder="Untertitel der Multimediadatei"/>
 			-->
 			<div class="containing-element">
 				<label for="interest" class="select"></label>
-				<select data-mini="false" name="interest" id="interest">
+				<select data-mini="true" name="interest" id="interest">
 					<option value="">Kategorie / Wissensgebiet</option>
 					<% _.each(video.interests, function(interest) { %>
 						<option <%= interest.checked %> value="<%= interest.name %>"><%= interest.name %></option>
-						<!--
-						<option value="standard">Standard: 7 day</option>
-						<option value="rush">Rush: 3 days</option>
-						<option value="express">Express: next day</option>
-						<option value="overnight">Overnight</option>
-						-->
 					<% }); %>
 				</select>
+			</div>
+
+			<div class="containing-element">
+				<input CHECKED data-mini="true" type="checkbox" name="flipactivate-1" id="flipactivate-1">
+				<label for="flipactivate-1">Mediadaten aktivieren</label>
 			</div>
 
 		<input type="hidden" id="camera_file" name="camera_file"></span>
 	</form>
 	
-	<button type="button" id="recordMediaUploadButton" name="recordMediaUploadButton" data-theme="b">Mediadaten hochladen</button>
-
+	<div class="containing-element" style="padding-top:15px;" >
+		<button type="button" id="recordMediaUploadButton" name="recordMediaUploadButton" data-theme="b">Mediadaten hochladen</button>
+	</div>
+	
 	<span id="camera_status" style="width:0px;height:0px;"></span>
 	<div id="debugdiv" style="width:0px;height:0px;overflow:hidden;"></div>
 

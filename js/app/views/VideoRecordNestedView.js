@@ -20,6 +20,7 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videoRecordColle
 				_thisViewRecordVideoNested.localStorageSubmitform.set(_thisViewRecordVideoNested.localStorageSubmitformModel);
 				this.activePage = VideoRecordNestedPage;
 			},
+			/*
 			initializeme: function() {
 				console.log('initializing ME in VideoRecordNestedView.js');
 				$(this.el).html('loading...');
@@ -37,6 +38,7 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videoRecordColle
 				  }
 				);
 			},
+			*/
 			fetchWorking: function() {
 				var setTimeoutWatcher = setTimeout(function foo() {
 					if ( _thisViewRecordVideoNested.dfd.state() === "pending" ) {
@@ -68,7 +70,7 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videoRecordColle
 				_thisViewRecordVideoNested = this;
 				console.log('fetching VideoRecordNestedView.js');
 				this.$el.hide();
-				_thisViewRecordVideoNested.initializeme();
+				// _thisViewRecordVideoNested.initializeme();
 				$.ajax({
 					url: "http://dominik-lohmann.de:5000/interests",
 					async: false
@@ -83,6 +85,19 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videoRecordColle
 					  return 1
 					 return 0 //default return value (no sorting)
 				});
+				
+				dpd('users').get(window.system.uid, function(me, err) { 
+					if (me) {
+						window.me = me;
+						_thisViewRecordVideoNested.me = me;
+						_thisViewRecordVideoNested.render();
+					}
+					else {
+						// console.log('Redirecting... You are not logged in!');
+						window.location.href = "#login";				
+					}
+				});
+				
 				// console.log(_thisViewRecordVideoNested.interests);
 			},
 			switchPage: function() {
@@ -151,6 +166,30 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videoRecordColle
 			bindEvents: function() {
 				var _thisViewRecordVideoNested = this;
 				$('#body').off( "swiperight", "#page-content");
+				
+				this.$el.off('change','#sliderprice').on('change','#sliderprice',function(event){
+					$('#priceincoins').html($('#sliderprice').val());					
+					var priceineuro = ((Math.ceil($('#sliderprice').val()*0.0055*100))/100).toString().replace(".", ",");
+					if (priceineuro.split(",")[1]==undefined) priceineuro = priceineuro + ",00";
+					else if (priceineuro.split(",")[1].length==0) priceineuro = priceineuro + "00";
+					else if (priceineuro.split(",")[1].length==1) priceineuro = priceineuro + "0";
+					$('#priceineuro').html(priceineuro);
+				});
+				
+				/*
+				$('#slider').val('on');
+				try {
+					$('#slider').slider("refresh");
+				}
+				catch (err) {
+					console.log ("Error occurred refreshing slider (probabily first time!)");
+				}
+				*/
+				
+				// $('#sliderprice').css({"visibility":"hidden","width":"0","display":"none"});
+				// $( ".ui-slider" ).css( {"width":"90% !important"} );
+				// $( "input.ui-slider-input" ).css( {"display":"none !important"} );
+				
 				/*
 				this.$el.off('click','#checkLocalTitleButton').on('click','#checkLocalTitleButton',function(event){
 					event.preventDefault();
@@ -229,7 +268,7 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videoRecordColle
 						// console.log(progressEvent.loaded + " / " + progressEvent.total);
 						$('#modaltxt').html(progressEvent.loaded+" / "+progressEvent.total);
 						if (oldprogress == progressEvent.loaded) {} 
-						else window.system.modaltimeout = 5000;
+						else window.system.modaltimeout = 60000;
 						oldprogress = progressEvent.loaded;
 						
 					};
@@ -278,7 +317,7 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videoRecordColle
 				var _thisViewRecordVideoNested = this;
 				console.log('DOING render VideoRecordNestedView.js called');
 				_thisVideoRecordAttributes = _thisViewRecordVideoNested.localStorageSubmitform.models[0].attributes;
-				if (_thisVideoRecordAttributes['sliderprice']==undefined) _thisVideoRecordAttributes['sliderprice'] = "2200";
+				if (_thisVideoRecordAttributes['sliderprice']==undefined) _thisVideoRecordAttributes['sliderprice'] = "1800";
 				// console.log(_thisVideoRecordAttributes['sliderprice']);
 				_thisViewRecordVideoNested.$el.html(_.template(_thisViewRecordVideoNested.activePage, {
 					slider_price:_thisVideoRecordAttributes['sliderprice'],

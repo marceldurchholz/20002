@@ -38,6 +38,13 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 					});
 					
 					$.ajax({
+						url: "http://dominik-lohmann.de:5000/videos?active=true&deleted=false", /* &public=true */
+						async: false
+					}).done(function(videos) {
+							_thisViewMyProfileNested.videos = videos;
+					});
+					
+					$.ajax({
 						url: "http://dominik-lohmann.de:5000/interests",
 						async: false
 					}).done(function(interests) {
@@ -45,6 +52,7 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 							var exists = $.inArray( $.trim(interest.name), _thisViewMyProfileNested.me.interests );
 							if (exists>-1) interest.checked = "checked";
 						});
+						// interests.quantity=new Array();
 						interests.sort(function(a, b){
 						 var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
 						 if (nameA < nameB) //sort string ascending
@@ -54,9 +62,29 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 						 return 0 //default return value (no sorting)
 						});
 						_thisViewMyProfileNested.interests = interests;
-						_thisViewMyProfileNested.render();
 						// _thisViewMyProfileNested.checkActiveStatus();
 					});
+										
+					_.each(_thisViewMyProfileNested.interests, function(interest, index, list) {
+						// if (_thisViewMyProfileNested.interests.quantity[video.topic]==undefined) _thisViewMyProfileNested.interests.quantity=0;
+						if (interest.quantity==undefined) interest.quantity=0;
+						_.each(_thisViewMyProfileNested.videos, function(video, index, list) {
+							if (video.topic==interest.name) {
+								interest.quantity = interest.quantity+1;
+							}
+						});
+						_thisViewMyProfileNested.interests[index] = interest;
+					});
+					
+					console.log(_thisViewMyProfileNested.interests);
+					
+					_thisViewMyProfileNested.render();
+					
+
+					
+					
+					
+					
 					// if (_thisViewMyProfileNested.me.active==false || $("#fullname").val()=='') {
 					/*
 					if ($("#fullname").val()=='') {
@@ -176,6 +204,9 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 				}
 				// $("#fullname").attr("placeholder","Name erforderlich...");
 				
+				// $(".sortabletable").tablesorter({debug: true})
+				$(".sortabletable").tablesorter();
+				
 				$("#fullname").blur(this.changeInputValue);
 				// $("#slogan").blur(this.changeInputValue);
 				$("#perstext").blur(this.changeInputValue);
@@ -236,6 +267,9 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 					var confirmButtonLabels = 'Bitte löschen,Vorgang abbrechen';
 					doConfirm(confirmText, confirmTitle, _thisViewMyProfileNested.deleteMyAccount, confirmButtonLabels);
 				});
+				
+				
+				
 				checkTopNaviRoles();
 			},
 			deleteMyAccount: function(response) {
@@ -268,6 +302,7 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 				seeker = $.inArray( 'seeker', _thisViewMyProfileNested.me.roles );				
 				htmlContent = _.template(MyProfileNestedViewPage, {
 					id: _thisViewMyProfileNested.me.id
+					, kdnr: _thisViewMyProfileNested.me.kdnr
 					, pictureurl: _thisViewMyProfileNested.me.pictureurl
 					, fullname: _thisViewMyProfileNested.me.fullname
 					, slogan: _thisViewMyProfileNested.me.slogan

@@ -66,6 +66,7 @@ define(["jquery", "backbone", "text!templates/DashboardNestedViewPage.html"],
 			},
 			bindEvents: function() {
 				var _thisViewDashboardNested = this;
+				$('#body').off( "swiperight", "#page-content");
 				dpd.messages.off('create');
 				dpd.messages.on('create', function(msgData) {
 					_thisViewDashboardNested.initializedata();

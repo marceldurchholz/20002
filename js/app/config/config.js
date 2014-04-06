@@ -31,6 +31,8 @@ require.config({
 	  
       "jelastic": "../jquery.elastic.source",
 
+      "jtablesorter": "../libs/jquery.tablesorter",
+
       "videojs": "../video-js/video",
 
       "backbone": "../libs/backbone",
@@ -71,6 +73,8 @@ require.config({
 
 	  "jelastic": ["jquery"],
 	  
+	  "jtablesorter": ["jquery"],
+	  
 	  "functions": ["jquery", "videojs"],
 	  
       // jQueryUI
@@ -83,7 +87,7 @@ require.config({
       "backbone": {
 
         // Depends on underscore/lodash and jQuery // "jquerypulltorefresh", 
-        "deps": ["functions", "underscore", "jquery", "jquerymobile", "jexpander", "jelastic"],
+        "deps": ["functions", "underscore", "jquery", "jquerymobile", "jexpander", "jelastic", "jtablesorter"],
 
         // Exports the global window.Backbone object
         "exports": "Backbone"
