@@ -49,6 +49,7 @@ define(["jquery", "backbone", "models/CardModel", "collections/cardsCollection",
 					else pricetext = 'für '+model.get('price')+' Coins';
 					_template = _.template(cardsDetailsViewHTML, {
 						id: model.get('id'),
+						uploaderdata: _thisViewCardDetails.uploaderdata,
 						uploader: _thisViewCardDetails.uploaderdata.fullname,
 						topic: model.get('topic'),
 						cardurl: model.get('cardurl'),
@@ -83,10 +84,23 @@ define(["jquery", "backbone", "models/CardModel", "collections/cardsCollection",
 					// window.createCardPreview(_thisViewCardDetails.$('#card_player_1'),'card_player_1',this._cardsCollection.models[0].attributes.cardurl);
 					_thisViewCardDetails.$el.trigger('create');
 					hideModal();
-					new FastClick(document.body);
+					var slicePoint = Math.round($(window).width()/5-14);
 					_thisViewCardDetails.$el.fadeIn( 500, function() {
 						$('.ui-content').scrollTop(0);
 						new FastClick(document.body);
+						fontResize();
+						$('.readmore').expander({
+							slicePoint: slicePoint*4,
+							preserveWords: true,
+							expandPrefix: '...',
+							expandEffect: 'fadeIn',
+							expandSpeed: 500,
+							collapseEffect: 'fadeOut',
+							collapseSpeed: 200,
+							expandText: ' Weiterlesen...',
+							userCollapseText: '',
+							userCollapse: false
+						});
 					});
 					return _thisViewCardDetails;
 				}

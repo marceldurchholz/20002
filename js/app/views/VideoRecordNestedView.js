@@ -111,8 +111,11 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videoRecordColle
 				// return(false);
 				var videosrc = $("#video_player").attr("src");
 				if (videosrc==undefined || videosrc=='') {
-					doAlert('Bitte nehmen es eines auf auf oder verknüpfen Sie ein existierendes Video.','Und das Video?');
-					return(false);
+					// if (!isMobile.any()) videosrc = 'https://dl.dropboxusercontent.com/u/45253363/appinaut/videos/1111111111.mp4';
+					// else {
+						doAlert('Bitte nehmen es eines auf auf oder verknüpfen Sie ein existierendes Video.','Und das Video?');
+						return(false);
+					// }
 				}
 				_thisViewRecordVideoNested.formValues = new Object;
 				_.each(this.$('#submitform').serializeArray(), function(input){
@@ -202,8 +205,13 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videoRecordColle
 				});
 				this.$el.off('click','#recordMediaUploadButton').on('click','#recordMediaUploadButton',function(event){
 					event.preventDefault();
-					_thisViewRecordVideoNested.savePageTwo(event);
-					// captureVideoUpload(_thisViewRecordVideoNested.localStorageSubmitform);
+					if (!isMobile.any()) {
+						doAlert('Die Uploadfunktion ist in einem APPinaut® Preview Beispiel nicht möglich. Sie werden statt dessen zur Pinnwand Ihres APPinaut® weitergeleitet.','APPinaut® Information');
+						window.location.href = "#learningstreamview";
+					}
+					else {
+						_thisViewRecordVideoNested.savePageTwo(event);
+					}
 				});
 				this.$el.off('click','#formbackbutton').on('click','#formbackbutton',function(event){
 					event.preventDefault();
@@ -211,7 +219,11 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videoRecordColle
 				});
 				this.$el.off('click','#captureVideoRecordButton').on('click','#captureVideoRecordButton',function(event){
 					event.preventDefault();
-					captureVideoRecord();
+					if (!isMobile.any()) {
+						doAlert('Die Aufnahmefunktion ist in einem APPinaut® Preview Beispiel nicht möglich. Es wird statt dessen ein Beispielvideo verwendet.','APPinaut® Information');
+						$("#video_player").attr("src", "https://dl.dropboxusercontent.com/u/45253363/appinaut/videos/1111111111.mp4").get(0).play();
+					}
+					else captureVideoRecord();
 				});
 				$('#downloadVideoInputDiv').toggle();
 				this.$el.off('click','.downloadVideoToggleButton').on('click','.downloadVideoToggleButton',function(event){
@@ -223,7 +235,7 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videoRecordColle
 					_thisViewRecordVideoNested.downloadVideo();
 				});
 				
-				$('#uploadstatusbar').hide();
+				// $('#uploadstatusbar').hide();
 				// $('#videobox').hide();
 				
 				/*
@@ -241,7 +253,7 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videoRecordColle
 					window.resizeElement('#video_player');
 					// window.resizeElement('#video_player_1')
 				});
-
+				
 			},
 			downloadVideo: function() {
 				var _thisViewRecordVideoNested = this;
@@ -337,7 +349,7 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videoRecordColle
 				this.$el.trigger('create');
 				sendLocalStorageToElements(_thisViewRecordVideoNested.localStorageSubmitform.models);
 				var mediaFilePath = $('#camera_file').val();
-				console.log(mediaFilePath);
+				// console.log(mediaFilePath);
 				// alert(mediaFilePath);
 				if (window.system.contentHelper==1) {
 					attachVideoToPlayer(testvideo);

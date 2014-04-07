@@ -58,7 +58,7 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 											}
 											// alert(username);
 											// alert(password);
-											window.dao.rememberUserData(username, password);
+											window.dao.rememberUserData(username, password, '1');
 											// alert('redirecting');
 											// system.redirectToUrl(targetUrl);
 											window.location.href="#dashboard";
@@ -76,13 +76,14 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 					var password = $('#password').val();
 					var giftcode = $('#giftcodeInput').val();
 					var uid = '';
-					var sponsor = '';
+					// var sponsor = '';
 					if (username!='' && password!='') {
 						if (checkString(username)==true) {
 							var roles = ["user","seeker"];
 							var registered = dateYmdHis();
+							/*
 							$.ajax({
-								url: 'http://dominik-lohmann.de:5000/users/?roles=owner',
+								url: 'http://dominik-lohmann.de:5000/users/'+window.system.aoid,
 								async: false,
 								success: function(sponsor, textStatus, XMLHttpRequest){
 									// _thisViewLogin.ownerdata = ownerdata[0];
@@ -91,9 +92,10 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 								},
 								error:function (xhr, ajaxOptions, thrownError) { }
 							});
-							
-							if (giftcode!='') sponsor = giftcode.replace('-','').toLowerCase();
-							dpd.users.post({username: username, password: password, fullname: username, active: true, messageble: true, sponsor: sponsor.id, roles: roles, registered: registered, credits: "0", purchases:[], followers:[], following:[], logincount:"0"}, function(user, err) {
+							*/
+							_thisViewLogin.sponsor = window.system.aoid;
+							if (giftcode!='') _thisViewLogin.sponsor = giftcode.replace('-','').toLowerCase();
+							dpd.users.post({username: username, password: password, fullname: username, active: true, messageble: true, sponsor: _thisViewLogin.sponsor, roles: roles, registered: registered, credits: "0", purchases:[], followers:[], following:[], logincount:"0"}, function(user, err) {
 								// alert(user);
 								// alert(user.username);
 								if (user==null) {
@@ -139,7 +141,7 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 						// alert(_thisViewLogin.userdata.username);
 						_thisViewLogin.username = _thisViewLogin.userdata.username;
 						_thisViewLogin.password = _thisViewLogin.userdata.password;						
-						_thisViewLogin.autologin = true;
+						if (_thisViewLogin.autologin=="1") _thisViewLogin.autologin = true;
 					}
 					// alert('third');
 					_thisViewLogin.render();

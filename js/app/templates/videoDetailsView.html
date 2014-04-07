@@ -14,11 +14,30 @@
 </div>
 -->
 <h3 class="ui-bar ui-bar-b" style="border-top-width:0px;text-align:center;"><%= video.topic %></h3>
-<div id="videocontainer" style="b/order:10px solid red;b/ackground-color:#000000;">
-	<a id="videocontainerlink" style="width:100%;height:100%;">
-		<video id="video_player_1" class="video-js vjs-default-skin" poster="<%= video.thumbnailurl %>" data-setup="{}"></video>
-	</a>
-	<img src="images/shadow.png" style="width:100%;height:20px;">
+<div id="videocontainer">
+	<video id="video_player_1" class="video-js vjs-default-skin" poster="<%= video.thumbnailurl %>" data-setup="{}"></video>
+	<div style="width:100%;height:0px;overflow:visible;">
+		<div style="width:100%;height:0px;overflow:visible;text-align:center;">
+			<img src="images/shadow.png" style="width:100%;height:20px;">
+		</div>
+		
+		<div style="padding:0px 20px 60px 20px;">
+			<div style="width:100%;height:auto;overflow:visible;text-align:right;">
+				<span id="functionBar">
+					<span><a id="sendMessageBtn" class="sendMessageBtn" style="font-weight:normal;"><!--Optionen--><img style="padding-top:10px;height:24px;" src="./images/icon-testimonials.png"></a></span>
+					<span><a id="showOptionsBtn" class="showOptionsBtn" style="font-weight:normal;"><!--Optionen--><img style="padding-top:10px;height:26px;" src="./images/icon-services.png"></a></span>
+				</span>
+			</div>
+			<div id="toggleDiv" style="display:none;padding-top:20px;">
+				<div style="float:right;clear:both;">
+					<span><a id="complainvideolink" class="complainvideolink red" style="font-weight:normal;" data-videoid="<%= video.id %>">Beschwerde schreiben</a></span>
+				</div>
+				<div style="float:right;clear:both;">
+					<% if(video.ireported >= 0) { %><% } else { %><span><a id="reportvideolink" class="reportvideolink red" style="font-weight:normal;" data-videoid="<%= video.id %>">Verstoß melden<br></a></span><% } %>
+				</div>
+			</div>
+		</div>
+	</div>
 	<!--
 	<div style="padding:0px 20px 0px 20px;">
 		<div id="" style="position:relative;top:-20px;clear:both;float:none;width:100%;height:0px;boder:5px solid #909090;">
@@ -27,20 +46,24 @@
 	</div>
 	-->
 </div>
+<div class="clear"></div>
 
-<% if( _.indexOf(video.purchases, video.id)==-1 && video.uploaderid != me.id) { %>
-	<div style="padding:0px 20px 0px 20px;"><a data-videoid="<%= video.id %>" id="loadvideobutton" class="loadvideobutton" data-theme="b" data-role="button"><%= video.pricetext %></a></div>
-<% } else  { %>
-		<% if (video.offlineurl=="") { %>
-			<!-- <div style="padding:0px 20px 0px 20px;"><a data-videoid="<%= video.id %>" id="downloadvideobutton" class="downloadvideobutton" data-theme="b" data-role="button">Video offline speichern</a></div> -->
-		<% } %>
+<% if(Math.round(video.price)>0) { %>
+	<% if( _.indexOf(video.purchases, video.id)==-1 && video.uploaderid != me.id) { %>
+		<div style="padding:0px 20px 0px 20px;"><a data-videoid="<%= video.id %>" id="loadvideobutton" class="loadvideobutton" data-theme="b" data-role="button"><%= video.pricetext %></a></div>
+	<% } else  { %>
+			<% if (video.offlineurl=="") { %>
+				<!-- <div style="padding:0px 20px 0px 20px;"><a data-videoid="<%= video.id %>" id="downloadvideobutton" class="downloadvideobutton" data-theme="b" data-role="button">Video offline speichern</a></div> -->
+			<% } %>
+	<% } %>
 <% } %>
+
 
 <div style="padding:0px 20px 60px 20px;">
 	
 	<div class="title">
-			<h5 class="resizetext" style="font-size:18px;line-height:1.3em;" >
-				<div class="readmoretitle"><%= video.title %></div>
+			<h5 class="resizetext" style="font-size:24px;line-height:1.3em;" >
+				<div class="readmoretitle" style="font-size:24px;"><%= video.title %></div>
 			</h5>
 	</div>
 	<div class="clear"></div>
@@ -65,7 +88,7 @@
 				<div class="clear"></div>
 				Dateigröße: <%= Math.round(video.vsize*100/1024/1024)/100 %> Mbyte
 				<div class="clear"></div>
-				Bereitgestellt am: <%= video.cdate %>
+				Bereitstellung: <%= video.cdate %>
 				<div class="clear"></div>
 				<div class="clear" style="padding-bottom:10px;"></div>
 			</div>
@@ -73,17 +96,7 @@
 		<div class="clear"></div>
 
 		<div class="readmore"><%= video.description %></div>
-		<div class="clear"></div>
 		
-		<p>
-			<div style="float:left;">
-				<span><a id="complainvideolink" class="complainvideolink" style="font-weight:normal;" data-videoid="<%= video.id %>">Beschwerde schreiben</a></span>
-			</div>
-			<div style="float:right;">
-				<% if(video.ireported >= 0) { %><% } else { %><span><a id="reportvideolink" class="reportvideolink" style="font-weight:normal;" data-videoid="<%= video.id %>">Verstoß melden<br></a></span><% } %>
-			</div>
-		</p>
-
 	</div>
 	<div class="clear"></div>
 

@@ -241,26 +241,14 @@ try {
 					// alert('SUCCESS Tables CREATE local SQLite database'); 
 					// websqlReady.resolve("initialize done"); 
 				}
-				/*
-				function(tx) { 
-					var sql1 = 'CREATE TABLE IF NOT EXISTS metbl ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "username VARCHAR(255), password VARCHAR(255))';
-					tx.executeSql(sql1,[], function (tx, results) {
-					});
-				}
-				function(tx) { 
-					var sql2 = 'CREATE TABLE IF NOT EXISTS videos ( " + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "videoid VARCHAR(255), " + "videourl VARCHAR(255))';
-					tx.executeSql(sql2,[], function (tx, results) {
-					});
-				}
-				*/
 			);
 			this.db.transaction(
 				function(tx) { 
-					tx.executeSql("CREATE TABLE IF NOT EXISTS metbl ( " + "id INTEGER PRIMARY KEY, " + "username VARCHAR(255), " + "password VARCHAR(255))");
+					tx.executeSql("CREATE TABLE IF NOT EXISTS metbl ( " + "id INTEGER PRIMARY KEY, " + "username VARCHAR(255), " + "password VARCHAR(255), " + "autologin VARCHAR(255))");
 				},
 				function(error) { 
-					// alert('ERROR ON Tables CREATE local SQLite database'); 
-					// alert(error);
+					alert('ERROR ON Tables CREATE local SQLite database'); 
+					alert(error);
 				},
 				function() { 
 					window.system.showtutorial = true;
@@ -269,20 +257,22 @@ try {
 				}
 			);
 		},
-		rememberUserDataDelete: function(callback) {
+		rememberUserDataDeleteAutologin: function(callback) {
 			// alert('rememberUserDataDelete');
+			// alert(window.system.kdnr);
 			if (isPhoneGap()) {
 				this.db.transaction(
 					function (tx) {
-						var id = 1;
-						var sql = "DELETE FROM metbl WHERE id=:id";
+						var id = window.system.kdnr;
+						// var sql = "DELETE FROM metbl WHERE id=:id";
+						var sql = "UPDATE metbl SET autologin = '0' WHERE id=:id";
 						tx.executeSql(sql, [id], function (tx, results) {
 							callback();
 						});
 					},
 					function (error) {
-						// alert('error');
-						// alert(error.message);
+						alert('error');
+						alert(error.message);
 						// deferred.reject("Transaction Error: " + error.message);
 						callback();
 					}
@@ -301,7 +291,7 @@ try {
 				this.db.transaction(
 					function (tx) {
 						var id = window.system.kdnr;
-						var sql = "SELECT m.username, m.password FROM metbl m WHERE m.id=:id";
+						var sql = "SELECT m.username, m.password, m.autologin FROM metbl m WHERE m.id=:id";
 						tx.executeSql(sql, [id], function (tx, results) {
 							// alert('found');
 							// alert(results.username);
@@ -326,12 +316,12 @@ try {
 			// return deferred.promise();
 			// callback();
 		},
-		rememberUserData: function(username, password) {
+		rememberUserData: function(username, password, autologin) {
 			if (isPhoneGap()) {
 				this.db.transaction(
 					function(tx) {
 						// alert('filling table INSERT START');
-						var sql3 = "INSERT OR REPLACE INTO metbl (id, username, password) VALUES ("+window.system.kdnr+", '"+username+"', '"+password+"')";
+						var sql3 = "INSERT OR REPLACE INTO metbl (id, username, password, autologin) VALUES ("+window.system.kdnr+", '"+username+"', '"+password+"', '"+autologin+"')";
 						// alert(sql3);
 						tx.executeSql(sql3);
 						// alert('filling table INSERT END');
@@ -2069,7 +2059,8 @@ try {
 					// console.log("Response = " + r.response);
 					// console.log("Sent = " + r.bytesSent);
 					// alert(r.bytesSent);
-					dpd.videos.post({"vsize":Math.ceil(r.bytesSent).toString(),"vlength":window.system.videolength.toString(),"uploader":""+_this._thisViewRecordVideoNested.me.id,"videourl":""+options.fileName,"active":true,"cdate":""+dateYmdHis(),"topic":""+formValues.interest,"title":""+formValues.title,"subtitle":""+formValues.subtitle,"description":""+formValues.description,"price":formValues.sliderprice}, function(result, err) {
+					// dpd.videos.post({"vsize":Math.ceil(r.bytesSent).toString(),"vlength":window.system.videolength.toString(),"uploader":""+_this._thisViewRecordVideoNested.me.id,"videourl":""+options.fileName,"active":true,"cdate":""+dateYmdHis(),"topic":""+formValues.interest,"title":""+formValues.title,"subtitle":""+formValues.subtitle,"description":""+formValues.description,"price":formValues.sliderprice}, function(result, err) {
+					dpd.videos.post({"vsize":Math.ceil(r.bytesSent).toString(),"vlength":window.system.videolength.toString(),"uploader":""+_this._thisViewRecordVideoNested.me.id,"videourl":""+options.fileName,"active":formValues.flipactivate,"cdate":""+dateYmdHis(),"topic":""+formValues.interest,"title":""+formValues.title,"subtitle":""+formValues.subtitle,"description":""+formValues.description,"price":formValues.sliderprice}, function(result, err) {
 						if(err) {
 							hideModal();
 							// doAlert('Es ist ein Fehler passiert, der nicht passieren sollte. Bitte versuchen Sie Ihre Aktion erneut oder wenden Sie sich direkt an das APPinaut Support Team.','Ups! Fehler beim Upload!');
@@ -2306,7 +2297,7 @@ try {
 					{ type: "video/ogg", src: _thisVideoUrl }
 				]);
 			}
-			console.log(myPlayer);
+			// console.log(myPlayer);
 			myPlayer.controlBar.hide();  
 			myPlayer.bigPlayButton.hide();
 			myPlayer.on('timeupdate', function() {
@@ -2913,12 +2904,9 @@ try {
 		$.mobile.loading( 'hide' );
 	}
 
-	var system = {
+	window.system = {
 		uid: "0",
-		app: {title:"Robert Spengler | Stärke Deinen Auftritt", calltoaction:"Registrieren oder Einloggen um zu entdecken"},
 		kdnr: "20002",
-		aoid: "3a499b457111f803",
-		master: false,
 		showtutorial: false,
 		contentHelper: 0,
 		timestamp: 0,
@@ -2947,6 +2935,17 @@ try {
 			}
 		}
 	}
+	$.ajax('http://dominik-lohmann.de:5000/users/?kdnr='+window.system.kdnr,{
+		type:"GET",
+		async: false,
+	}).done(function(result) {
+		var me = result[0];
+		// alert(me.slogan);
+		window.system.app = {title:me.slogan, calltoaction:"Registrieren oder Einloggen um zu entdecken"};
+		window.system.aoid = me.id;
+		window.system.master = me.master;
+	});
+	
 	// alert(system.contentHelper);
 
 	function checkEmail(email){
@@ -3076,7 +3075,7 @@ try {
 		var height = $(window).height();
 		var width = $(window).width();
 		
-		var font = 13;
+		var font = 10;
 		//Get window width
 
 		//Set new font size
@@ -3087,10 +3086,9 @@ try {
 		// 150000
 		var factor = (fullpixel/180000);
 		// alert(factor);
-		if (factor<1) factor = 1;
-		if (factor>1.2) factor = 1.2;
+		if (factor<0.8) factor = 0.8;
+		if (factor>1.4) factor = 1.4;
 		var newFont = font * factor;
-		if (newFont<12) newFont = 12;
 		/*
 		$('#body').each(function( index ) {
 			// alert($(this).css('font-size').substr($( this ).css('font-size').len-2,2));
@@ -3105,7 +3103,8 @@ try {
 			// alert($(this).html());
 			var font = $(this).css('font-size').substr($( this ).css('font-size').len-2,2);
 			newFont = font*factor;
-			if (newFont>20) newFont = 20;
+			if (newFont<12) newFont = 12;
+			if (newFont>24) newFont = 24;
 			// alert(newFont);
 			$(this).css("font-size", newFont+"px");
 		});
@@ -3167,7 +3166,7 @@ try {
 		// $('#page-content').stop().animate({
 		setTimeout(function() {
 			$('#page-content').animate({
-				scrollTop: $("#page-content")[0].scrollHeight
+				scrollTop: $("#page-content")[0].scrollHeight;
 			}, "fast", function() {
 				// animation done
 				$('#page-content').focus();

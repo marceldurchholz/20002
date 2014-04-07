@@ -58,8 +58,25 @@ define(["jquery", "backbone", "collections/videosCollection", "text!templates/vi
 						});
 					});
 					*/
-					this.$el.off('click','#loadvideobutton').on('click','#loadvideobutton',function(e) { 
+					this.$el.off('click','#showOptionsBtn').on('click','#showOptionsBtn',function(e) { 
 						e.preventDefault();
+						$('#toggleDiv').fadeIn();
+						$('#functionBar').hide();
+						window.setTimeout(function() {
+							$('#functionBar').show();
+							$('#toggleDiv').fadeOut();
+						}, 10000);
+					});
+					this.$el.off('click','#sendMessageBtn').on('click','#sendMessageBtn',function(e) { 
+						e.preventDefault();
+						// var exists = $.inArray( $.trim(window.me.id), _thisViewVideoDetails.uploaderdata.followers );
+						// if (exists>-1) {
+							// alert('you are a follower of him...')
+							window.location.href = "#messages/details/view/"+_thisViewVideoDetails.uploaderdata.id;
+						// }
+					});
+					
+					this.$el.off('click','#loadvideobutton').on('click','#loadvideobutton',function(e) { 
 						var videoid = $(this).attr('data-videoid');
 						
 						// dpd.users.me(function(me) {
@@ -89,6 +106,8 @@ define(["jquery", "backbone", "collections/videosCollection", "text!templates/vi
 						addVideoReport(me, videoid);
 						// var tgt = event.target;
 						$(this).remove();
+						$('#toggleDiv').hide();
+						$('#functionBar').show();
 						// window.location.href = "mailto:support@appinaut.de?subject=Meldung%20eines%20Videos%20oder%20eines%20Verstosses%20-%20"+videoid+"&body=Bitte%20teilen%20Sie%20uns%20den%20Hintergrund%20Ihrer%20Meldung%20oder%20des%20Verstosses%20detailliert%20mit.";
 					});
 					this.$el.off('click','#detailsvideolink').on('click','#detailsvideolink',function(e) { 
@@ -295,6 +314,7 @@ define(["jquery", "backbone", "collections/videosCollection", "text!templates/vi
 					var querystr = "";
 					// if (topic!='') querystr += "&topic="+topic;
 					var url = "http://dominik-lohmann.de:5000/videos?active=true&deleted=false&public=true";
+					if (window.system.master!=true) url = url+"&uploader="+window.system.aoid;
 					var anzahl = 0;
 					$.ajax({
 						url: url+querystr,
@@ -338,19 +358,23 @@ define(["jquery", "backbone", "collections/videosCollection", "text!templates/vi
 							if (anzahl > 4) return(false);
 						});
 					});
-					/*
-					var url = "http://dominik-lohmann.de:5000/cards?active=true&deleted=false";
+					var url = "http://dominik-lohmann.de:5000/cards?active=true&deleted=false&public=true";
+					if (window.system.master!=true) url = url+"&uploader="+window.system.aoid;
 					$.ajax({
 						url: url+querystr,
 						async: false
 					}).done(function(cardData) {
+						// console.log(cardData);
 						_.each(cardData, function(value, index, list) {
+							anzahl = anzahl + 1;
 							value.ccat = 'card';
 							value.icon = 'images/icon-cards-60.png';
 							value.href = '#cards/details/view/'+value.id;
 							_thisKnowledgeData.streamData.push(value);
+							if (anzahl > 4) return(false);
 						});
 					});
+					/*
 					var url = "http://dominik-lohmann.de:5000/planer?active=true&deleted=false";
 					$.ajax({
 						url: url+querystr,
@@ -432,11 +456,11 @@ define(["jquery", "backbone", "collections/videosCollection", "text!templates/vi
 				},
 				render: function() {
 					_thisViewVideoDetails = this;
-					console.log('rendering');
+					// console.log('rendering');
 					$(window).resize(function() {
 						window.resizeElement('#video_player_1')
 					});
-					console.log('DOING render VideoDetailsView.js called');
+					// console.log('DOING render VideoDetailsView.js called');
 					$('#sidebarListViewDiv').html(_.template(sidemenusList, {}));
 					_thisViewVideoDetails.nestedView = new SidemenuView().fetch();
 					
@@ -487,13 +511,13 @@ define(["jquery", "backbone", "collections/videosCollection", "text!templates/vi
 					this.$el.trigger('create');
 					new FastClick(document.body);
 					
-					var slicePoint = Math.round($(window).width()/10-5);
+					var slicePoint = Math.round($(window).width()/12-14);
 					// alert(slicePoint);
 					_thisViewVideoDetails.title_shorten = this._videosCollection.models[0].attributes.title;
 					if (_thisViewVideoDetails.title_shorten.length>slicePoint) _thisViewVideoDetails.title_shorten = _thisViewVideoDetails.title_shorten.substr(0,slicePoint)+'...';
 
 					_thisViewVideoDetails.fullname_shorten = _thisViewVideoDetails.uploaderdata.fullname;
-					if (_thisViewVideoDetails.fullname_shorten.length>slicePoint) _thisViewVideoDetails.fullname_shorten = _thisViewVideoDetails.fullname_shorten.substr(0,slicePoint)+'...';
+					if (_thisViewVideoDetails.fullname_shorten.length>slicePoint) _thisViewVideoDetails.fullname_shorten = _thisViewVideoDetails.fullname_shorten.substr(0,slicePoint*2)+'...';
 					
 					this.$el.fadeIn( 500, function() {
 						$('.ui-content').scrollTop(0);

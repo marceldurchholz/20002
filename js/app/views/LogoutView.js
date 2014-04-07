@@ -13,14 +13,14 @@ define(["jquery", "backbone", "text!templates/LogoutView.html"],
 						_thisViewLogout.render();
 					}
 					else {
-						window.dao.rememberUserDataDelete(_thisViewLogout.rememberUserDataDeleteCallback);
+						window.dao.rememberUserDataDeleteAutologin(_thisViewLogout.rememberUserDataDeleteAutologinCallback);
 						window.system.uid = "0";
-						document.location.hash = "home";
+						// document.location.hash = "home";
+						document.location.href = "#login";
 					}
 				});
             },
-			rememberUserDataDeleteCallback: function() {
-				// alert('rememberUserDataDeleteCallback');
+			rememberUserDataDeleteAutologinCallback: function() {
                 _thisViewLogout.render();				
 			},
             events: {

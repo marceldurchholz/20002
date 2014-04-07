@@ -102,7 +102,24 @@ define(["jquery", "backbone", "text!templates/DashboardNestedViewPage.html"],
 			},
 			render: function() {
 				var _thisViewDashboardNested = this;
-				console.log('rendering DashboardNestedView.js');
+				// console.log('rendering DashboardNestedView.js');
+				
+				/*
+				dpd.users.put(window.system.aoid, {"slogan":"jhhsd"}, function(result, err) {
+				  if(err) return console.log(err);
+				  // console.log(result, result.id);
+				});
+				dpd.users.me(function(user) {
+				  if (user) {
+					alert('you are loggedIn');
+					// $('h1').text("Welcome, " + user.username + "!");
+				  } else {
+					alert('NOT loggedIn');
+					// location.href = "/";
+				  }
+				});
+				*/
+				
 				var htmlContent = '';
 				$(this.el).html(htmlContent);
 				if (_thisViewDashboardNested.me.pictureurl==undefined || _thisViewDashboardNested.me.pictureurl.length<=10) {

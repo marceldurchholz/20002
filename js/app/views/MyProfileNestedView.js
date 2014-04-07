@@ -14,7 +14,20 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 				// _thisViewMyProfileNested.me = window.me;
 				_thisViewMyProfileNested.initialized = window.me;
 				// dpd.users.me(function(me) {
+				
+				if (1==2) dpd.users.me(function(user) {
+				  if (user) {
+					alert('you are loggedIn');
+					console.log(user);
+					// $('h1').text("Welcome, " + user.username + "!");
+				  } else {
+					alert('NOT loggedIn');
+					// location.href = "/";
+				  }
+				});
+				
 				dpd('users').get(window.system.uid, function(me, err) {
+				// dpd.users.me(function(me) {
 					if (me) { 
 						_thisViewMyProfileNested.me = me;
 					}
@@ -44,10 +57,14 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 							_thisViewMyProfileNested.videos = videos;
 					});
 					
+					/*
 					$.ajax({
 						url: "http://dominik-lohmann.de:5000/interests",
 						async: false
 					}).done(function(interests) {
+					*/
+					dpd('interests').get(function(interests, err) {
+						// console.log(interests);
 						_.each(interests, function(interest) {
 							var exists = $.inArray( $.trim(interest.name), _thisViewMyProfileNested.me.interests );
 							if (exists>-1) interest.checked = "checked";
@@ -61,24 +78,30 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 						  return 1
 						 return 0 //default return value (no sorting)
 						});
+						
 						_thisViewMyProfileNested.interests = interests;
-						// _thisViewMyProfileNested.checkActiveStatus();
-					});
-										
-					_.each(_thisViewMyProfileNested.interests, function(interest, index, list) {
-						// if (_thisViewMyProfileNested.interests.quantity[video.topic]==undefined) _thisViewMyProfileNested.interests.quantity=0;
-						if (interest.quantity==undefined) interest.quantity=0;
-						_.each(_thisViewMyProfileNested.videos, function(video, index, list) {
-							if (video.topic==interest.name) {
-								interest.quantity = interest.quantity+1;
-							}
+						_.each(_thisViewMyProfileNested.interests, function(interest, index, list) {
+							// if (_thisViewMyProfileNested.interests.quantity[video.topic]==undefined) _thisViewMyProfileNested.interests.quantity=0;
+							if (interest.quantity==undefined) interest.quantity=0;
+							_.each(_thisViewMyProfileNested.videos, function(video, index, list) {
+								if (video.topic==interest.name) {
+									interest.quantity = interest.quantity+1;
+								}
+							});
+							_thisViewMyProfileNested.interests[index] = interest;
 						});
-						_thisViewMyProfileNested.interests[index] = interest;
+						
+						// _thisViewMyProfileNested.checkActiveStatus();
+						// console.log(_thisViewMyProfileNested.interests);
+						// alert(_thisViewMyProfileNested.interests.length);
+						_thisViewMyProfileNested.render();
 					});
+					// alert(_thisViewMyProfileNested.interests.length);
+
 					
-					console.log(_thisViewMyProfileNested.interests);
+					// console.log(_thisViewMyProfileNested.interests);
 					
-					_thisViewMyProfileNested.render();
+					
 					
 
 					
@@ -101,6 +124,7 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 				// console.log('fetching MyProfileNestedView.js');
 			},
 			changeInputValue: function(e) {
+				e.preventDefault();
 				/*
 				console.log(e);
 				console.log(e.currentTarget.id);
@@ -112,7 +136,8 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 					_thisViewMyProfileNested.me = me;
 				});
 				var obj = e.currentTarget;
-				if (obj.defaultValue != obj.value) {
+				// console.log(e);
+				if (obj.defaultValue != obj.value || 1==1) {
 					// console.log(_thisViewMyProfileNested.me.id);
 					// console.log(obj.id);
 					if (obj.id=='username') {
@@ -125,14 +150,24 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 					o.value = obj.value;
 					// var newroles = ["user","seeker"];
 					// if (obj.id=='fullname') if (obj.value=='') { doAlert('Es muss ein Vor- und Nachname eingegeben werden.','Information'); } else dpd.users.put(_thisViewMyProfileNested.me.id, {"fullname":obj.value, roles: newroles}, function(result, err) { 
-					if (obj.id=='fullname') if (obj.value=='') { doAlert('Es muss ein Vor- und Nachname eingegeben werden.','Information'); } else dpd.users.put(_thisViewMyProfileNested.me.id, {"fullname":obj.value}, function(result, err) { 
-						if(err) return console.log(err); 
-						// console.log(result, result.id); 
-						_thisViewMyProfileNested.me = result;
-						if (_thisViewMyProfileNested.me.active==false) {
-							_thisViewMyProfileNested.activationMessage();
+					if (obj.id=='fullname') {
+						if (obj.value=='') { 
+							doAlert('Es muss ein Vor- und Nachname eingegeben werden.','Information'); 
+						} 
+						else {
+							console.log(window.me.fullname + " > " + obj.value);
+							if (window.me.fullname != obj.value) {
+								dpd.users.put(_thisViewMyProfileNested.me.id, {"fullname":obj.value}, function(me, err) { 
+									if(err) return console.log(err); 
+									window.me.fullname = me.fullname;
+									_thisViewMyProfileNested.me = me;
+									if (_thisViewMyProfileNested.me.active==false) {
+										_thisViewMyProfileNested.activationMessage();
+									}
+								});
+							}
 						}
-					});
+					}
 					// if (obj.id=='slogan') dpd.users.put(_thisViewMyProfileNested.me.id, {"slogan":obj.value}, function(result, err) { if(err) return console.log(err); console.log(result, result.id); });
 					if (obj.id=='perstext') dpd.users.put(_thisViewMyProfileNested.me.id, {"perstext":obj.value}, function(result, err) { if(err) return console.log(err); /* console.log(result, result.id); */ });
 				}
@@ -276,13 +311,18 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 				// console.log(response);
 				if (response==1) {
 					doAlert('Das finden wir schade. Ihr Zugang wurde gelöscht. Schauen Sie gerne wieder einmal vorbei.','Auf Wiedersehen :-(');
-					var deldate = new Date();
-					var deletetedusername = 'DELETETED_'+deldate+'_'+_thisViewMyProfileNested.me.username;
-					dpd.users.put(_thisViewMyProfileNested.me.id, {"username":deletetedusername,"deleted":true}, function(result, err) { 
-						if(err) return console.log(err); 
-						// console.log(result, result.id); 
+					if (isMobile.any()) { 
+						var deldate = new Date();
+						var deletetedusername = 'DELETETED_'+deldate+'_'+_thisViewMyProfileNested.me.username;
+						dpd.users.put(_thisViewMyProfileNested.me.id, {"username":deletetedusername,"deleted":true}, function(result, err) { 
+							if(err) return console.log(err); 
+							// console.log(result, result.id); 
+							system.redirectToUrl('#logout');
+						});
+					}
+					else {
 						system.redirectToUrl('#logout');
-					});
+					}
 				}
 			},
 			render: function() {
