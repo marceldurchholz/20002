@@ -3166,7 +3166,7 @@ try {
 		// $('#page-content').stop().animate({
 		setTimeout(function() {
 			$('#page-content').animate({
-				scrollTop: $("#page-content")[0].scrollHeight;
+				scrollTop: $("#page-content")[0].scrollHeight
 			}, "fast", function() {
 				// animation done
 				$('#page-content').focus();
