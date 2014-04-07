@@ -96,7 +96,7 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videosCollection
 				});
 
 				
-				var requestUrl = "http://dominik-lohmann.de:5000/videos?active=true&deleted=false&public=true";
+				var requestUrl = "http://dominik-lohmann.de:5000/videos?active=true&deleted=false";
 				if (window.system.master!=true) requestUrl = requestUrl + "&uploader="+window.system.aoid;
 				$.ajax({
 					url: requestUrl,
@@ -110,7 +110,9 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videosCollection
 							value.ccat = 'video';
 							value.icon = 'images/icon-multimedia-60.png';
 							value.href = '#videos/details/view/'+value.id;
-							_thisViewLearningStreamNested.streamData.push(value);
+							if ((window.system.master==true && value.public==true) || window.system.master==false) { 
+								_thisViewLearningStreamNested.streamData.push(value);
+							}
 						}
 					});
 				});
@@ -130,7 +132,9 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videosCollection
 							value.ccat = 'card';
 							value.icon = 'images/icon-cards-60.png';
 							value.href = '#cards/details/view/'+value.id;
-							_thisViewLearningStreamNested.streamData.push(value);
+							if ((window.system.master==true && value.public==true) || window.system.master==false) { 
+								_thisViewLearningStreamNested.streamData.push(value);
+							}
 						}
 					});
 				});

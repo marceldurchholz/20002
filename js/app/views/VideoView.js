@@ -81,12 +81,13 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videosCollection
 				if (_thisViewVideo.me.interests == undefined) _thisViewVideo.me.interests = new Array();
 				});
 				
-				var requestUrl = "http://dominik-lohmann.de:5000/videos?active=true&deleted=false&public=true";
+				var requestUrl = "http://dominik-lohmann.de:5000/videos?active=true&deleted=false";
 				if (window.system.master!=true) requestUrl = requestUrl + "&uploader="+window.system.aoid;
 				$.ajax({
 					url: requestUrl,
 					async: false
 				}).done(function(videoData) {
+					_thisViewVideo.uploaderArray = new Array();
 					_.each(videoData, function(value, index, list) {
 						var filter = 0;
 						var exists = $.inArray( value.topic, _thisViewVideo.me.interests );
@@ -97,25 +98,39 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videosCollection
 							value.icon = 'images/icon-multimedia-60.png';
 							value.href = '#videos/details/view/'+value.id;
 							var uploader = value.uploader;
-							$.ajax({
-								url: 'http://dominik-lohmann.de:5000/users/?id='+uploader,
-								async: false,
-								success: function(data, textStatus, XMLHttpRequest) {
-									value.uploaderdata = data;
-									_thisViewVideo.streamData.push(value);
-									// _thisViewVideo.rowContent = _thisViewVideo.rowContent + _thisViewVideo.insertData(value);
-								},
-								error:function (xhr, ajaxOptions, thrownError) {
-									console.log(xhr.responseText);
-									/*
-									if (xhr.responseText=='{"message":"not found","statusCode":404,"status":404}') {
-										dpd.videos.put(model.attributes.id, {"active":false}, function(result, err) {
-										  if(err) return console.log(err);
-										});
+							console.log(uploader);
+							console.log(_thisViewVideo.uploaderArray[uploader]);
+							if (_thisViewVideo.uploaderArray[uploader]==undefined) {
+								$.ajax({
+									url: 'http://dominik-lohmann.de:5000/users/?id='+uploader,
+									async: false,
+									success: function(data, textStatus, XMLHttpRequest) {
+										console.log(data);
+										value.uploaderdata = data;
+										_thisViewVideo.uploaderArray[data.id]==data;
+										console.log(_thisViewVideo.uploaderArray[data.id]);
+										// _thisViewVideo.streamData.push(value);
+										// _thisViewVideo.rowContent = _thisViewVideo.rowContent + _thisViewVideo.insertData(value);
+									},
+									error:function (xhr, ajaxOptions, thrownError) {
+										console.log(xhr.responseText);
+										/*
+										if (xhr.responseText=='{"message":"not found","statusCode":404,"status":404}') {
+											dpd.videos.put(model.attributes.id, {"active":false}, function(result, err) {
+											  if(err) return console.log(err);
+											});
+										}
+										*/
 									}
-									*/
-								}
-							});
+								});
+							}
+							else {
+								value.uploaderdata = _thisViewVideo.uploaderArray[uploader];
+							}
+							
+							// if ((window.system.master==true && value.public==true) || window.system.master==false) { 
+								_thisViewVideo.streamData.push(value);
+							// }
 						}
 					});
 				});
