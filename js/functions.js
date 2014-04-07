@@ -258,7 +258,7 @@ try {
 			);
 		},
 		rememberUserDataDeleteAutologin: function(callback) {
-			// alert('rememberUserDataDelete');
+			// alert('rememberUserDataDeleteAutologin');
 			// alert(window.system.kdnr);
 			if (isPhoneGap()) {
 				this.db.transaction(
@@ -266,6 +266,31 @@ try {
 						var id = window.system.kdnr;
 						// var sql = "DELETE FROM metbl WHERE id=:id";
 						var sql = "UPDATE metbl SET autologin = '0' WHERE id=:id";
+						tx.executeSql(sql, [id], function (tx, results) {
+							callback();
+						});
+					},
+					function (error) {
+						alert('error');
+						alert(error.message);
+						// deferred.reject("Transaction Error: " + error.message);
+						callback();
+					}
+				);
+			}
+			else {
+				callback();
+			}
+		},
+		rememberUserDataDelete: function(callback) {
+			// alert('rememberUserDataDelete');
+			// alert(window.system.kdnr);
+			if (isPhoneGap()) {
+				this.db.transaction(
+					function (tx) {
+						var id = window.system.kdnr;
+						// var sql = "DELETE FROM metbl WHERE id=:id";
+						var sql = "UPDATE metbl SET username = '0', password = '0' WHERE id=:id";
 						tx.executeSql(sql, [id], function (tx, results) {
 							callback();
 						});
@@ -1784,6 +1809,7 @@ try {
 				console.log( "Es ist leider ein Fehler passiert, der nicht passieren sollte.", "Entschuldigung..." );
 			})
 			.always(function() {
+				window.me.purchases = _newData.purchases;
 				window._thisViewVideoDetails.render();
 			});
 		}
@@ -2306,6 +2332,7 @@ try {
 						myPlayer.posterImage.hide();  
 						myPlayer.currentTime(0);  
 						myPlayer.pause();
+						doAlert('Wenn Sie dieses Video kaufen, können Sie mehr als diese Vorschau sehen.','Sie finden das interesant?');
 					}
 				}
 			});

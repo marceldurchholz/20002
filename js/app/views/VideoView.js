@@ -128,9 +128,9 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videosCollection
 								value.uploaderdata = _thisViewVideo.uploaderArray[uploader];
 							}
 							
-							// if ((window.system.master==true && value.public==true) || window.system.master==false) { 
+							if ((window.system.master==true && value.public==true) || (window.system.master==false && window.system.aoid==value.uploader)) { 
 								_thisViewVideo.streamData.push(value);
-							// }
+							}
 						}
 					});
 				});

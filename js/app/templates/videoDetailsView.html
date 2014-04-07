@@ -101,8 +101,7 @@
 	<div class="clear"></div>
 
 	<ul data-role="listview" data-inset="true">
-		<!-- <%= video.related.length %> -->
-		<% if (video.related.length>1) { %>
+		<% if (video.related.length>0) { %>
 			<li data-theme="a" data-role="list-divider">Das könnte interessant sein...</li>
 		<% } %>
 		<% var displayedvideos = 0; %>

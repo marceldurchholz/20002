@@ -16,35 +16,26 @@ define(["jquery", "backbone", "models/CardModel", "collections/cardsCollection",
 					_thisViewCardStart._answersCollection = new answersCollection();
 					_thisViewCardStart.failures = 0;
 					_thisViewCardStart.lastquestion = "";
+					_thisViewCardStart.answerCountdownIntervalStatus = 0;
+					_thisViewCardStart.answerCountdownButtonDelayText = 10;
 					// _thisViewCardStart._answersCollection.set(_thisViewCardStart._AnswerModel);
 					// _thisViewCardStart.listenTo(_thisViewCardStart._answersCollection, 'change', _thisViewCardStart.alarm);
 				},
 				alarm: function() {
 					alert('alarm');
 				},
-				submitAnswer: function (event) {
-					event.preventDefault();
-					_thisViewCardStart = this;
-					var $this = $(this);
-					var submitFormData = $('#submitform').serializeArray();
-					_.each(submitFormData, function(obj) {
-						var n = obj.name;
-						var v = obj.value;
-						_thisViewCardStart._AnswerModel = new AnswerModel({question: n, answer: v});
-						if (n.substr(0,6)=='answer') { _thisViewCardStart._answersCollection.add(_thisViewCardStart._AnswerModel); }
-					});
-					_thisViewCardStart.options.page = parseInt(_thisViewCardStart.cardpagedata.page)+1;					
-					if (_thisViewCardStart.options.page > _thisViewCardStart.cardcount) {
-						_thisViewCardStart.displayPage = cardsFinishViewHTML;
-					}
-					_thisViewCardStart.render();
-					return(false);
-				},
-
 				retryCard: function (event) {
 					event.preventDefault();
 					_thisViewCardStart = this;
 					window.location.href = "#cards/details/view/"+_thisViewCardStart.options.cardid;
+					return(false);
+				},
+				showDetails: function (event) {
+					event.preventDefault();
+					_thisViewCardStart = this;
+					// window.location.href = "#cards/details/view/"+_thisViewCardStart.options.cardid;
+					$('#showDetailsBtnArea').hide();
+					$('#detailsArea').fadeIn();
 					return(false);
 				},
 
@@ -57,8 +48,9 @@ define(["jquery", "backbone", "models/CardModel", "collections/cardsCollection",
 				
 				bindEvents: function(event) {
 					var _thisViewCardStart = this;
-					this.$el.off('click','#submitanswer').on('click','#submitanswer',function(event){_thisViewCardStart.submitAnswer(event);});
+					this.$el.off('click','#submitAnswerBtn').on('click','#submitAnswerBtn',function(event){_thisViewCardStart.submitAnswer(event);});
 					this.$el.off('click','#retrycard').on('click','#retrycard',function(event){_thisViewCardStart.retryCard(event);});
+					this.$el.off('click','#showDetailsBtn').on('click','#showDetailsBtn',function(event){_thisViewCardStart.showDetails(event);});
 					this.$el.off('click','#cardslink').on('click','#cardslink',function(event){_thisViewCardStart.cardsLink(event);});
 				},
 				
@@ -66,7 +58,78 @@ define(["jquery", "backbone", "models/CardModel", "collections/cardsCollection",
 					_thisViewCardStart = this;
 					_thisViewCardStart.options = options;
 					_thisViewCardStart.render();
-					
+					_thisViewCardStart.answerCountdownLoopReset();
+					_thisViewCardStart.answerCountdownButtonDelayReset();
+				},
+				
+				answerCountdownButtonDelayStart: function() {
+					_thisViewCardStart.answerCountdownDelayInterval = setInterval(_thisViewCardStart.answerCountdownButtonDelayRaise,1000);
+				},
+				answerCountdownButtonDelayRaise: function() {
+					if (_thisViewCardStart.answerCountdownButtonDelayText==10) {
+						$("#submitAnswerBtn").button('enable'); 
+					}
+					_thisViewCardStart.answerCountdownButtonDelayText = _thisViewCardStart.answerCountdownButtonDelayText - 1;
+					$('#answerCountdownButtonDelayElement').html(_thisViewCardStart.answerCountdownButtonDelayText);
+					if (_thisViewCardStart.answerCountdownButtonDelayText <= 0) _thisViewCardStart.submitAnswer(null);
+				},
+				answerCountdownButtonDelayReset: function() {
+					_thisViewCardStart.answerCountdownButtonDelayStop();
+					_thisViewCardStart.answerCountdownButtonDelayStart();
+				},
+				answerCountdownButtonDelayStop: function() {
+					_thisViewCardStart.answerCountdownButtonDelayText = 10;
+					clearInterval(_thisViewCardStart.answerCountdownDelayInterval);
+				},
+				
+				
+				answerCountdownLoopStart: function() {
+					_thisViewCardStart.answerCountdownInterval = setInterval(_thisViewCardStart.answerCountdownLoopRaise,10);
+				},
+				answerCountdownLoopRaise: function() {
+					_thisViewCardStart.answerCountdownIntervalStatus = _thisViewCardStart.answerCountdownIntervalStatus + 0.1;
+					$('#answerCountdownBar').css("width",_thisViewCardStart.answerCountdownIntervalStatus+"%");
+					if (_thisViewCardStart.answerCountdownIntervalStatus >= 50) $('#answerCountdownBar').addClass("red");
+					else $('#answerCountdownBar').removeClass("red");
+					if (_thisViewCardStart.answerCountdownIntervalStatus >= 100) _thisViewCardStart.submitAnswer(null);
+				},
+				answerCountdownLoopReset: function() {
+					// _thisViewCardStart.delayCountdownPointer = window.setTimeout(function() {
+						_thisViewCardStart.answerCountdownLoopStop();
+						_thisViewCardStart.answerCountdownLoopStart();
+					// }, 3000);
+				},
+				answerCountdownLoopStop: function() {
+					_thisViewCardStart.answerCountdownIntervalStatus = 0;
+					// clearTimeout(_thisViewCardStart.delayCountdownPointer);
+					clearInterval(_thisViewCardStart.answerCountdownInterval);
+				},
+				
+				submitAnswer: function (event) {
+					if (event!=null) event.preventDefault();
+					_thisViewCardStart = this;
+					showModal();
+					var $this = $(this);
+					var submitFormData = $('#submitform').serializeArray();
+					_.each(submitFormData, function(obj) {
+						var n = obj.name;
+						var v = obj.value;
+						_thisViewCardStart._AnswerModel = new AnswerModel({question: n, answer: v});
+						if (n.substr(0,6)=='answer') { _thisViewCardStart._answersCollection.add(_thisViewCardStart._AnswerModel); }
+					});
+					_thisViewCardStart.options.page = parseInt(_thisViewCardStart.cardpagedata.page)+1;					
+					if (_thisViewCardStart.options.page > _thisViewCardStart.cardcount) {
+						// alert('fin');
+						_thisViewCardStart.answerCountdownLoopStop();
+						_thisViewCardStart.answerCountdownButtonDelayStop();
+						_thisViewCardStart.displayPage = cardsFinishViewHTML;
+					}
+					else {
+						_thisViewCardStart.answerCountdownLoopReset();
+						_thisViewCardStart.answerCountdownButtonDelayReset();
+					}
+					_thisViewCardStart.render();
+					return(false);
 				},
 				
 				insertResult: function(options) {
@@ -78,6 +141,7 @@ define(["jquery", "backbone", "models/CardModel", "collections/cardsCollection",
 						
 						this.cardpage = cardpage;
 						// console.log(this.cardpage);
+						/*
 						console.log('---------------------------------------');
 						console.log('---------------------------------------');
 						console.log('checking cardpageid ' + cardpage.id);
@@ -88,6 +152,7 @@ define(["jquery", "backbone", "models/CardModel", "collections/cardsCollection",
 						console.log(cardpage.question);
 						console.log('running through potential answers');
 						console.log('+++++++++++++++++++++++++++++++++++++++');
+						*/
 						
 						_.each(cardpage.answers, function(answer) {
 							// var correctanswer = model.get('');
@@ -252,14 +317,17 @@ define(["jquery", "backbone", "models/CardModel", "collections/cardsCollection",
 					}
 					
 					_thisViewCardStart.$el.trigger('create');
-					hideModal();
-					new FastClick(document.body);
 					fontResize();
+					hideModal();
+					/*
 					_thisViewCardStart.$el.fadeIn( 500, function() {
 						$('.ui-content').scrollTop(0);
 						new FastClick(document.body);
+						submitAnswerBtn();
 					});
+					*/
 					this.bindEvents();
+					$("#submitAnswerBtn").button('disable');
 					return _thisViewCardStart;
 				}
 

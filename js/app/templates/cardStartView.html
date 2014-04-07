@@ -1,8 +1,17 @@
-<h3 class="ui-bar ui-bar-f" style="border-top-width:0px;text-align:center;"><%= card.title %></h3>
+<h3 class="ui-bar ui-bar-f" style="border-top-width:0px;text-align:center;">
+	<%= card.title %>
+</h3>
 
 <div style="margin-bottom:50px;padding:15px;width;100%;">
 
-	<h3><%= card.question %></h3>
+	<h5 style="font-size:18px;" class="resizetext"><%= card.question %></h5>
+	<div class="clear"></div>
+	<div style="width:100%;height:auto;background-color:tansparent !important;text-align:right;color:#fff;background-color:#fff;">
+		<div id="answerCountdownBar" style="width:0%;height:100%;background-color:red !important;border:1px outset #ccc;margin-bottom:30px;">
+			<div style="width:auto;height:0px;overflow:visible;padding:0px 10px 0px 0px;" id="answerCountdownButtonDelayElement">&nbsp;</div>
+		</div>
+	</div>
+	<div class="clear"></div>
 	
 	<form id="submitform" action="#cards/start/view/<%= card.cardid %>/<%= card.nextpage %>" method="post" class="no-ui-body no-ui-body-a no-ui-corner-all" style="border:0;">
 		
@@ -13,12 +22,13 @@
 			<div data-role="controlgroup" style="border:0;">
 				<% _.each(card.answers, function(answer) { %>
 					<input type="checkbox" name="answer-<%= card.cardpageid %>-<%= card.page %>-<%= answer.id %>-<%= answer.solution %>" id="answer-<%= card.cardpageid %>-<%= card.page %>-<%= answer.id %>-<%= answer.solution %>" value="1">
-					<label for="answer-<%= card.cardpageid %>-<%= card.page %>-<%= answer.id %>-<%= answer.solution %>" style="font-weight:normal;"><%= answer.text %></label>
+					<label for="answer-<%= card.cardpageid %>-<%= card.page %>-<%= answer.id %>-<%= answer.solution %>" style="font-weight:normal;font-size:10px !important;" class="resizetext"><%= answer.text %></label>
 				<% }); %>
 			</div>
 		</p>
 		
-		<input id="submitanswer" name="submitanswer" data-theme="f" type="button" value="Weiter" />
+		<input id="submitAnswerBtn" name="submitAnswerBtn" data-theme="f" type="button" value="Weiter" />
+		<div class="clear"></div>
 		
 	</form>
 	

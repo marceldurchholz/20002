@@ -313,71 +313,46 @@ define(["jquery", "backbone", "collections/videosCollection", "text!templates/vi
 					_thisKnowledgeData.streamData = streamData;
 					var querystr = "";
 					// if (topic!='') querystr += "&topic="+topic;
-					var url = "http://dominik-lohmann.de:5000/videos?active=true&deleted=false&public=true";
+					var url = "http://dominik-lohmann.de:5000/videos?active=true&deleted=false";
 					if (window.system.master!=true) url = url+"&uploader="+window.system.aoid;
 					var anzahl = 0;
 					$.ajax({
-						url: url+querystr,
+						url: url,
 						async: false
 					}).done(function(videoData) {
-						var nameArray = new Array;
 						_.each(videoData, function(value, index, list) {
 							anzahl = anzahl + 1;
 							value.ccat = 'video';
 							value.icon = 'images/icon-multimedia-60.png';
 							value.href = '#videos/details/view/'+value.id;
-							// _thisKnowledgeData.streamData.push(value);
-							var uploader = value.uploader; // "ed568841af69d94d";
-							/*
-							if (nameArray[uploader]==undefined) {
-								$.ajax({
-									// type: 'get',
-									// timeout: 5000,
-									url: 'http://dominik-lohmann.de:5000/users/?id='+uploader,
-									async: false,
-									success: function(data, textStatus, XMLHttpRequest){
-										// console.log('Error: ' + textStatus);
-										
-										nameArray[_thisMessagesDetailsViewNested.messages[key4].sender] = userdata.fullname;
-										// _thisKnowledgeData.streamData.push(value);
-										
-										// console.log(data);
-									},
-									error:function (xhr, ajaxOptions, thrownError){
-										// console.log('error');
-										// console.log(index);
-										// alert(xhr.status);
-										// alert(xhr.statusText);
-										// alert(xhr.responseText);
-									}
-								});
+							var uploader = value.uploader;
+							if ((window.system.master==true && value.public==true) || window.system.master==false) { 
+								_thisKnowledgeData.streamData.push(value);
 							}
-							*/
-							_thisKnowledgeData.streamData.push(value);
-							// _thisMessagesDetailsViewNested.messages[key4].fullname = nameArray[uploader];
 							if (anzahl > 4) return(false);
 						});
 					});
-					var url = "http://dominik-lohmann.de:5000/cards?active=true&deleted=false&public=true";
+					var url = "http://dominik-lohmann.de:5000/cards?active=true&deleted=false";
 					if (window.system.master!=true) url = url+"&uploader="+window.system.aoid;
 					$.ajax({
-						url: url+querystr,
+						url: url,
 						async: false
 					}).done(function(cardData) {
-						// console.log(cardData);
 						_.each(cardData, function(value, index, list) {
 							anzahl = anzahl + 1;
 							value.ccat = 'card';
 							value.icon = 'images/icon-cards-60.png';
 							value.href = '#cards/details/view/'+value.id;
-							_thisKnowledgeData.streamData.push(value);
+							if ((window.system.master==true && value.public==true) || window.system.master==false) { 
+								_thisKnowledgeData.streamData.push(value);
+							}
 							if (anzahl > 4) return(false);
 						});
 					});
 					/*
 					var url = "http://dominik-lohmann.de:5000/planer?active=true&deleted=false";
 					$.ajax({
-						url: url+querystr,
+						url: url,
 						async: false
 					}).done(function(planData) {
 						_.each(planData, function(value, index, list) {
@@ -472,7 +447,7 @@ define(["jquery", "backbone", "collections/videosCollection", "text!templates/vi
 						}
 					});
 					
-					if( $.inArray( this._videosCollection.models[0].attributes.id , window.me.purchases ) >- 1 ) {
+					if( ($.inArray( this._videosCollection.models[0].attributes.id , window.me.purchases ) >- 1) || (Math.round(this._videosCollection.models[0].attributes.price)==0) ) {
 						this._videosCollection.models[0].attributes.videourl,showVideoLength = 0;
 					} else {
 						this._videosCollection.models[0].attributes.videourl,showVideoLength = 60;

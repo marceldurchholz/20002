@@ -308,6 +308,7 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 				checkTopNaviRoles();
 			},
 			deleteMyAccount: function(response) {
+				var _thisViewMyProfileNested = this;
 				// console.log(response);
 				if (response==1) {
 					doAlert('Das finden wir schade. Ihr Zugang wurde gelöscht. Schauen Sie gerne wieder einmal vorbei.','Auf Wiedersehen :-(');
@@ -317,13 +318,16 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 						dpd.users.put(_thisViewMyProfileNested.me.id, {"username":deletetedusername,"deleted":true}, function(result, err) { 
 							if(err) return console.log(err); 
 							// console.log(result, result.id); 
-							system.redirectToUrl('#logout');
+							window.dao.rememberUserDataDelete(_thisViewMyProfileNested.gotoLogout);
 						});
 					}
 					else {
-						system.redirectToUrl('#logout');
+						window.dao.rememberUserDataDelete(_thisViewMyProfileNested.gotoLogout);
 					}
 				}
+			},
+			gotoLogout: function() {
+				system.redirectToUrl('#logout');
 			},
 			render: function() {
 				var _thisViewMyProfileNested = this;
