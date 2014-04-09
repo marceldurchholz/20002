@@ -1,224 +1,334 @@
-// LearningStreamNestedView.js
+// CardStartView.js
 // -------
-define(["jquery", "backbone", "text!templates/LearningStreamNestedPage.html", "text!templates/sidemenusList.html", "views/SidemenuView"],
+define(["jquery", "backbone", "collections/answersCollection", "models/AnswerModel", "views/CardView", "text!templates/cardStartView.html", "text!templates/cardFinishView.html", "text!templates/sidemenusList.html", "views/SidemenuView"],
 
-    function($, Backbone, LearningStreamNestedPage, sidemenusList, SidemenuView){
+    function($, Backbone, answersCollection, AnswerModel, CardListViewItems, cardsStartViewHTML, cardsFinishViewHTML, sidemenusList, SidemenuView){
 		
-		var LearningStreamNestedViewVar = Backbone.View.extend({
+			var CardStartViewVar = Backbone.View.extend({
 			
-			el: "#LearningStreamViewDiv",
-			initialize: function() {
-				console.log('initializing LearningStreamNestedView.js');
-				var _thisViewLearningStreamNested = this;
-				showModal();
-				_thisViewLearningStreamNested.checkLogin();
-				var streamData = new Array();
-				_thisViewLearningStreamNested.streamData = streamData;
-			},
-			checkLogin:function() {
-				// dpd.users.me(function(user) {
-				dpd('users').get(window.system.uid, function(user, err) {
-					if (user) { }
-					else system.redirectToUrl('#login');
-				});
-			},
-			fetch: function() {	
-				// alert('bla');
-				// this.$el.hide();
-				_thisViewLearningStreamNested = this;
-				console.log('fetching LearningStreamNestedView.js');
-				_thisViewLearningStreamNested.collectStreamData();
-			},
-			bindEvents: function() {
-				var _thisViewLearningStreamNested = this;
-				
-				// dpd.videos.on('create', function(videoData) {
-				dpd.videos.once('create', function(videoData) {
-					// renderMessage(message);
-					// doAlert('new video existing');
-					// console.log(videoData);
-					// console.log(videoData);
-					_thisViewLearningStreamNested.collectStreamData();
-					// window.location.reload();
-					_thisViewLearningStreamNested.render();
-				});
+				el: "#page-content",
+				attributes: {"data-role": 'content'},
+				initialize: function(options) {
+					_thisViewCardStart = this;
+					_thisViewCardStart.displayPage = cardsStartViewHTML;
+					_thisViewCardStart.fetch(options);
+					_thisViewCardStart._AnswerModel = new AnswerModel();
+					_thisViewCardStart._answersCollection = new answersCollection();
+					_thisViewCardStart.failures = 0;
+					_thisViewCardStart.lastquestion = "";
+					_thisViewCardStart.answerCountdownIntervalStatus = 0;
+					_thisViewCardStart.answerCountdownButtonDelayText = 10;
+				},
+				retryCard: function (event) {
+					event.preventDefault();
+					_thisViewCardStart = this;
+					window.location.href = "#cards/details/view/"+_thisViewCardStart.options.cardid;
+					return(false);
+				},
+				showDetails: function (event) {
+					event.preventDefault();
+					_thisViewCardStart = this;
+					// window.location.href = "#cards/details/view/"+_thisViewCardStart.options.cardid;
+					$('#showDetailsBtnArea').hide();
+					$('#detailsArea').fadeIn();
+					return(false);
+				},
 
+				cardsLink: function (event) {
+					event.preventDefault();
+					_thisViewCardStart = this;
+					window.location.href = "#cards";
+					return(false);
+				},
 				
-				/*
-				// this.$el.off('click','.clickRow').on('click','.clickRow',function(){_thisViewLearningStreamNested.clicked(e);});
-				this.$el.off('click','.showVideoDetailsLink').on('click','.showVideoDetailsLink',function(event){
-					event.preventDefault();
-					window.location.href = event.currentTarget.hash;
-				});
-				this.$el.off('click','.isVideoToFavourites').on('click','.isVideoToFavourites',function(event){
-					event.preventDefault();
-					alert('isVideoToFavourites');
-				});
-				this.$el.off('click','.addVideoToFavourites').on('click','.addVideoToFavourites',function(event){
-					event.preventDefault();
-					console.log(event);
-					$(this).removeClass("addVideoToFavourites");
-					$(this).addClass("isVideoToFavourites");
-					var videoid = $(event.currentTarget).attr('data-link');
-					var _videoid = videoid;
-					console.log(_videoid);
-					dpd.users.get({id:_thisViewLearningStreamNested.me.id,following:_videoid}, function(result, error) {
-						if (result) {
-							console.log(result);
-							}
-						else {
-							// console.log(error);
-							dpd.users.put(_thisViewLearningStreamNested.me.id, {following:{$push:_videoid}}, function(result, error) {
-								if (result) {
-									console.log(result);
+				bindEvents: function(event) {
+					var _thisViewCardStart = this;
+					this.$el.off('click','#submitAnswerBtn').on('click','#submitAnswerBtn',function(event){_thisViewCardStart.submitAnswer(event);});
+					this.$el.off('click','#retrycard').on('click','#retrycard',function(event){_thisViewCardStart.retryCard(event);});
+					this.$el.off('click','#showDetailsBtn').on('click','#showDetailsBtn',function(event){_thisViewCardStart.showDetails(event);});
+					this.$el.off('click','#cardslink').on('click','#cardslink',function(event){_thisViewCardStart.cardsLink(event);});
+				},
+				
+				fetch: function(options) {
+					_thisViewCardStart = this;
+					_thisViewCardStart.options = options;
+					_thisViewCardStart.render();
+					_thisViewCardStart.answerCountdownLoopReset();
+					_thisViewCardStart.answerCountdownButtonDelayReset();
+				},
+				
+				answerCountdownButtonDelayStart: function() {
+					_thisViewCardStart.answerCountdownDelayInterval = setInterval(_thisViewCardStart.answerCountdownButtonDelayRaise,1000);
+				},
+				answerCountdownButtonDelayRaise: function() {
+					if (_thisViewCardStart.answerCountdownButtonDelayText==10) {
+						$("#submitAnswerBtn").button('enable'); 
+					}
+					_thisViewCardStart.answerCountdownButtonDelayText = _thisViewCardStart.answerCountdownButtonDelayText - 1;
+					$('#answerCountdownButtonDelayElement').html(_thisViewCardStart.answerCountdownButtonDelayText);
+					if (_thisViewCardStart.answerCountdownButtonDelayText <= 0) _thisViewCardStart.submitAnswer(null);
+				},
+				answerCountdownButtonDelayReset: function() {
+					_thisViewCardStart.answerCountdownButtonDelayStop();
+					_thisViewCardStart.answerCountdownButtonDelayStart();
+				},
+				answerCountdownButtonDelayStop: function() {
+					_thisViewCardStart.answerCountdownButtonDelayText = 10;
+					clearInterval(_thisViewCardStart.answerCountdownDelayInterval);
+				},
+				
+				
+				answerCountdownLoopStart: function() {
+					_thisViewCardStart.answerCountdownInterval = setInterval(_thisViewCardStart.answerCountdownLoopRaise,10);
+				},
+				answerCountdownLoopRaise: function() {
+					_thisViewCardStart.answerCountdownIntervalStatus = _thisViewCardStart.answerCountdownIntervalStatus + 0.1;
+					$('#answerCountdownBar').css("width",_thisViewCardStart.answerCountdownIntervalStatus+"%");
+					if (_thisViewCardStart.answerCountdownIntervalStatus >= 50) $('#answerCountdownBar').addClass("red");
+					else $('#answerCountdownBar').removeClass("red");
+					if (_thisViewCardStart.answerCountdownIntervalStatus >= 100) _thisViewCardStart.submitAnswer(null);
+				},
+				answerCountdownLoopReset: function() {
+					// _thisViewCardStart.delayCountdownPointer = window.setTimeout(function() {
+						_thisViewCardStart.answerCountdownLoopStop();
+						_thisViewCardStart.answerCountdownLoopStart();
+					// }, 3000);
+				},
+				answerCountdownLoopStop: function() {
+					_thisViewCardStart.answerCountdownIntervalStatus = 0;
+					// clearTimeout(_thisViewCardStart.delayCountdownPointer);
+					clearInterval(_thisViewCardStart.answerCountdownInterval);
+				},
+				
+				submitAnswer: function (event) {
+					if (event!=null) event.preventDefault();
+					_thisViewCardStart = this;
+					showModal();
+					var $this = $(this);
+					var submitFormData = $('#submitform').serializeArray();
+					_.each(submitFormData, function(obj) {
+						var n = obj.name;
+						var v = obj.value;
+						_thisViewCardStart._AnswerModel = new AnswerModel({question: n, answer: v});
+						if (n.substr(0,6)=='answer') { _thisViewCardStart._answersCollection.add(_thisViewCardStart._AnswerModel); }
+					});
+					_thisViewCardStart.options.page = parseInt(_thisViewCardStart.cardpagedata.page)+1;					
+					if (_thisViewCardStart.options.page > _thisViewCardStart.cardcount) {
+						// alert('fin');
+						_thisViewCardStart.answerCountdownLoopStop();
+						_thisViewCardStart.answerCountdownButtonDelayStop();
+						_thisViewCardStart.displayPage = cardsFinishViewHTML;
+					}
+					else {
+						_thisViewCardStart.answerCountdownLoopReset();
+						_thisViewCardStart.answerCountdownButtonDelayReset();
+					}
+					_thisViewCardStart.render();
+					return(false);
+				},
+				
+				insertResult: function(options) {
+					_thisViewCardStart = this;
+					// console.log(_thisViewCardStart.options);
+					// console.log(_thisViewCardStart.allcardpages);
+					_thisViewCardStart.resultArray = new Array();
+					_.each(_thisViewCardStart.allcardpages, function(cardpage) {
+						
+						this.cardpage = cardpage;
+						// console.log(this.cardpage);
+						/*
+						console.log('---------------------------------------');
+						console.log('---------------------------------------');
+						console.log('checking cardpageid ' + cardpage.id);
+						console.log(cardpage);
+						console.log('***************************************');
+						
+						console.log(cardpage.id);
+						console.log(cardpage.question);
+						console.log('running through potential answers');
+						console.log('+++++++++++++++++++++++++++++++++++++++');
+						*/
+						
+						_.each(cardpage.answers, function(answer) {
+							// var correctanswer = model.get('');
+							// console.log('answer.id ' +answer.id);
+							console.log('answer.text ' +answer.text + ' >> ' + answer.solution);
+							// console.log('answer.solution '+answer.solution);
+							var found = 0;
+							
+							_.each(_thisViewCardStart._answersCollection.models, function(model) {
+								if (
+									cardpage.id == model.get('question').split("-")[1] 
+									&& cardpage.page == model.get('question').split("-")[2]
+									&& answer.id == model.get('question').split("-")[3]
+									) {
+									found = 1;
+									console.log('FOUND GIVEN ANSWER: ' + model.get('answer'));
+									if (answer.solution != model.get('answer')) {
+										console.log('FAILURE !!!');
+										_thisViewCardStart.failures = _thisViewCardStart.failures+1;
+										var fo = new Object();
+										fo.question = cardpage.question;
+										fo.answer = answer.text;
+										fo.solution = answer.solution;
+										fo.lastquestion = _thisViewCardStart.lastquestion;
+										_thisViewCardStart.lastquestion = fo.question;
+										_thisViewCardStart.resultArray.push(fo);
 									}
-								else {
-									// console.log(error);
+									// console.log(model.get('answer'));
+									return(false);
 								}
 							});
-						}
-					});
-				});
-				*/
-			},
-			collectStreamData: function() {
-				var _thisViewLearningStreamNested = this;
-				var streamData = new Array();
-				_thisViewLearningStreamNested.streamData = streamData;
-				
-				var requestUrl = "http://dominik-lohmann.de:5000/users/"+window.me.id;
-				$.ajax({
-					url: requestUrl,
-					async: false
-				}).done(function(me) {
-					// alert(me.id);
-					_thisViewLearningStreamNested.me = me;
-				if (_thisViewLearningStreamNested.me.interests == undefined) _thisViewLearningStreamNested.me.interests = new Array();
-				});
+							if (answer.solution == 1 && found==0) {
+								console.log('FAILURE !!!');
+								_thisViewCardStart.failures = _thisViewCardStart.failures+1;
+								var fo = new Object();
+								fo.question = cardpage.question;
+								fo.answer = answer.text;
+								fo.solution = answer.solution;
+								fo.lastquestion = _thisViewCardStart.lastquestion;
+								_thisViewCardStart.lastquestion = fo.question;
+								_thisViewCardStart.resultArray.push(fo);
+							}
+							
+						});
 
-				
-				var requestUrl = "http://dominik-lohmann.de:5000/videos?active=true&deleted=false";
-				if (window.system.master!=true) requestUrl = requestUrl + "&uploader="+window.system.aoid;
-				$.ajax({
-					url: requestUrl,
-					async: false
-				}).done(function(videoData) {
-					_.each(videoData, function(value, index, list) {
-						var exists = $.inArray( value.topic, _thisViewLearningStreamNested.me.interests );
-						if (_thisViewLearningStreamNested.me.interests == undefined) exists=1;
-						else if (_thisViewLearningStreamNested.me.interests.length==0) exists=1;
-						if (exists>-1 || value.uploader == me.id) {
-							value.ccat = 'video';
-							value.icon = 'images/icon-multimedia-60.png';
-							value.href = '#videos/details/view/'+value.id;
-							if ((window.system.master==true && value.public==true) || window.system.master==false) { 
-								_thisViewLearningStreamNested.streamData.push(value);
-							}
-						}
 					});
-				});
-				// console.log(_thisViewLearningStreamNested.streamDatairefire);
+					
+					_template = _.template(_thisViewCardStart.displayPage, {
+						id: _thisViewCardStart.carddata.id,
+						uploader: _thisViewCardStart.uploaderdata.fullname,
+						results: _thisViewCardStart._answersCollection.models,
+						/*
+						cardid: _thisViewCardStart.carddata.cardid,
+						answers: _thisViewCardStart.cardpagedata.answers,
+						question: _thisViewCardStart.cardpagedata.question,
+						page_id: _thisViewCardStart.cardpagedata.id,
+						page: _thisViewCardStart.cardpagedata.page,
+						lastpage: (parseInt(_thisViewCardStart.cardpagedata.page)-1),
+						nextpage: (parseInt(_thisViewCardStart.cardpagedata.page)+1),
+						*/
+						failures: _thisViewCardStart.failures,
+						topic: _thisViewCardStart.carddata.topic,
+						cardurl: _thisViewCardStart.carddata.cardurl,
+						description: _thisViewCardStart.carddata.description,
+						resultArray: _thisViewCardStart.resultArray,
+						
+						title: _thisViewCardStart.carddata.title
+					},{variable: 'card'});
+					$(this.el).html(_template);
+				},
 				
-				var requestUrl = "http://dominik-lohmann.de:5000/cards?active=true&deleted=false&public=true";
-				if (window.system.master!=true) requestUrl = requestUrl + "&uploader="+window.system.aoid;
-				$.ajax({
-					url: requestUrl,
-					async: false
-				}).done(function(cardData) {
-					_.each(cardData, function(value, index, list) {
-						var exists = $.inArray( value.topic, _thisViewLearningStreamNested.me.interests );
-						if (_thisViewLearningStreamNested.me.interests == undefined) exists=1;
-						else if (_thisViewLearningStreamNested.me.interests.length==0) exists=1;
-						if (exists>-1 || value.uploader == me.id) {
-							value.ccat = 'card';
-							value.icon = 'images/icon-cards-60.png';
-							value.href = '#cards/details/view/'+value.id;
-							if ((window.system.master==true && value.public==true) || window.system.master==false) { 
-								_thisViewLearningStreamNested.streamData.push(value);
-							}
-						}
+				insertVariables: function(options) {
+					_thisViewCardStart = this;
+					console.log(_thisViewCardStart.options);
+					
+					if ( typeof( _thisViewCardStart.carddata ) == "undefined") {
+						var query = "http://dominik-lohmann.de:5000/cards/?id="+_thisViewCardStart.options.cardid;
+						$.ajax({
+							url: query,
+							async: false
+						}).done(function(carddata) {
+							_thisViewCardStart.carddata = carddata;
+						});
+					}
+					// console.log(_thisViewCardStart.carddata);
+					
+					var query = "http://dominik-lohmann.de:5000/cardpages/?cardid="+_thisViewCardStart.options.cardid;
+					$.ajax({
+						url: query,
+						async: false
+					}).done(function(allcardpages) {
+						_thisViewCardStart.allcardpages = allcardpages;
+						_thisViewCardStart.allcardpages.sort(function(a, b){
+							return a.page-b.page
+						});
+						_thisViewCardStart.cardcount = allcardpages.length;
+						// console.log(_thisViewCardStart.cardcount);
+					});					
+					
+					var query = "http://dominik-lohmann.de:5000/cardpages/?cardid="+_thisViewCardStart.options.cardid+"&page="+_thisViewCardStart.options.page; // +"&uploader?"+model.get('uploader')
+					console.log(query);
+					$.ajax({
+						url: query,
+						async: false
+					}).done(function(cardpagedata) {
+						_thisViewCardStart.cardpagedata = cardpagedata[0];
+						// console.log(_thisViewCardStart.cardpagedata);
 					});
-				});
-				/*
-				$.ajax({
-					url: "http://dominik-lohmann.de:5000/planer?active=true&deleted=false",
-					async: false
-				}).done(function(planData) {
-					_.each(planData, function(value, index, list) {
-						var exists = $.inArray( value.topic, _thisViewLearningStreamNested.me.interests );
-						if (_thisViewLearningStreamNested.me.interests == undefined) exists=1;
-						else if (_thisViewLearningStreamNested.me.interests.length==0) exists=1;
-						if (exists>-1 || value.uploader == me.id) {
-						if (exists>-1) {
-							value.ccat = 'plan';
-							value.icon = 'images/icon-planer-60.png';
-							value.href = '#planer/details/view/'+value.id;
-							// _thisViewLearningStreamNested.streamData.push(value);
-						}
+					console.log(_thisViewCardStart.cardpagedata);
+					
+					if ( typeof( _thisViewCardStart.uploaderdata ) == "undefined") {
+						var uploader = _thisViewCardStart.carddata.uploader;
+						$.ajax({
+							url: "http://dominik-lohmann.de:5000/users/?id="+uploader,
+							async: false
+						}).done(function(uploaderdata) {
+							// console.log(uploaderdata);
+							_thisViewCardStart.uploaderdata = uploaderdata;
+						});
+					}
+					// console.log(_thisViewCardStart.uploaderdata);
+					// console.log('_thisViewCardStart.carddata');
+					// console.log(_thisViewCardStart.carddata);
+					
+					var pricetext = '';
+					if (_thisViewCardStart.carddata.price==0) pricetext = 'kostenlos';
+					else pricetext = 'für '+_thisViewCardStart.carddata.price+' Coins';
+					_template = _.template(_thisViewCardStart.displayPage, {
+						id: _thisViewCardStart.carddata.id,
+						uploader: _thisViewCardStart.uploaderdata.fullname,
+						cardid: _thisViewCardStart.carddata.cardid,
+						answers: _thisViewCardStart.cardpagedata.answers,
+						question: _thisViewCardStart.cardpagedata.question,
+						cardpageid: _thisViewCardStart.cardpagedata.id,
+						page: _thisViewCardStart.cardpagedata.page,
+						lastpage: (parseInt(_thisViewCardStart.cardpagedata.page)-1),
+						nextpage: (parseInt(_thisViewCardStart.cardpagedata.page)+1),
+						topic: _thisViewCardStart.carddata.topic,
+						cardurl: _thisViewCardStart.carddata.cardurl,
+						title: _thisViewCardStart.carddata.title,
+						description: _thisViewCardStart.carddata.description,
+						price: _thisViewCardStart.carddata.price,
+						pricetext: pricetext
+					},{variable: 'card'});
+					$(this.el).html(_template);
+				},
+				render: function() {
+					_thisViewCardStart = this;
+					$(window).resize(function() {
+						window.resizeElement('#card_player_1')
 					});
-				});
-				*/
-				
-				if (_thisViewLearningStreamNested.streamData.length==0) {
-					var value = new Object();
-					value.ccat = 'plan';
-					value.icon = 'images/avatar.jpg';
-					value.href = '#myprofile';
-					value.title = 'Noch keine Inhalte!';
-					value.topic = 'Bitte Interessen auswählen...';
-					value.description = ' Klicken Sie hier um auf Ihre Profileinstellungen zu gelangen...';
-					_thisViewLearningStreamNested.streamData.push(value);
-				}
-				// alert(_thisViewLearningStreamNested.streamData.length);
-				
-				// Sort multidimensional arrays with oobjects by value 
-				// http://www.javascriptkit.com/javatutors/arraysort2.shtml
-				_thisViewLearningStreamNested.streamData.sort(function(a, b){
-					return b.cdate-a.cdate
-				});
-				_thisViewLearningStreamNested.render();
-			},
-			/*
-			reload: function() {
-				if (!_thisViewLearningStreamNested.reloadtimer) _thisViewLearningStreamNested.reloadtimer = setTimeout(function() {
-					alert('reloadtimer');
-					_thisViewLearningStreamNested.collectStreamData();
-					// alert('reloadtimer');
-				},10000);
-			},
-			*/
-			render: function() {
-				this.bindEvents();
-				var _thisViewLearningStreamNested = this;
-				
-				console.log(_thisViewLearningStreamNested.streamData);
-				
-				// console.log(_thisViewLearningStreamNested);
-				// console.log('DOING render LearningStreamNestedView.js called');
-				// _thisViewLearningStreamNested.reload();
-				_thisViewLearningStreamNested.$el.html(_.template(LearningStreamNestedPage, {
-					data: _thisViewLearningStreamNested.streamData
-				},{variable: 'stream'}));
-				
-				hideModal();
-				this.$el.trigger('create');
-				// _thisViewLearningStream.$el.trigger('create');
-				new FastClick(document.body);
-				// this.$el.fadeIn( 500, function() {
-					// $('.ui-content').scrollTop(0);
-					// new FastClick(document.body);
+					$('#sidebarListViewDiv').html(_.template(sidemenusList, {}));
+					_thisViewCardStart.nestedView = new SidemenuView().fetch();
+					var htmlContent = '';
+					$(this.el).html(htmlContent);
+					
+					if (_thisViewCardStart.options.page > _thisViewCardStart.cardcount) {
+						// doAlert('finish');
+						_thisViewCardStart.insertResult(_thisViewCardStart.options);
+					} else {
+						_thisViewCardStart.insertVariables(_thisViewCardStart.options);
+					}
+					
+					_thisViewCardStart.$el.trigger('create');
+					fontResize();
+					hideModal();
 					/*
-					var LearningStreamUpdateInterval = setInterval(function(){
-						// alert("Hello");
-						// _thisViewLearningStreamNested.fetch();
-					},2000);
+					_thisViewCardStart.$el.fadeIn( 500, function() {
+						$('.ui-content').scrollTop(0);
+						new FastClick(document.body);
+						submitAnswerBtn();
+					});
 					*/
-				// });
-				return this;				
-			}
-		});
+					this.bindEvents();
+					$("#submitAnswerBtn").button('disable');
+					return _thisViewCardStart;
+				}
 
-        return LearningStreamNestedViewVar;
+			});
+
+        return CardStartViewVar;
 
     }
 
