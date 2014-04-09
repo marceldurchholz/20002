@@ -68,7 +68,7 @@ require.config({
 
       // jQueryUI
       "jqueryui": ["jquery"],
-	  
+      
 	  "jexpander": ["jquery"],
 
 	  "jelastic": ["jquery"],
@@ -77,7 +77,6 @@ require.config({
 	  
 	  "functions": ["jquery", "videojs"],
 	  
-      // jQueryUI
       "videojs": {
 		"deps": ["jquery"],
 		"exports": "videojs"
@@ -87,7 +86,7 @@ require.config({
       "backbone": {
 
         // Depends on underscore/lodash and jQuery // "jquerypulltorefresh", 
-        "deps": ["functions", "underscore", "jquery", "jquerymobile", "jexpander", "jelastic", "jtablesorter"],
+        "deps": ["functions", "underscore", "jquery", "jquerymobile", "jqueryui", "jexpander", "jelastic", "jtablesorter"],
 
         // Exports the global window.Backbone object
         "exports": "Backbone"

@@ -1,8 +1,8 @@
 // MobileRouter.js
 // ---------------
-define(["jquery", "backbone", "models/Profile", "models/System", "views/View", "views/Aboutus", "views/Listview", "views/Videos", "views/Planer", "views/Cards", "views/AdminUserListView", "views/AdminUserDetailsView", "views/VideoDetailsView", "views/MessageDetailsView", "views/PlanDetailsView", "views/CardDetailsView", "views/CardStartView", "views/VideoRecordView", "views/LearningStreamView", "views/loginView", "views/DashboardView", "views/NoAccess", "views/LogoutView", "views/MyProfileView", "views/supportView", "views/helpView", "views/agbView", "views/privacyView", "views/MessagesView", "views/MessagesEditView"],
+define(["jquery", "backbone", "models/Profile", "models/System", "views/View", "views/Aboutus", "views/Listview", "views/Videos", "views/Planer", "views/Cards", "views/AdminUserListView", "views/AdminUserDetailsView", "views/VideoDetailsView", "views/MessageDetailsView", "views/PlanDetailsView", "views/CardDetailsView", "views/CardStartView", "views/CardEditView", "views/VideoRecordView", "views/LearningStreamView", "views/loginView", "views/DashboardView", "views/NoAccess", "views/LogoutView", "views/MyProfileView", "views/supportView", "views/helpView", "views/agbView", "views/privacyView", "views/MessagesView", "views/MessagesEditView"],
         
-    function($, Backbone, Profile, System, View, Aboutus, Listview, Videos, Planer, Cards, AdminUserListView, AdminUserDetailsView, Videosdetailsview, MessageDetailsView, Planerdetailsview, Cardsdetailsview, Cardstartview, Videorecordview, Learningstreamview, loginView, DashboardView, NoAccess, Logout, MyProfile, supportView, helpView, agbView, privacyView, MessagesView, MessagesEditView) {
+    function($, Backbone, Profile, System, View, Aboutus, Listview, Videos, Planer, Cards, AdminUserListView, AdminUserDetailsView, Videosdetailsview, MessageDetailsView, Planerdetailsview, Cardsdetailsview, Cardstartview, CardEditView, Videorecordview, Learningstreamview, loginView, DashboardView, NoAccess, Logout, MyProfile, supportView, helpView, agbView, privacyView, MessagesView, MessagesEditView) {
 
 		var MobileRouter = Backbone.Router.extend({
 
@@ -51,7 +51,11 @@ define(["jquery", "backbone", "models/Profile", "models/System", "views/View", "
 				"cards/details/:id" : "carddetails",
 				"cards/details/view/:id" : "carddetailsview",
 				"cards/start/view/:id/:page" : "cardstartview",
-				"cards/edit/:id" : "cardeditview",
+				
+				"cards/edit" : "CardEditViewRouter",
+				"cards/edit/:id" : "CardEditViewRouter",
+				"cards/edit/:id/:page" : "CardEditViewRouter",
+
 				"myprofile" : "myprofile",
 				"admin/users" : "adminuserlist",
 				"admin/users/details/:id" : "adminuserdetails",
@@ -137,6 +141,10 @@ define(["jquery", "backbone", "models/Profile", "models/System", "views/View", "
             cardstartview: function(cardid,page) {
 				// new Videosdetailsview({id:id});
 				this.changePage(Cardstartview, {cardid:cardid,page:page});
+            },
+            CardEditViewRouter: function(cardid,pageid) {
+				// new Videosdetailsview({id:id});
+				this.changePage(CardEditView, {cardid:cardid,pageid:pageid});
             },
             videodetailsview: function(id) {
 				// new Videosdetailsview({id:id});

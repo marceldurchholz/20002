@@ -2932,6 +2932,9 @@ try {
 	}
 
 	window.system = {
+		owner: new Object(),
+		me: new Object(),
+		master: false,
 		uid: "0",
 		kdnr: "20002",
 		showtutorial: false,
@@ -2966,11 +2969,11 @@ try {
 		type:"GET",
 		async: false,
 	}).done(function(result) {
-		var me = result[0];
-		// alert(me.slogan);
-		window.system.app = {title:me.slogan, calltoaction:"Registrieren oder Einloggen um zu entdecken"};
-		window.system.aoid = me.id;
-		window.system.master = me.master;
+		var owner = result[0];
+		window.system.app = {title:owner.slogan, calltoaction:"Registrieren oder Einloggen um zu entdecken"};
+		window.system.owner = owner;
+		window.system.aoid = owner.id;
+		window.system.master = owner.master;
 	});
 	
 	// alert(system.contentHelper);
@@ -3044,9 +3047,11 @@ try {
 		// var s = date.getSeconds();
 		// var i = date.getMinutes();
 		// var H = date.getHours();
-		var d = date.substr(6,2);
-		var m = date.substr(4,2);
-		var y = date.substr(0,4);
+		// var d = date.substr(6,2);
+		if (date==undefined) date = "??????????????";
+		var d = (undefined ? "" : date.substr(6,2));
+		var m = (undefined ? "" : date.substr(4,2));
+		var y = (undefined ? "" : date.substr(0,4));
 		// var val = '' + y + '' + (m<=9 ? '0' + m : m) + '' + (d <= 9 ? '0' + d : d) + '' + (H<=9 ? '0' + H : H)  + '' + (i<=9 ? '0' + i : i)  + '' + (s<=9 ? '0' + s : s);
 		var val = '' + d + '.' + m + '.' + y;
 		return(val);

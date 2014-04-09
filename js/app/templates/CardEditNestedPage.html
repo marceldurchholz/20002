@@ -1,0 +1,48 @@
+<h3 class="ui-bar ui-bar-f" style="border-top-width:0px;text-align:center;"><%= stream.data.pagetitle %></h3>
+<div class="clear"></div>
+<div id="CardEditNestedViewDiv" class="CardEditNestedViewDiv">
+	<!-- data-filter="true" data-filter-placeholder="Suchfilter..." --> 
+	<% if(stream.data.pagetype=="Lernset") { %>
+		<ul style="padding-top:15px;" id="CardEditList" class="" data-filter-theme="a" data-count-theme="a" data-role="listview" data-theme="a" data-divider-theme="f" data-role="listview" data-inset="false">
+			<li style="margin-left:15px;margin-right:15px;">
+				<a class="newCard" href="#cards/edit/0">
+				<!-- <img style="padding:8px 0px 8px 25px;height:40px !important;max-height:40px !important;max-width:40px !important;" src="./images/avatar2.jpg" /> -->
+				<h6 style="margin:0;">Neues Lernset erstellen</h6>
+				<p>Klicken zum Hinzufügen...</p>
+				</a>
+			</li>
+		<ul style="padding:15px;" id="CardEditList" class="sortableListe" data-filter-theme="a" data-count-theme="a" data-role="listview" data-theme="a" data-divider-theme="f" data-role="listview" data-inset="false">
+			<% _.each(stream.data.cardsArray, function(data) { %>
+				<li style="margin-left:15px;margin-right:15px;" data-role="list-divider"><%= data.topic %><!--<span class="ui-li-count">2</span>--></li>
+				<li style="margin-left:15px;margin-right:15px;" data-id="<%= data.id %>" class="noswipeToDelete" ><a href="#cards/edit/<%= data.id %>">
+					<h2><%= data.title %></h2>
+					<p><%= data.description %></p>
+					<p><i><%= data.uploaderdata.fullname %> am <%= dateYmdHisToGerman(data.cdate) %></i></p>
+					<!-- <p class="ui-li-aside"><strong>6:24</strong>PM</p> -->
+				</a></li>
+			<% }); %>
+		</ul>
+	<% } %>
+	<% if(stream.data.pagetype=="Lernkarte") { %>
+		<ul style="padding-top:15px;" id="CardPagesEditList" class="" data-filter-theme="a" data-count-theme="a" data-role="listview" data-theme="a" data-divider-theme="f" data-role="listview" data-inset="false">
+			<li style="margin-left:15px;margin-right:15px;">
+				<a class="newCardpage" href="#cards/edit/<%= stream.data.cardsArray[0].id %>/0">
+				<!-- <img style="padding:8px 0px 8px 25px;height:40px !important;max-height:40px !important;max-width:40px !important;" src="./images/avatar2.jpg" /> -->
+				<h6 style="margin:0;">Neue Lernkarte erstellen</h6>
+				<p>Klicken zum Hinzufügen...</p>
+				</a>
+			</li>
+		<ul style="padding:15px;" id="CardPagesEditList" class="sortableListe" data-filter-theme="a" data-count-theme="a" data-role="listview" data-theme="a" data-divider-theme="f" data-role="listview" data-inset="false">
+			<% _.each(stream.data.pagesArray, function(data) { %>
+				<li style="margin-left:15px;margin-right:15px;" data-icon="false" data-id="<%= data.id %>" class="noswipeToDelete">
+					<a class="editCardpage" href="#cards/edit/<%= data.id %>/<%= data.id %>" style="font-weight:normal !important;font-size:12px !important;"> <%= data.question %> "</a>
+				</li>
+			<% }); %>
+		<% } %>
+
+		<!--
+		<li style="m/ax-height:80px !important;height:150px !important;visibility:hidden;">
+		</li>
+		-->
+	</ul>
+</div>

@@ -1,8 +1,8 @@
 // LearningStreamNestedView.js
 // -------
-define(["jquery", "backbone", "models/VideoModel", "collections/videosCollection", "text!templates/LearningStreamNestedPage.html", "text!templates/sidemenusList.html", "views/SidemenuView"],
+define(["jquery", "backbone", "text!templates/LearningStreamNestedPage.html", "text!templates/sidemenusList.html", "views/SidemenuView"],
 
-    function($, Backbone, VideoModel, videosCollection, LearningStreamNestedPage, sidemenusList, SidemenuView){
+    function($, Backbone, LearningStreamNestedPage, sidemenusList, SidemenuView){
 		
 		var LearningStreamNestedViewVar = Backbone.View.extend({
 			
