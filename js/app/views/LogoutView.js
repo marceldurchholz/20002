@@ -5,7 +5,6 @@ define(["jquery", "backbone", "text!templates/LogoutView.html"],
         var LogoutViewVar = Backbone.View.extend({
             el: "#page-content",
             initialize: function() {
-
 				_thisViewLogout = this;
 				dpd.users.logout(function(err) {
 					if (err) {
@@ -14,9 +13,6 @@ define(["jquery", "backbone", "text!templates/LogoutView.html"],
 					}
 					else {
 						window.dao.rememberUserDataDeleteAutologin(_thisViewLogout.rememberUserDataDeleteAutologinCallback);
-						window.system.uid = "0";
-						// document.location.hash = "home";
-						document.location.href = "#login";
 					}
 				});
             },
@@ -29,6 +25,9 @@ define(["jquery", "backbone", "text!templates/LogoutView.html"],
 				_thisViewLogout = this;
                 _thisViewLogout.$el.html(_.template(template, {}));
 				_thisViewLogout.$el.trigger('create');
+				window.system.uid = "0";
+				// // document.location.hash = "home";
+				document.location.href = "#login";
                 return _thisViewLogout;
             }
         });

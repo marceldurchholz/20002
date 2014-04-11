@@ -289,8 +289,10 @@ try {
 				this.db.transaction(
 					function (tx) {
 						var id = window.system.kdnr;
+						alert(id);
 						// var sql = "DELETE FROM metbl WHERE id=:id";
-						var sql = "UPDATE metbl SET username = '0', password = '0' WHERE id=:id";
+						var sql = "UPDATE metbl SET username = '0', password = '0', autologin = '0' WHERE id=:id";
+						alert(sql);
 						tx.executeSql(sql, [id], function (tx, results) {
 							callback();
 						});
@@ -316,7 +318,9 @@ try {
 				this.db.transaction(
 					function (tx) {
 						var id = window.system.kdnr;
+						alert(id);
 						var sql = "SELECT m.username, m.password, m.autologin FROM metbl m WHERE m.id=:id";
+						alert(sql);
 						tx.executeSql(sql, [id], function (tx, results) {
 							// alert('found');
 							// alert(results.username);
@@ -324,6 +328,9 @@ try {
 							// alert('length '+results.rows.length);
 							// alert('results.row... '+results.rows.item(0).username);
 							// deferred.resolve(results.rows.length === 1 ? results.rows.item(0) : null);
+							alert(results.rows.item(0).username);
+							alert(results.rows.item(0).password);
+							alert(results.rows.item(0).autologin);
 							callback(results.rows.item(0));
 						});
 					},

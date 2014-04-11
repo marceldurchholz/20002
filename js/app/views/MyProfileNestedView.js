@@ -311,7 +311,7 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 				var _thisViewMyProfileNested = this;
 				// console.log(response);
 				if (response==1) {
-					doAlert('Das finden wir schade. Ihr Zugang wurde gelöscht. Schauen Sie gerne wieder einmal vorbei.','Auf Wiedersehen :-(');
+					doAlert('Das finden wir schade. Ihr Zugang wird gelöscht. Schauen Sie gerne wieder einmal vorbei.','Auf Wiedersehen :-(');
 					if (isMobile.any()) { 
 						var deldate = new Date();
 						var deletetedusername = 'DELETETED_'+deldate+'_'+_thisViewMyProfileNested.me.username;
