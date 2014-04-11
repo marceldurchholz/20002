@@ -37,18 +37,20 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 			},
 			bindEvents: function() {
 				_thisViewCardEditNested = this;
-					$( ".sortableListe" ).sortable({
-						'containment': 'parent',
-						'opacity': 0.6,
-						update: function(event, ui) {
-							// alert("dropped");
-							// console.log(event);
-							// console.log(ui);
-							console.log('update: '+ui.item.index());
-						},
-						start: function(event, ui) { 
-							console.log('start: ' + ui.item.index())
-						}
+					$(document).ready(function(e) {
+						$( ".sortableListe" ).sortable({
+							'containment': 'parent',
+							'opacity': 0.6,
+							update: function(event, ui) {
+								// alert("dropped");
+								// console.log(event);
+								// console.log(ui);
+								console.log('update: '+ui.item.index());
+							},
+							start: function(event, ui) { 
+								console.log('start: ' + ui.item.index())
+							}
+						});
 					});
 					$( ".sortableListe" ).disableSelection();
 				// this.$el.off('click','.clickRow').on('click','.clickRow',function(){_thisViewLearningStreamNested.clicked(e);});
