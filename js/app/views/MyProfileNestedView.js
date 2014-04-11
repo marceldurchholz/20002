@@ -334,7 +334,8 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 						_thisViewLogout.render();
 					}
 					else {
-						window.dao.rememberUserDataDeleteAutologin(_thisViewLogout.rememberUserDataDeleteAutologinCallback);
+						// window.dao.rememberUserDataDeleteAutologin(_thisViewLogout.rememberUserDataDeleteAutologinCallback);
+						window.dao.rememberUserDataDelete(_thisViewLogout.rememberUserDataDeleteAutologinCallback);
 					}
 				});
 			},

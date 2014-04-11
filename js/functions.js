@@ -291,8 +291,8 @@ try {
 						var id = window.system.kdnr;
 						alert(id);
 						// var sql = "DELETE FROM metbl WHERE id=:id";
-						// var sql = "UPDATE metbl SET username = '0', password = '0', autologin = '0' WHERE id=:id";
-						var sql = "UPDATE metbl SET autologin = '0' WHERE id=:id";
+						var sql = "UPDATE metbl SET username = '0', password = '0', autologin = '0' WHERE id=:id";
+						// var sql = "UPDATE metbl SET autologin = '0' WHERE id=:id";
 						alert(sql);
 						tx.executeSql(sql, [id], function (tx, results) {
 							callback();
