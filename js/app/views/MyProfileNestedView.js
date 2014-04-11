@@ -313,13 +313,7 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 				if (response==1) {
 					doAlert('Das finden wir schade. Ihr Zugang wird gelöscht. Schauen Sie gerne wieder einmal vorbei.','Auf Wiedersehen :-(');
 					if (isMobile.any()) { 
-						var deldate = new Date();
-						var deletetedusername = 'DELETETED_'+deldate+'_'+_thisViewMyProfileNested.me.username;
-						dpd.users.put(_thisViewMyProfileNested.me.id, {"username":deletetedusername,"deleted":true}, function(result, err) { 
-							if(err) return console.log(err); 
-							// console.log(result, result.id); 
-							window.dao.rememberUserDataDelete(_thisViewMyProfileNested.gotoLogout);
-						});
+						window.dao.rememberUserDataDelete(_thisViewMyProfileNested.gotoLogout);
 					}
 					else {
 						window.dao.rememberUserDataDelete(_thisViewMyProfileNested.gotoLogout);
@@ -327,7 +321,13 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 				}
 			},
 			gotoLogout: function() {
-				system.redirectToUrl('#logout');
+				var deldate = new Date();
+				var deletetedusername = 'DELETETED_'+deldate+'_'+_thisViewMyProfileNested.me.username;
+				dpd.users.put(_thisViewMyProfileNested.me.id, {"username":deletetedusername,"deleted":true}, function(result, err) { 
+					if(err) return console.log(err); 
+					// console.log(result, result.id); 
+					system.redirectToUrl('#logout');
+				});
 			},
 			render: function() {
 				var _thisViewMyProfileNested = this;
