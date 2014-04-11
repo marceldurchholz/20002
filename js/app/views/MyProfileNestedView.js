@@ -309,6 +309,7 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 			},
 			deleteMyAccount: function(response) {
 				var _thisViewMyProfileNested = this;
+				/*
 				// console.log(response);
 				if (response==1) {
 					doAlert('Das finden wir schade. Ihr Zugang wird gelöscht. Schauen Sie gerne wieder einmal vorbei.','Auf Wiedersehen :-(');
@@ -326,6 +327,16 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 						window.dao.rememberUserDataDelete(_thisViewMyProfileNested.gotoLogout);
 					}
 				}
+				*/
+				dpd.users.logout(function(err) {
+					if (err) {
+						console.log(err);
+						_thisViewLogout.render();
+					}
+					else {
+						window.dao.rememberUserDataDeleteAutologin(_thisViewLogout.rememberUserDataDeleteAutologinCallback);
+					}
+				});
 			},
 			gotoLogout: function() {
 				system.redirectToUrl('#logout');
