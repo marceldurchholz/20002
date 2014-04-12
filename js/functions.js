@@ -284,7 +284,7 @@ try {
 		},
 		rememberUserDataDelete: function(callback) {
 			// alert('rememberUserDataDelete');
-			// alert(window.system.kdnr);
+			alert('rememberUserDataDelete: '+window.system.kdnr);
 			if (isPhoneGap()) {
 				this.db.transaction(
 					function (tx) {
