@@ -28,14 +28,16 @@
 			</a>
 		</li>
 		
-		<li>
-			<a href="#cards" style="padding-top:0px;padding-bottom:0px;">
-				<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-cards-60.png" /></div>
-				<h5 style="padding-top:2px;padding-bottom:4px;margin-left:80px;">Lernsets</h5>
-				<p style="margin-left:80px;">Lernkarten zum interaktiven Lernen</p>
-				<!-- <p class="ui-li-aside"><strong>6:24</strong>PM</p> -->
-			</a>
-		</li>
+		<% if (checkAppRole("cards")==true) { %>
+			<li>
+				<a href="#cards" style="padding-top:0px;padding-bottom:0px;">
+					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-cards-60.png" /></div>
+					<h5 style="padding-top:2px;padding-bottom:4px;margin-left:80px;">Lernsets</h5>
+					<p style="margin-left:80px;">Lernkarten zum interaktiven Lernen</p>
+					<!-- <p class="ui-li-aside"><strong>6:24</strong>PM</p> -->
+				</a>
+			</li>
+		<% } %>
 		
 		<li>
 			<a href="#messages" style="padding-top:0px;padding-bottom:0px;">
@@ -46,7 +48,7 @@
 			</a>
 		</li>
 		
-		<% if (checkRole("events")==true) { %>
+		<% if (checkAppRole("events")==true) { %>
 			<li>
 				<a href="#planer" style="padding-top:0px;padding-bottom:0px;">
 					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-calendar-002-resized-60.png" /></div>

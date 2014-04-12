@@ -2823,6 +2823,20 @@ try {
 		});
 		return(show);
 	}
+	
+	function checkAppRole(role) {
+		var show = false;
+		$.each( window.system.owner.roles, function( key, value ) {
+			if (role==value) {
+				show = true;
+				return(show);
+			}
+			else {
+				// show = false;
+			}
+		});
+		return(show);
+	}
 
 	$('#footervideolink').on("vclick", function (e) {
 		// report('footer clicked');
