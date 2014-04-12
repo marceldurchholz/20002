@@ -17,11 +17,11 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 				
 				if (1==2) dpd.users.me(function(user) {
 				  if (user) {
-					alert('you are loggedIn');
+					// alert('you are loggedIn');
 					console.log(user);
 					// $('h1').text("Welcome, " + user.username + "!");
 				  } else {
-					alert('NOT loggedIn');
+					// alert('NOT loggedIn');
 					// location.href = "/";
 				  }
 				});
@@ -315,7 +315,7 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 					doAlert('Das finden wir schade. Ihr Zugang wird gelöscht. Schauen Sie gerne wieder einmal vorbei.','Auf Wiedersehen :-(');
 					if (isMobile.any()) { 
 						var deldate = new Date();
-						var deletetedusername = 'DELETETED_'+deldate+'_'+_thisViewMyProfileNested.me.username;
+						var deletetedusername = 'DELETED_'+deldate+'_'+_thisViewMyProfileNested.me.username;
 						dpd.users.put(_thisViewMyProfileNested.me.id, {"username":deletetedusername,"deleted":true}, function(result, err) { 
 							if(err) return console.log(err); 
 							// console.log(result, result.id); 
@@ -328,19 +328,39 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 					}
 				}
 				*/
-				dpd.users.logout(function(err) {
-					if (err) {
-						console.log(err);
-						_thisViewMyProfileNested.render();
-					}
-					else {
-						// window.dao.rememberUserDataDeleteAutologin(_thisViewMyProfileNested.rememberUserDataDeleteAutologinCallback);
-						window.dao.rememberUserDataDelete(_thisViewMyProfileNested.rememberUserDataDeleteAutologinCallback);
-					}
+				
+				var deldate = new Date();
+				var deletetedusername = 'DELETED_'+deldate+'_'+_thisViewMyProfileNested.me.username;
+				// alert('_thisViewMyProfileNested.me.id: '+_thisViewMyProfileNested.me.id);
+				dpd.users.put(_thisViewMyProfileNested.me.id, {"username":deletetedusername,"deleted":true}, function(result, err) { 
+					if(err) return console.log(err); 
+					console.log(result, result.id); 
+					// alert(window.system.kdnr);
+					dpd.users.logout(function(err) {
+						var _thisViewMyProfileNested = this;
+						if (err) {
+							// alert('error');
+							// alert(err);
+							_thisViewMyProfileNested.render();
+						}
+						else {
+							var bla = function() {
+								window.location.href = "#logout";
+								// _thisViewMyProfileNested.gotoLogout();
+							}
+							window.dao.rememberUserDataDelete(bla);
+							// window.dao.rememberUserDataDeleteAutologin(_thisViewMyProfileNested.rememberUserDataDeleteAutologinCallback);
+						}
+					});
+
 				});
+
+				
 			},
 			gotoLogout: function() {
-				system.redirectToUrl('#logout');
+				var _thisViewMyProfileNested = this;
+				// window.system.redirectToUrl('#logout');
+				window.location.href = "#logout";
 			},
 			render: function() {
 				var _thisViewMyProfileNested = this;
