@@ -18,7 +18,7 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 				_thisViewCardEditNested = this;
 				_thisViewCardEditNested.me = window.me;
 				if (!isMobile.any()) {
-					window.system.uid = '3a499b457111f803'; // 81f03ace38e668db
+					// window.system.uid = '3a499b457111f803'; // 81f03ace38e668db
 					_thisViewCardEditNested.me.id = window.system.uid;
 				}
 				dpd('users').get(window.system.uid, function(user, err) {

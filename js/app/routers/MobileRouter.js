@@ -256,7 +256,7 @@ define(["jquery", "backbone", "models/Profile", "models/System", "views/View", "
 				$('#pageFooter').html('');
 				$('#body').css('overflow','hidden !mportant');
 				
-
+				window.getOwnerData();
 				
 				// this.myView.$el.off('create', this.testFunction);
 				// this.myView.$el.on('create', this.testFunction);

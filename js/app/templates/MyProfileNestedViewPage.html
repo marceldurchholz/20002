@@ -26,9 +26,9 @@
 </div>
 
 <div class="clear"></div>
-<div class="resizetext" style="font-size:12px;"><% if( user.provider <= 0 ) { %>Helfen Sie den APPinaut® Wissensanbietern:<% } else { %>Informatieren Sie die APPinaut® Wissensdurstigen:<% } %></div>
+<div class="resizetext" style="font-size:12px;"><% if( user.provider <= 0 ) { %>Helfen Sie den APPinaut® Wissensanbietern:<% } else { %>Informieren Sie die APPinaut® Wissensdurstigen:<% } %></div>
 <div class="clear"></div>
-<textarea style="width:100%;height:<%= Math.round($(window).height()/5) %>px;max-height:300px;min-height:80px;" data-theme="a" no-data-role="none" data-mini="false" type="text" placeholder="<% if( user.provider <= 0 ) { %>Welche Themen begeistern Sie und welches Wissen interessiert Sie?<% } else { %>Zu welchen Expertengebieten werden Sie den Wissensdurstigen des APPinaut® Inhalte bieten?<% } %>" name="perstext" id="perstext"><%= user.perstext %></textarea>
+<textarea style="width:100%;height:<%= Math.round($(window).height()/5) %>px;max-height:300px;min-height:80px;" data-theme="a" no-data-role="none" data-mini="false" type="text" placeholder="<% if( user.provider <= 0 ) { %>Welche Themen begeistern Sie und welches Wissen interessiert Sie?<% } else { %>Zu welchen Expertengebieten werden Sie den Wissensdurstigen Inhalte bieten?<% } %>" name="perstext" id="perstext"><%= user.perstext %></textarea>
 <div class="clear"></div>
 <hr>
 
@@ -81,7 +81,7 @@
 			<% _.each(user.interests, function(interest) { %>
 				<tr>
 					<td>
-						<input data-inset="false" <%= interest.checked %> data-mini="true" type="checkbox" name="checkbox-v-<%= interest.id %>" id="checkbox-v-<%= interest.id %>">
+						<input data-inset="false" <%= interest.checked %> data-mini="true" type="checkbox" class="interestcb" name="checkbox-v-<%= interest.id %>" id="checkbox-v-<%= interest.id %>">
 						<label class="interestcheckbox" for="checkbox-v-<%= interest.id %>"><%= interest.name %></label>
 					</td>
 					<td style="width:auto !important; float:right; text-align:right;font-size:11px;">
@@ -112,6 +112,28 @@
 	
 	<div class="clear"></div>
 
+	<% if( user.provider > 0 ) { %>
+		<div data-role="collapsible" data-theme="b" data-content-theme="a">
+			<h6>APPinaut® Einstellungen</h6>
+			<table cellspacing="0" cellpadding="0" id="appviewstable">
+				<% console.log(user.appviews) %>
+				<% console.log(window.system.appoptions.views) %>
+				<% _.each(window.system.appoptions.views, function(appoption) { %>
+					<tr>
+						<td>
+							<% console.log(appoption.tag) %>
+							<% console.log($.inArray( appoption.tag, user.appviews )) %>
+							<input data-inset="false" <% if($.inArray( appoption.tag, user.appviews )>-1) { %> CHECKED <% } %> data-mini="true" type="checkbox" class="appviewscb" name="<%= appoption.tag %>" id="<%= appoption.tag %>">
+							<label class="appviewscheckbox" for="<%= appoption.tag %>"><%= appoption.name %> aktivieren</label>
+						</td>
+					</tr>
+				<% }); %>
+			</table>
+		</div>
+
+		<div class="clear"></div>
+	<% } %>
+	
 	<% if( user.provider <= 0 ) { %>
 		<div data-role="collapsible" data-theme="b" data-content-theme="a">
 			<h2>Sie sind Wissensanbieter?<!-- <%= user.provider %> - Upgrades und Personal APPinaut®--></h2>

@@ -1,0 +1,11 @@
+<ul id="cardsListView" class="cardsListView" data-filter="true" data-filter-placeholder="Suchfilter..." data-filter-theme="a" data-count-theme="a" data-role="listview" data-theme="a" data-divider-theme="f" data-role="listview" data-autodividers="true">
+	<% _.each(stream.data, function(data) { %>
+		<li data-id="<%= data.id %>" class="<% if(window.system.uid==data.uploader) { %>swipeToDelete<% } %>" data-topic="<%= data.topic %>">
+			<a class="showCardDetailsLink" href="<%= data.href %>">
+				<h3><%= data.title %></h3>
+				<p><%= data.uploaderdata.fullname %></p>
+				<p><%= data.description %></p>
+			</a>
+		</li>
+	<% }); %>
+</ul>

@@ -248,24 +248,52 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 				// $("#username").blur(this.changeInputValue);
 				$("input[type='checkbox']").bind( "change", function(event, ui) {
 					event.preventDefault();
-					// console.log(event);
-					// console.log(event.delegateTarget);
-					// console.log(event.delegateTarget.id);
-					// console.log( $("label[for='"+ event.delegateTarget.id +"']").text() );
-					// console.log(event.delegateTarget.checked);
-					var o = new Object();
-					o.id = event.delegateTarget.id;
-					if (event.delegateTarget.checked==false) o.status = "";
-					else o.status = "checked";
-					o.label = $("label[for='"+ event.delegateTarget.id +"']").text();					
-					// dpd.users.me(function(me) {
-					dpd('users').get(window.system.uid, function(me, err) {
-						// console.log(me);
-						var exists = $.inArray( $.trim(o.label), me.interests )
-						// console.log(exists);
-						if (event.delegateTarget.checked==false && exists>-1) dpd.users.put(_thisViewMyProfileNested.me.id, {"interests": {$pull:$.trim(o.label)}} );
-						else if (event.delegateTarget.checked==true && exists==-1) dpd.users.put(_thisViewMyProfileNested.me.id, {"interests": {$push:$.trim(o.label)}} );
-					});
+					if (event.currentTarget.className=="interestcb") {
+						// console.log(event);
+						// console.log(event.delegateTarget);
+						// console.log(event.delegateTarget.id);
+						// console.log( $("label[for='"+ event.delegateTarget.id +"']").text() );
+						// console.log(event.delegateTarget.checked);
+						var o = new Object();
+						o.id = event.delegateTarget.id;
+						if (event.delegateTarget.checked==false) o.status = "";
+						else o.status = "checked";
+						o.label = $("label[for='"+ event.delegateTarget.id +"']").text();					
+						// dpd.users.me(function(me) {
+						dpd('users').get(window.system.uid, function(me, err) {
+							// console.log(me);
+							var exists = $.inArray( $.trim(o.label), me.interests )
+							// console.log(exists);
+							// if (event.delegateTarget.checked==false && exists>-1) dpd.users.put(_thisViewMyProfileNested.me.id, {"interests": {$pull:$.trim(o.label)}} );
+							// else if (event.delegateTarget.checked==true && exists==-1) dpd.users.put(_thisViewMyProfileNested.me.id, {"interests": {$push:$.trim(o.label)}} );
+							if (o.status=="checked" && exists==-1) dpd.users.put(_thisViewMyProfileNested.me.id, {"interests": {$push:$.trim(o.id)}} );
+							else dpd.users.put(_thisViewMyProfileNested.me.id, {"interests": {$pull:$.trim(o.id)}} );
+						});
+					}
+					else if (event.currentTarget.className=="appviewscb") {
+						// console.log(event);
+						// console.log(event.delegateTarget);
+						// console.log(event.delegateTarget.id);
+						// console.log( $("label[for='"+ event.delegateTarget.id +"']").text() );
+						// console.log(event.delegateTarget.checked);
+						var o = new Object();
+						o.id = event.delegateTarget.id;
+						if (event.delegateTarget.checked==false) o.status = "";
+						else o.status = "checked";
+						o.label = $("label[for='"+ event.delegateTarget.id +"']").text();					
+						// dpd.users.me(function(me) {
+						dpd('users').get(window.system.uid, function(me, err) {
+							// console.log(me);
+							var exists = $.inArray( $.trim(o.label), me.appviews )
+							console.log(o.id);
+							if (o.status=="checked" && exists==-1) dpd.users.put(_thisViewMyProfileNested.me.id, {"appviews": {$push:$.trim(o.id)}} );
+							else dpd.users.put(_thisViewMyProfileNested.me.id, {"appviews": {$pull:$.trim(o.id)}} );
+						});
+					}
+					else {
+						doAlert('Diese Auswahl wurde noch nicht mit einer Aktion belegt.','Information');
+						return(false);
+					}
 				});
 				
 				this.$el.off('click','.purchasebtn').on('click','.purchasebtn',function(e){
@@ -376,7 +404,8 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 				var provider;
 				provider = $.inArray( 'provider', _thisViewMyProfileNested.me.roles );
 				var seeker;
-				seeker = $.inArray( 'seeker', _thisViewMyProfileNested.me.roles );				
+				seeker = $.inArray( 'seeker', _thisViewMyProfileNested.me.roles );	
+				console.log(_thisViewMyProfileNested.me.appviews);				
 				htmlContent = _.template(MyProfileNestedViewPage, {
 					id: _thisViewMyProfileNested.me.id
 					, kdnr: _thisViewMyProfileNested.me.kdnr
@@ -390,6 +419,7 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 					, interests: _thisViewMyProfileNested.interests
 					, provider: provider
 					, seeker: seeker
+					, appviews: _thisViewMyProfileNested.me.appviews
 				},{variable: 'user'});
 				// alert(htmlContent);
 				$(this.el).html(htmlContent);

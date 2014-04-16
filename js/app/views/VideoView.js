@@ -16,10 +16,17 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videosCollection
 				_thisViewVideo.streamData = streamData;
 			},
 			checkLogin:function() {
-				dpd('users').get(window.system.uid, function(user, err) {
-					if (user) { }
-					else system.redirectToUrl('#login');
-				});
+				// alert(window.system.uid);
+				if(window.system.uid=='') {
+					system.redirectToUrl('#login');
+				} else {
+					dpd('users').get(window.system.uid, function(user, err) {
+						if (user) {
+							// console.log(user);
+						}
+						else system.redirectToUrl('#login');
+					});
+				}
 			},
 			initializeme: function() {
 				// console.log('initializing ME in VideoView.js');
@@ -82,24 +89,25 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videosCollection
 				});
 				
 				var requestUrl = "http://dominik-lohmann.de:5000/videos?active=true&deleted=false";
-				if (window.system.master!=true) requestUrl = requestUrl + "&uploader="+window.system.aoid;
+				// if (window.system.master!=true) requestUrl = requestUrl + "&uploader="+window.system.aoid;
+				if (window.system.master==false) requestUrl = requestUrl + "&uploader="+window.system.aoid;
+				else requestUrl = requestUrl + "&public=true";
 				$.ajax({
 					url: requestUrl,
 					async: false
 				}).done(function(videoData) {
 					_thisViewVideo.uploaderArray = new Array();
 					_.each(videoData, function(value, index, list) {
-						var filter = 0;
 						var exists = $.inArray( value.topic, _thisViewVideo.me.interests );
 						if (_thisViewVideo.me.interests == undefined) exists=1;
 						else if (_thisViewVideo.me.interests.length==0) exists=1;
-						if (exists>-1 || value.uploader == me.id || filter==0) {
+						if (exists>-1 || value.uploader == me.id) {
 							value.ccat = 'video';
 							value.icon = 'images/icon-multimedia-60.png';
 							value.href = '#videos/details/view/'+value.id;
 							var uploader = value.uploader;
-							console.log(uploader);
-							console.log(_thisViewVideo.uploaderArray[uploader]);
+							// console.log(uploader);
+							// console.log(_thisViewVideo.uploaderArray[uploader]);
 							if (_thisViewVideo.uploaderArray[uploader]==undefined) {
 								$.ajax({
 									url: 'http://dominik-lohmann.de:5000/users/?id='+uploader,
@@ -128,9 +136,9 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videosCollection
 								value.uploaderdata = _thisViewVideo.uploaderArray[uploader];
 							}
 							
-							if ((window.system.master==true && value.public==true) || (window.system.master==false && window.system.aoid==value.uploader)) { 
+							// if ((window.system.master==true && value.public==true) || (window.system.master==false && window.system.aoid==value.uploader)) { 
 								_thisViewVideo.streamData.push(value);
-							}
+							// }
 						}
 					});
 				});
@@ -143,6 +151,7 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videosCollection
 					window.location.href = event.currentTarget.hash;
 				});
 			},
+			/*
 			insertData: function(value) {
 				_thisViewVideo = this;
 				rowContent = '';
@@ -158,6 +167,7 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videosCollection
 				},{variable: 'video'});
 				return(rowContent);
 			},
+			*/
 			render: function() {
 				this.bindEvents();
 				var _thisViewVideo = this;
@@ -198,7 +208,7 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videosCollection
 					data: _thisViewVideo.streamData
 				},{variable: 'videos'}));
 
-				$(this.el).html(_thisViewVideo.htmlContent);
+				// $(this.el).html(_thisViewVideo.htmlContent);
 				$("#videosListView").listview({
 				  autodividers: true,
 				  autodividersSelector: function ( li ) {

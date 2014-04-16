@@ -1,8 +1,8 @@
 // LearningStreamNestedView.js
 // -------
-define(["jquery", "backbone", "text!templates/LearningStreamNestedPage.html", "text!templates/sidemenusList.html", "views/SidemenuView"],
+define(["jquery", "backbone", "text!templates/LearningStreamNestedPage.html"],
 
-    function($, Backbone, LearningStreamNestedPage, sidemenusList, SidemenuView){
+    function($, Backbone, LearningStreamNestedPage){
 		
 		var LearningStreamNestedViewVar = Backbone.View.extend({
 			
@@ -92,9 +92,8 @@ define(["jquery", "backbone", "text!templates/LearningStreamNestedPage.html", "t
 				}).done(function(me) {
 					// alert(me.id);
 					_thisViewLearningStreamNested.me = me;
-				if (_thisViewLearningStreamNested.me.interests == undefined) _thisViewLearningStreamNested.me.interests = new Array();
+					if (_thisViewLearningStreamNested.me.interests == undefined) _thisViewLearningStreamNested.me.interests = new Array();
 				});
-
 				
 				var requestUrl = "http://dominik-lohmann.de:5000/videos?active=true&deleted=false";
 				if (window.system.master!=true) requestUrl = requestUrl + "&uploader="+window.system.aoid;
@@ -166,6 +165,7 @@ define(["jquery", "backbone", "text!templates/LearningStreamNestedPage.html", "t
 					value.title = 'Noch keine Inhalte!';
 					value.topic = 'Bitte Interessen auswählen...';
 					value.description = ' Klicken Sie hier um auf Ihre Profileinstellungen zu gelangen...';
+					value.uploaderdata = new Array();
 					_thisViewLearningStreamNested.streamData.push(value);
 				}
 				// alert(_thisViewLearningStreamNested.streamData.length);

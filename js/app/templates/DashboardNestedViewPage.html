@@ -19,16 +19,18 @@
 			</a>
 		</li>
 		
-		<li>
-			<a href="#videos" style="padding-top:0px;padding-bottom:0px;">
-				<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-multimedia-60.png" /></div>
-				<h5 style="padding-top:2px;padding-bottom:4px;margin-left:80px;">Mediathek</h5>
-				<p style="margin-left:80px;">Alle Inhalte (nach Kategorien gelistet)</p>
-				<!-- <p class="ui-li-aside"><strong>6:24</strong>PM</p> -->
-			</a>
-		</li>
+		<% if (checkAppConfig("videos")==true) { %>
+			<li>
+				<a href="#videos" style="padding-top:0px;padding-bottom:0px;">
+					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-multimedia-60.png" /></div>
+					<h5 style="padding-top:2px;padding-bottom:4px;margin-left:80px;">Mediathek</h5>
+					<p style="margin-left:80px;">Alle Inhalte (nach Kategorien gelistet)</p>
+					<!-- <p class="ui-li-aside"><strong>6:24</strong>PM</p> -->
+				</a>
+			</li>
+		<% } %>
 		
-		<% if (checkAppRole("cards")==true) { %>
+		<% if (checkAppConfig("cards")==true) { %>
 			<li>
 				<a href="#cards" style="padding-top:0px;padding-bottom:0px;">
 					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-cards-60.png" /></div>
@@ -39,16 +41,18 @@
 			</li>
 		<% } %>
 		
-		<li>
-			<a href="#messages" style="padding-top:0px;padding-bottom:0px;">
-				<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-message-<% if(user.newmsgs>0) { %>unread<% } else { %>read<% } %>-60.png" /></div>
-				<h5 style="padding-top:2px;padding-bottom:4px;margin-left:80px;">Nachrichten <% if(user.newmsgs>0) { %>(<%= user.newmsgs %>) <% } %></h5>
-				<p style="margin-left:80px;">Mitteilungen an und von Wissensanbieter</p>
-				<!-- <p class="ui-li-aside"><strong>6:24</strong>PM</p> -->
-			</a>
-		</li>
+		<% if (checkAppConfig("messages")==true) { %>
+			<li>
+				<a href="#messages" style="padding-top:0px;padding-bottom:0px;">
+					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-message-<% if(user.newmsgs>0) { %>unread<% } else { %>read<% } %>-60.png" /></div>
+					<h5 style="padding-top:2px;padding-bottom:4px;margin-left:80px;">Nachrichten <% if(user.newmsgs>0) { %>(<%= user.newmsgs %>) <% } %></h5>
+					<p style="margin-left:80px;">Mitteilungen an und von Wissensanbieter</p>
+					<!-- <p class="ui-li-aside"><strong>6:24</strong>PM</p> -->
+				</a>
+			</li>
+		<% } %>			
 		
-		<% if (checkAppRole("events")==true) { %>
+		<% if (checkAppConfig("events")==true) { %>
 			<li>
 				<a href="#planer" style="padding-top:0px;padding-bottom:0px;">
 					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-calendar-002-resized-60.png" /></div>
@@ -58,6 +62,7 @@
 				</a>
 			</li>
 		<% } %>
+		
 		<!--
 		<li>
 			<a href="#preferences" style="padding-top:0px;padding-bottom:0px;">

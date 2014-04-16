@@ -26,13 +26,12 @@ try {
 	var camCorrectOrientationDefault = ['correctOrientation', false];
 	var camSaveToPhotoAlbumDefault = ['saveToPhotoAlbum', true];
 
-	var badgeToggledOn = false;
-	var autoLockIsDisabled = false;
-	var cdvBadge = null;
-	var isMobile = {};
-	
+	// var badgeToggledOn = false;
+	// var autoLockIsDisabled = false;
+	// var cdvBadge = null;
 	var me = new Object();
 	
+	var isMobile = {};	
 	isMobile = {
 		Android: function() {
 			// return navigator.userAgent.match(/Android/i) ? true : false;
@@ -372,6 +371,7 @@ try {
 			}
 			// if (!isPhoneGap()) websqlReady.resolve("initialize done");
 		},
+		/*
 		fillTable: function() {
 			// alert('filling table');
 			if (isPhoneGap()) {
@@ -418,7 +418,6 @@ try {
 
 		},
 
-		
 		bbb_sync: function(callback) {
 			var self = this;
 			alert('Starting synchronization...');
@@ -456,7 +455,6 @@ try {
 
 		},
 
-		/*
 		fillTable: function(callback) {
 			this.db.transaction(
 				function(tx) {
@@ -487,7 +485,6 @@ try {
 				}
 			);
 		},
-		*/
 
 		bbb_getLastSync: function(callback) {
 			alert('getLastSync');
@@ -559,6 +556,7 @@ try {
 				}
 			);
 		},
+		*/
 
 		txErrorHandler: function(tx) {
 			alert(tx.message);
@@ -1590,9 +1588,6 @@ try {
 
 
 
-
-
-
 	/*
 	CAMERA AND VIDEO FUNCTIONS
 	*/
@@ -1716,7 +1711,7 @@ try {
 		// my_media.release();
 		// my_media = null;
 		console.log("Error playbacking media");
-	}	
+	}
 
 	function captureVideoRecord() {
 		var options = { limit: 1, duration: 600, quality: 10 };
@@ -1726,36 +1721,18 @@ try {
 			var newPopoverOptions = new CameraPopoverOptions(0, 0, 100, 100, 0);
 			popoverHandle.setPosition(newPopoverOptions);
 		}
-		// console.log(popoverHandle);
 	}
 
 	function purchaseVideoConfirm(me,videoData) {
 		this._me = me;
 		this._videoData = videoData;
-		// doAlert('Möchten Sie Video uying video ' + videoData.id);
 		if (this._videoData.price>0) doConfirm('Möchten Sie dieses Video für ' + this._videoData.price + ' APPinaut Coins ansehen?', 'Video ansehen', function (event) { 
-			// console.log(event);
-			// console.log(this._me);
-			// purchaseVideoConfirmCallback(event,this._me,this._videoData,this._creditsAfterPurchase); 
 			if (event=="1") {
 				purchaseVideoStart(me,videoData);
 			}
 		}, undefined);
 		else purchaseVideoStart(me,videoData);
 	}
-
-	/*
-	function purchaseVideoConfirmCallback(event,me,videoData,creditsAfterPurchase) {
-		// console.log(this.event);
-		// if (event=="1") doAlert('event=1 (OK)');
-		// if (event=="2") doAlert('event=2 (ABBRECHEN)');
-		if (event=="1") {
-			// console.log(event);
-			purchaseVideoStart(me,videoData,creditsAfterPurchase);
-		}
-		// alert('You clicked confirm...');
-	}
-	*/
 
 	function purchaseVideoStart(me,videoData) {
 		var creditsAfterPurchase = parseFloat(me.credits) - parseFloat(videoData.price);
@@ -1970,88 +1947,6 @@ try {
 			// $('#submitbutton').button('disable');
 		}
 	}
-	/*
-	function attachVideoToPlayer(mediaFilePath) {
-		// var path = mediaFile.fullPath;
-		// var path = mediaFilePath;
-		// console.log('attachVideoToPlayer: '+mediaFilePath);
-		// var video_player = $('#video_player');
-		// if (mediaFilePath==undefined) {
-			// console.log('hide');
-			// $('#videobox').hide();
-			// return(false);
-		// }
-		// else {
-			// $('#camera_file').val(mediaFilePath);
-		// }
-		// if (video_player && mediaFilePath!='') {
-			// var startTime = new Date();
-			// video_player.src = mediaFilePath;
-			// video_player.onloadend = function() {
-				// console.log('Video load time: ' + (new Date() - startTime));
-			// };
-		// }
-		// if (mediaFilePath=='') {
-			// console.log('mediaFilePath empty','DEBUG');
-			// $('#captureVideoUploadButton').button('disable');
-			// $('#submitbutton').button('disable');
-		// }
-	}
-	*/
-	/*
-	function recordVideoUpload(videoRecordLocalStorage) {	
-		console.log(videoRecordLocalStorage);
-		// alert('bla');
-		// return(false);
-		var mediaFile = $('#camera_file').val();
-		log('class captureVideoUpload started');
-		try {
-			// $.mobile.loading( 'show', { theme: 'b', textVisible: true, textonly: true, html: '<div style="text-align:center;">Uploading the awesome...</div>' });
-			showModal();
-			log('uploading '+mediaFile);
-			// log('uploading '+mediaFile.name);
-			var ft = new FileTransfer();
-			ft.onprogress = function(progressEvent) {
-				// $('#uploadstatusbar').html(round((progressEvent.loaded/progressEvent.total)*100)+' %');
-				// $('#uploadstatusbar').html(round((progressEvent.loaded/progressEvent.total)*10000)+' % (' + progressEvent.loaded + ' / ' + progressEvent.total + ')');
-				console.log(progressEvent.loaded + " / " + progressEvent.total);
-				$('#modaltxt').html(progressEvent.loaded+"/"+progressEvent.total);
-			};
-			var options = new FileUploadOptions();
-			options.fileName = new Date().getTime();
-			options.mimeType = "video/mp4";
-			options.chunkedMode = false;
-			ft.upload(mediaFile,
-				// "http://management-consulting.marcel-durchholz.de/secure/upload.php",
-				"http://prelaunch002.appinaut.de/secure/upload.php",
-				function(r) {
-					console.log("Code = " + r.responseCode);
-					console.log("Response = " + r.response);
-					console.log("Sent = " + r.bytesSent);
-					dpd.videos.post({"uploader":""+window.me.id,"videourl":""+options.fileName,"title":""+options.fileName,"description":""+options.fileName,"price":123,"thumbnailurl":""}, function(result, err) {
-						if(err) {
-							return console.log(err);
-						}
-						// $.mobile.loading( 'hide' );
-						hideModal();
-						console.log(result, result.id);
-					});
-				},
-				function(error) {
-					// $.mobile.loading('hide');
-					hideModal();
-					// alert("An error has occurred: Code = " = error.code);
-					log('Error uploading file ' + mediaFile + ': ' + error.code);
-				},
-				options
-			);
-		} catch (e) {
-			// not DATA_URL
-			log('class new FileTransfer not possible');
-		}
-		log('class recordVideoUpload ended');
-	}
-	*/
 
 	// Upload files to server
 	function captureVideoUpload(videoRecordLocalStorage) {
@@ -2824,9 +2719,9 @@ try {
 		return(show);
 	}
 	
-	function checkAppRole(role) {
+	function checkAppConfig(role) {
 		var show = false;
-		$.each( window.system.owner.roles, function( key, value ) {
+		$.each( window.system.owner.appviews, function( key, value ) {
 			if (role==value) {
 				show = true;
 				return(show);
@@ -2837,7 +2732,7 @@ try {
 		});
 		return(show);
 	}
-
+	
 	$('#footervideolink').on("vclick", function (e) {
 		// report('footer clicked');
 		if (footervideoStatus != true) {
@@ -2956,11 +2851,13 @@ try {
 	}
 
 	window.system = {
-		owner: new Object(),
-		me: new Object(),
 		master: false,
-		uid: "0",
 		kdnr: "20002",
+		owner: new Object(),
+		appoptions: new Array(),
+		me: new Object(),
+		aoid: "", // 042cb1572ffbea5d
+		uid: "", // 042cb1572ffbea5d
 		showtutorial: false,
 		contentHelper: 0,
 		timestamp: 0,
@@ -2989,17 +2886,49 @@ try {
 			}
 		}
 	}
-	$.ajax('http://dominik-lohmann.de:5000/users/?kdnr='+window.system.kdnr,{
-		type:"GET",
-		async: false,
-	}).done(function(result) {
-		var owner = result[0];
-		window.system.app = {title:owner.slogan, calltoaction:"Registrieren oder Einloggen um zu entdecken"};
-		window.system.owner = owner;
-		window.system.aoid = owner.id;
-		window.system.master = owner.master;
-	});
 	
+	function getOwnerData() {
+		// get owner data and roles
+		$.ajax('http://dominik-lohmann.de:5000/users/?kdnr='+window.system.kdnr,{
+			type:"GET",
+			async: false,
+		}).done(function(result) {
+			var owner = result[0];
+			window.system.app = {title:owner.slogan, calltoaction:"Registrieren oder Einloggen um zu entdecken"};
+			window.system.owner = owner;
+			window.system.aoid = owner.id;
+			window.system.master = owner.master;
+		});
+	}
+	getOwnerData();
+
+	function getAppOptions() {
+		// get app data and roles
+		$.ajax('http://dominik-lohmann.de:5000/appoptions/',{
+			type:"GET",
+			async: false,
+		}).done(function(result) {
+			window.system.appoptions = result[0];
+		});
+	}
+	getAppOptions();
+
+	/*
+	function checkLogin() {
+		// get owner data and roles
+		$.ajax('http://dominik-lohmann.de:5000/users/?kdnr='+window.system.kdnr,{
+			type:"GET",
+			async: false,
+		}).done(function(result) {
+			var owner = result[0];
+			window.system.app = {title:owner.slogan, calltoaction:"Registrieren oder Einloggen um zu entdecken"};
+			window.system.owner = owner;
+			window.system.aoid = owner.id;
+			window.system.master = owner.master;
+		});
+	}
+	*/
+
 	// alert(system.contentHelper);
 
 	function checkEmail(email){
@@ -3197,6 +3126,17 @@ try {
 			  'message: ' + error.message + '\n');
 	}
 
+	function scrollBottom() {
+		// $('#page-content').stop().animate({
+		setTimeout(function() {
+			$('#page-content').animate({
+				scrollTop: $("#page-content")[0].scrollHeight
+			}, "fast", function() {
+				// animation done
+				$('#page-content').focus();
+			});
+		}, 1000);
+	}
 
 	var showDeleteBar = function(status) {
 		var deleteBarDeferred = $.Deferred();
@@ -3217,18 +3157,6 @@ try {
 			// console.log(value);
 		});
 	};
-
-	function scrollBottom() {
-		// $('#page-content').stop().animate({
-		setTimeout(function() {
-			$('#page-content').animate({
-				scrollTop: $("#page-content")[0].scrollHeight
-			}, "fast", function() {
-				// animation done
-				$('#page-content').focus();
-			});
-		}, 1000);
-	}
 
 } catch (e) {
 	console.log('error in js script');
