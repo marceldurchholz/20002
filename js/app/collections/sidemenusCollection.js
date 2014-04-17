@@ -69,9 +69,10 @@ define(["jquery", "backbone", "models/SidemenuModel"],
 			for (n = 0; n < responseSidemenu.length; ++n) {
 				model = responseSidemenu[n];
 				var access = 0;
-				jQuery.each(model.roles, function(i, val) {
+				/*
+				$.each(model.roles, function(i, val) {
 					if (_thisCollectionSidemenu.user) {
-						access = jQuery.inArray( val, _thisCollectionSidemenu.user.roles );
+						access = $.inArray( val, _thisCollectionSidemenu.user.roles );
 						if (access<=0) {
 						}
 						if (access>0) {
@@ -84,7 +85,10 @@ define(["jquery", "backbone", "models/SidemenuModel"],
 						access = 1;
 					}
 				});
-				
+				*/
+				// console.log(model.userfriendly+': '+access);
+				if (checkAppConfigs(model.roles)==true && checkRoles(model.roles)==true) access = 1;
+				// console.log(model.userfriendly+': '+access);				
 				if (access>0) {
 					// console.log('ADDING PAGE ' + model.userfriendly);
 					_thisCollectionSidemenu.add(model);

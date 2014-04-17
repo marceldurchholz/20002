@@ -24,7 +24,7 @@
 		<div style="padding:0px 20px 60px 20px;">
 			<div style="width:100%;height:auto;overflow:visible;text-align:right;">
 				<span id="functionBar">
-					<span><a id="sendMessageBtn" class="sendMessageBtn" style="font-weight:normal;"><!--Optionen--><img style="padding-top:10px;height:24px;" src="./images/icon-testimonials.png"></a></span>
+					<% if(checkAppConfig("messages")==true) { %><span><a id="sendMessageBtn" class="sendMessageBtn" style="font-weight:normal;"><!--Optionen--><img style="padding-top:10px;height:24px;" src="./images/icon-testimonials.png"></a></span><% } %>
 					<span><a id="showOptionsBtn" class="showOptionsBtn" style="font-weight:normal;"><!--Optionen--><img style="padding-top:10px;height:26px;" src="./images/icon-services.png"></a></span>
 				</span>
 			</div>
