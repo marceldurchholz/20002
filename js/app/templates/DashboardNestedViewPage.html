@@ -10,14 +10,16 @@
 			</a>
 		</li>
 		
-		<li>
-			<a href="#learningstreamview" style="padding-top:0px;padding-bottom:0px;">
-				<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-cloud-storage-001-60x60.png" /></div>
-				<h5 style="padding-top:2px;padding-bottom:4px;margin-left:80px;">Pinnwand</h5>
-				<p style="margin-left:80px;">Ausgewählte Inhalte (chronologisch)</p>
-				<!-- <p class="ui-li-aside"><strong>6:24</strong>PM</p> -->
-			</a>
-		</li>
+		<% if (checkAppConfig("wall")==true) { %>
+			<li>
+				<a href="#learningstreamview" style="padding-top:0px;padding-bottom:0px;">
+					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-cloud-storage-001-60x60.png" /></div>
+					<h5 style="padding-top:2px;padding-bottom:4px;margin-left:80px;">Pinnwand</h5>
+					<p style="margin-left:80px;">Ausgewählte Inhalte (chronologisch)</p>
+					<!-- <p class="ui-li-aside"><strong>6:24</strong>PM</p> -->
+				</a>
+			</li>
+		<% } %>
 		
 		<% if (checkAppConfig("videos")==true) { %>
 			<li>

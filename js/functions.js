@@ -2707,12 +2707,17 @@ try {
 
 	function checkRole(role) {
 		var show = false;
-		$.each( window.me.roles, function( key, value ) {
-			if (role==value) {
-				show = true;
-				return(show);
-			}
-		});
+		if ($.inArray('user', window.me.roles) > -1) show = true;
+		// if (role=='provider' || role=='seeker') show = true;
+		// else 
+		else if (window.me.roles!=undefined) {
+			$.each( window.me.roles, function( key, value ) {
+				if (role==value) {
+					show = true;
+					return(show);
+				}
+			});
+		}
 		return(show);
 	}
 	function checkRoles(smroles) {
@@ -2728,10 +2733,13 @@ try {
 	
 	function checkAppConfig(role) {
 		var show = false;
-		if (role=='provider') show = true;
+		console.log(role);
+		if (role=='user') show = true;
 		else if (window.system.owner.appviews!=undefined) {
+			console.log(window.system.owner.appviews);
 			$.each( window.system.owner.appviews, function( key, value ) {
 				if (role==value) {
+					console.log(role+' ?= '+value);
 					show = true;
 					return(show);
 				}
@@ -2870,13 +2878,13 @@ try {
 	}
 
 	window.system = {
-		master: false,
-		kdnr: "20002",
+		master: window.master,
+		kdnr: window.kdnr,
 		owner: new Object(),
 		appoptions: new Array(),
 		me: new Object(),
-		aoid: "", // 042cb1572ffbea5d
-		uid: "", // 042cb1572ffbea5d
+		aoid: window.aoid,
+		uid: window.uid,
 		showtutorial: false,
 		contentHelper: 0,
 		timestamp: 0,
@@ -2905,6 +2913,7 @@ try {
 			}
 		}
 	}
+	
 	
 	function getOwnerData() {
 		// get owner data and roles
