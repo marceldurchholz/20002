@@ -2369,7 +2369,8 @@ try {
 	$(window).bind('hashchange', function(){
 		showModal();
 		modifyiOS7StatusBar();
-		checkTopNaviRoles();
+		checkTopNaviAppConfig();
+		// checkTopNaviRoles();
 		bindSwipeBack();
 		showDeleteBar(false);
 		$("#flexiblecontent").animate({
@@ -2406,7 +2407,8 @@ try {
 		e.preventDefault();
 		// alert('bla');
 		showPageOptions();
-		checkTopNaviRoles();
+		// checkTopNaviRoles();
+		checkTopNaviAppConfig();
 	});
 	
 	
@@ -2669,23 +2671,16 @@ try {
 	
 	 
 	function checkTopNaviRoles() {
-		// alert('foo');
-		// dpd.users.me(function(me) {
 		 try {
 			$( "#pageOptions li" ).each(function(index, value) {
 				var lirole = $(this).attr('data-roles');
-				// console.log(value);
-				// console.log(lirole);
-				// console.log(checkRole(lirole));
-				if (lirole == '' || lirole == 'public' || lirole == undefined) { 
+				// if (lirole == '' || lirole == 'public' || lirole == undefined) { 
+				if (lirole == 'public') { 
 					$(this).css('visibility','visible');
 					$(this).css('display','block');
 				}
 				else {
 					if (lirole != undefined) {
-						//  && checkRole(lirole)==true
-						// var bla = checkRole(lirole);
-						// alert(bla);
 						if (checkRole(lirole)==true) {
 							$(this).css('visibility','visible');
 							$(this).css('display','block');
@@ -2697,19 +2692,46 @@ try {
 					}
 				}
 			});
-		// });
 		} catch (e) {
-			// alert(e);
-			// $( "#showPageOptions" ).hide();
 		}
+	}
 
+	function checkTopNaviAppConfig() {
+		 try {
+			// alert('checkTopNaviAppConfig');
+			$( "#pageOptions li" ).each(function(index, value) {
+				var liconfig = $(this).attr('data-appconfig');
+				// console.log('is '+liconfig+' enabled: '+checkAppConfig(liconfig));
+				if (checkAppConfig(liconfig)==true) {
+				// if (liconfig == '' || liconfig == 'public' || liconfig == undefined) { 
+					var lirole = $(this).attr('data-role');
+					// console.log('do i have access to '+lirole+': '+checkRole(lirole));
+					if (checkRole(lirole)) {
+						$(this).css('visibility','visible');
+						$(this).css('display','block');
+					}
+					else {
+						$(this).css('visibility','hidden');
+						$(this).css('display','none');
+					}
+				}
+				else {
+					$(this).css('visibility','hidden');
+					$(this).css('display','none');
+				}
+				
+			});
+		} catch (e) {
+		}
 	}
 
 	function checkRole(role) {
 		var show = false;
-		if ($.inArray('user', window.me.roles) > -1) show = true;
+		// if ($.inArray('user', window.me.roles) > -1) show = true;
 		// if (role=='provider' || role=='seeker') show = true;
 		// else 
+		// else 
+		if (role=='' || role==undefined) show = true;
 		else if (window.me.roles!=undefined) {
 			$.each( window.me.roles, function( key, value ) {
 				if (role==value) {
@@ -2733,13 +2755,16 @@ try {
 	
 	function checkAppConfig(role) {
 		var show = false;
-		console.log(role);
-		if (role=='user') show = true;
+		// console.log(role);
+		// if (role=='') alert('empty'); // show = true;
+		// else alert(role);
+		if (role=='') show = true;
+		else if (role=='user') show = true;
 		else if (window.system.owner.appviews!=undefined) {
-			console.log(window.system.owner.appviews);
+			// console.log(window.system.owner.appviews);
 			$.each( window.system.owner.appviews, function( key, value ) {
 				if (role==value) {
-					console.log(role+' ?= '+value);
+					// console.log(role+' ?= '+value);
 					show = true;
 					return(show);
 				}

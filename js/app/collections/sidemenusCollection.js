@@ -87,7 +87,7 @@ define(["jquery", "backbone", "models/SidemenuModel"],
 				});
 				*/
 				// console.log(model.userfriendly+': '+access);
-				if (checkAppConfigs(model.roles)==true && checkRoles(model.roles)==true) access = 1;
+				if (checkAppConfigs(model.roles)==true) access = 1;
 				// console.log(model.userfriendly+': '+access);				
 				if (access>0) {
 					// console.log('ADDING PAGE ' + model.userfriendly);

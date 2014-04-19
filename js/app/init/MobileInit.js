@@ -44,6 +44,7 @@ require(["jquery", "backbone", "routers/MobileRouter", "jquerymobile", "backbone
 	// dpd.socketReady(function() {
 			
 		// dpd.users.off('changed');
+		
 		dpd.users.on('changed', function(changedData) {
 			/*
 			if (msgData.sender==window.system.uid || msgData.receiver==window.system.uid) {
@@ -57,6 +58,7 @@ require(["jquery", "backbone", "routers/MobileRouter", "jquerymobile", "backbone
 			console.log('changed');
 			console.log(changedData);
 		});
+		
 		/*
 		dpd.users.get(window.system.aoid, function (result) {
 			alert('found');
@@ -71,6 +73,7 @@ require(["jquery", "backbone", "routers/MobileRouter", "jquerymobile", "backbone
 
 		window.MobileRouter = MobileRouter;
 		app.initialize();
+		checkTopNaviAppConfig();
 		
 	  // Do something
 	// });

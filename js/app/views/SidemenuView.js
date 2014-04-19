@@ -42,6 +42,7 @@ define(["jquery", "backbone", "collections/sidemenusCollection", "text!templates
 				var _thisViewSidemenu = this;
 				var htmlContent = '';
 				$(this.el).html(htmlContent);
+				// console.log(this._sidemenusCollection.models);
 				_.each(this._sidemenusCollection.models, function(model) {
 					this.id = model.get('id');
 					// _thisViewSidemenu.insertData(model);
