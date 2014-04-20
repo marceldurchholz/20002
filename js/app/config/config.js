@@ -32,6 +32,8 @@ require.config({
       "jelastic": "../jquery.elastic.source",
 
       "jtablesorter": "../libs/jquery.tablesorter",
+	  
+	  "jtouchpunch": "..libs/jquery.ui.touch-punch",
 
       "videojs": "../video-js/video",
 
