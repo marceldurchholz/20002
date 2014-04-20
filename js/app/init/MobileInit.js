@@ -2,7 +2,7 @@
 // -------------
 
 // Include Mobile Specific JavaScript files here (or inside of your Mobile router)
-require(["jquery", "backbone", "routers/MobileRouter", "jquerymobile", "backbone.validateAll", "backbone.LocalStorage", "functions"],
+require(["jquery", "backbone", "routers/MobileRouter", "jquerymobile", "backbone.validateAll", "backbone.LocalStorage", "functions", "jqueryui", "jtouchpunch"],
 
   function($, Backbone, MobileRouter) {
 	// LocalStorageAdapter

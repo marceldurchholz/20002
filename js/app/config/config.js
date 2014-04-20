@@ -33,8 +33,6 @@ require.config({
 
       "jtablesorter": "../libs/jquery.tablesorter",
 	  
-	  "jtouchpunch": "..libs/jquery.ui.touch-punch",
-
       "videojs": "../video-js/video",
 
       "backbone": "../libs/backbone",
@@ -47,6 +45,8 @@ require.config({
       // Plugins
       // -------
       "backbone.validateAll": "../libs/plugins/Backbone.validateAll",
+
+	  "jtouchpunch": "../libs/plugins/jquery.ui.touch-punch",
 
       "bootstrap": "../libs/plugins/bootstrap",
 
@@ -71,6 +71,8 @@ require.config({
       // jQueryUI
       "jqueryui": ["jquery"],
       
+	  "jtouchpunch": ["jqueryui"],
+	  
 	  "jexpander": ["jquery"],
 
 	  "jelastic": ["jquery"],
