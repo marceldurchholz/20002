@@ -41,13 +41,13 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 				var newpage = 0;
 				// console.log($( "#CardPagesEditList li" ).length);
 				$( "#CardPagesEditList li" ).each(function(index, value) {
-					var id = $(this).attr('data-cardpageid');
+					var cardpageid = $(this).attr('data-cardpageid');
 					var page = $(this).attr('data-page');
-					// console.log(id+': '+page+' >> '+newpage);
-					if (page!=newpage && id != undefined) {
-						dpd.cardpages.put(id, {"page":''+newpage}, function(result, err) {
+					// console.log(cardpageid+': '+page+' >> '+newpage);
+					if (page!=newpage && cardpageid != undefined) {
+						dpd.cardpages.put(cardpageid, {"page":''+newpage}, function(result, err) {
 							if(err) {
-								return console.log(err+' ('+id+')');
+								return console.log(err);
 								// hideModal();
 							}
 							// console.log(result, result.id);
@@ -58,9 +58,9 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 						});
 					}
 					newpage = newpage+1;
-					if (newpage==$( "#CardPagesEditList li" ).length) hideModal();
+					// if (newpage==$( "#CardPagesEditList li" ).length) hideModal();
 				});
-				// hideModal();
+				hideModal();
 			},
 			bindEvents: function() {
 				_thisViewCardEditNested = this;
@@ -82,13 +82,8 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 					});
 					$( ".sortableListe" ).disableSelection();
 				// this.$el.off('click','.clickRow').on('click','.clickRow',function(){_thisViewLearningStreamNested.clicked(e);});
-				_thisViewCardEditNested.$el.off('click','.newCardpage').on('click','.newCardpage',function(e){
-					e.preventDefault();
-					var cardsetid = $(this).attr('data-cardsetid');
-					alert(cardsetid);
-					return(false);
-					// window.location.href = e.currentTarget.hash;
-				});
+				
+				
 				_thisViewCardEditNested.$el.off('click','.editCardpage').on('click','.editCardpage',function(e){
 					e.preventDefault();
 					var cardpageid = $(this).attr('data-cardpageid');
@@ -97,6 +92,75 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 					return(false);
 					// window.location.href = e.currentTarget.hash;
 				});
+				
+				_thisViewCardEditNested.$el.off('blur','#question').on('blur','#question',function(e){
+					e.preventDefault();
+					showModal();
+					var cardpageid = $(this).attr('data-cardpageid');
+					var newquestion = $(e.currentTarget).val();
+					dpd.cardpages.put(cardpageid, {"question":''+newquestion}, function(result, err) {
+						if(err) {
+							return console.log(err);
+							// hideModal();
+						}
+					});
+					hideModal();
+					return(false);
+				});
+				
+				_thisViewCardEditNested.$el.off('blur','.answer').on('blur','.answer',function(e){
+					e.preventDefault();
+					showModal();
+					var newanswerArray = new Array();
+					var answerOrder = 0;
+					$( "#answerList input" ).each(function(index, value) {
+						// [type=text]
+						// alert('bla');
+						var newanswerObject = new Object();
+						// console.log(value);
+						var cardpageid = $(this).attr('data-cardpageid');
+						// console.log(cardpageid);
+						// console.log($(this));
+						
+						if ($(this).hasClass( "answercb" )) {
+							var iscorrect = $(this).val();
+						}
+						if ($(this).hasClass( "answer" )) {
+							var newanswer = $(this).val();
+						}
+						
+						// console.log(newanswer);
+						
+						newanswerObject.id = answerOrder;
+						newanswerObject.text = newanswer;
+						
+						newanswerArray.push(newanswerObject);
+						answerOrder = answerOrder + 1;
+					});
+					console.log(newanswerArray);
+					/*
+					var cardpageid = $(this).attr('data-cardpageid');
+					var newanswer = $(e.currentTarget).val();
+					dpd.cardpages.put(cardpageid, {"answer":''+newanswer}, function(result, err) {
+						if(err) {
+							return console.log(err);
+							// hideModal();
+						}
+					});
+					*/
+					hideModal();
+					return(false);
+				});
+				
+				
+				_thisViewCardEditNested.$el.off('click','.newCardpage').on('click','.newCardpage',function(e){
+					e.preventDefault();
+					var cardsetid = $(this).attr('data-cardsetid');
+					alert(cardsetid);
+					return(false);
+					// window.location.href = e.currentTarget.hash;
+				});
+				
 				_thisViewCardEditNested.$el.off('click','.newCard').on('click','.newCard',function(e){
 					e.preventDefault();
 					return(false);
