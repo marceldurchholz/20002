@@ -113,7 +113,7 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 						$( ".sortableListe" ).sortable({
 							'containment': 'parent',
 							'opacity': 0.6,
-							'delay': 1000, 
+							// 'delay': 1000, 
 							update: function(e, ui) {
 								// alert("dropped");
 								// console.log(e);
@@ -157,7 +157,7 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 							// console.log(_thisViewCardEditNested.streamData.activePageArray);
 							// console.log('^^ _thisViewCardEditNested.streamData.activePageArray');
 							// console.log(_thisViewCardEditNested.streamData.pagesArray.length+1);
-							dpd.cardpages.post({"question":''+newquestion, "cardid":''+cardsetid, "active":true, "public":true, "uploader": _thisViewCardEditNested.me.id, "page":""+(_thisViewCardEditNested.streamData.pagesArray.length)}, function(result, err) {
+							dpd.cardpages.post({"question":''+newquestion, "cardid":''+cardsetid, "active":false, "public":true, "uploader": _thisViewCardEditNested.me.id, "page":""+(_thisViewCardEditNested.streamData.pagesArray.length)}, function(result, err) {
 								if(err) {
 									return console.log(err);
 									// hideModal();
@@ -190,6 +190,22 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 					return(false);
 				});
 				
+				
+				_thisViewCardEditNested.$el.off('change','.activatecardcb').on('change','.activatecardcb',function(e){
+					e.preventDefault();
+					// alert('change triggered');
+					// _thisViewCardEditNested.updateCardPageAnswers();
+					var cardpageid = $(this).attr('data-cardpageid');
+					// alert(cardpageid);
+					var isactive = $(this).is(":checked");
+					dpd.cardpages.put(cardpageid, {"active":isactive}, function(result, err) {
+						if(err) {
+							return console.log(err);
+							// hideModal();
+						}
+					});
+					return(false);
+				});
 				
 				_thisViewCardEditNested.$el.off('change','.answercb').on('change','.answercb',function(e){
 					e.preventDefault();
@@ -283,7 +299,7 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 				}
 			},
 			collectCardData: function(cardsetid,pageid) {
-				var requestUrl = "http://dominik-lohmann.de:5000/cards?active=true&deleted=false";
+				var requestUrl = "http://dominik-lohmann.de:5000/cards?deleted=false"; // active=true&
 				if (window.system.master!=true) requestUrl = requestUrl + "&uploader="+window.system.aoid;
 				if (cardsetid!="") requestUrl = requestUrl + "&id="+cardsetid;
 				// console.log(requestUrl);
@@ -328,7 +344,7 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 					if (cardsetid!="") {
 						if (cardsetid==myObj.cardData.id) { 
 							// console.log('foo');
-							var requestUrl = "http://dominik-lohmann.de:5000/cardpages?active=true&deleted=false&cardid="+cardsetid;
+							var requestUrl = "http://dominik-lohmann.de:5000/cardpages?deleted=false&cardid="+cardsetid; // active=true&
 							$.ajax({
 								url: requestUrl,
 								async: false

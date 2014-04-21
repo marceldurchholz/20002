@@ -104,10 +104,12 @@
 						<p>Klicken zum Hinzufügen...</p>
 					</a>
 				</li>
-			<ul style="padding:15px;padding-bottom:100px;margin-bottom:100px;" id="CardPagesEditList" class="sortableListe" data-filter-theme="a" data-count-theme="a" data-role="listview" data-theme="a" data-divider-theme="f" data-role="listview" data-inset="false">
+			<ul style="padding:15px;padding-bottom:100px;margin-bottom:100px;" id="CardPagesEditList" class="sortableListe" data-corners="false" data-filter-theme="a" data-count-theme="a" data-role="listview" data-theme="a" data-divider-theme="f" data-role="listview" data-inset="true">
 				<% _.each(stream.data.pagesArray, function(data) { %>
-					<li style="margin-left:15px;margin-right:15px;" data-icon="false" data-page="<%= data.page %>" data-cardpageid="<%= data.id %>" class="swipeToDelete">
-						<a class="editCardpage" data-cardpageid="<%= data.id %>" href="#cards/edit/<%= stream.data.cardsArray[0].id %>/<%= data.id %>" style="font-weight:normal !important;font-size:12px !important;"><!--<%= data.page %>--><%= data.question %></a>
+					<li style="margin-left:15px;margin-right:15px;padding-left:10px;w/idth:100px;overflow:hidden;" data-icon="false" data-page="<%= data.page %>" data-cardpageid="<%= data.id %>" class="swipeToDelete">
+						<input style="float:left;display:none;" data-cardpageid="<%= data.id %>" data-corners="false" data-inset="false" <% if(data.active==true) { %>CHECKED<% } %> data-mini="true" type="checkbox" class="activatecardcb" name="checkbox-activatecardcb-<%= data.id %>" id="checkbox-activatecardcb-<%= data.id %>" data-cardpageid="<%= stream.data.activePageArray[0].id %>">
+						<label class="activatecardcheckbox" for="checkbox-activatecardcb-<%= data.id %>" style="font-weight:normal;width:40px;float:left;">&nbsp;</label>
+						<a class="editCardpage" data-cardpageid="<%= data.id %>" href="#cards/edit/<%= stream.data.cardsArray[0].id %>/<%= data.id %>" style="font-weight:normal !important;font-size:12px !important;b/order:1px solid red;width:<%= $(window).width()-30-30-80 %>px;float:left;"><%= data.question %></a>
 					</li>
 				<% }); %>
 			<% } %>
