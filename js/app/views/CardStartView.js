@@ -110,12 +110,17 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 						var n = obj.name;
 						var v = obj.value;
 						_thisViewCardStart._AnswerModel = new AnswerModel({question: n, answer: v});
-						if (n.substr(0,6)=='answer') { _thisViewCardStart._answersCollection.add(_thisViewCardStart._AnswerModel); }
+						if (n.substr(0,6)=='answer') { 
+							// console.log('saving answer from field with name: '+n);
+							// console.log('value: '+v);
+							_thisViewCardStart._answersCollection.add(_thisViewCardStart._AnswerModel); 
+						}
 					});
+					// console.log(_thisViewCardStart._answersCollection);
 					
-					console.log(_thisViewCardStart.options.page);
+					// console.log(_thisViewCardStart.options.page);
 					_thisViewCardStart.options.page = parseInt(_thisViewCardStart.options.page)+1;
-					console.log(_thisViewCardStart.options.page);
+					// console.log(_thisViewCardStart.options.page);
 					
 					/*
 					// find the next active page
@@ -154,6 +159,7 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 						
 						_thisViewCardStart.cardpage = cardpage;
 						// console.log(this.cardpage);
+
 						/*
 						console.log('---------------------------------------');
 						console.log('---------------------------------------');
@@ -165,25 +171,31 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 						console.log(cardpage.question);
 						console.log('running through potential answers');
 						console.log('+++++++++++++++++++++++++++++++++++++++');
+						
+						console.log(cardpage.answers);
+						console.log('***************************************');
+						console.log(_thisViewCardStart._answersCollection.models);
+						console.log('***************************************');
 						*/
 						
 						_.each(cardpage.answers, function(answer) {
 							// var correctanswer = model.get('');
 							// console.log('answer.id ' +answer.id);
-							console.log('answer.text ' +answer.text + ' >> ' + answer.solution);
+							// console.log('answer.text ' +answer.text + ' >> ' + answer.solution);
 							// console.log('answer.solution '+answer.solution);
 							var found = 0;
 							
 							_.each(_thisViewCardStart._answersCollection.models, function(model) {
+								// console.log('model');
+								// console.log(model);
 								if (
-									cardpage.id == model.get('question').split("-")[1] 
-									&& cardpage.page == model.get('question').split("-")[2]
-									&& answer.id == model.get('question').split("-")[3]
+									cardpage.id == model.get('question').split("-")[1] // cardpageid
+									&& answer.id == model.get('question').split("-")[2] // answerid >> 0,1,2,3,4,...
 									) {
 									found = 1;
-									console.log('FOUND GIVEN ANSWER: ' + model.get('answer'));
+									// console.log('FOUND GIVEN ANSWER: ' + model.get('answer'));
 									if (answer.solution != model.get('answer')) {
-										console.log('FAILURE !!!');
+										// console.log('FAILURE !!!');
 										_thisViewCardStart.failures = _thisViewCardStart.failures+1;
 										var fo = new Object();
 										fo.question = cardpage.question;
@@ -198,7 +210,7 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 								}
 							});
 							if (answer.solution == 1 && found==0) {
-								console.log('FAILURE !!!');
+								// console.log('FAILURE !!!');
 								_thisViewCardStart.failures = _thisViewCardStart.failures+1;
 								var fo = new Object();
 								fo.question = cardpage.question;
@@ -212,26 +224,34 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 						});
 					});
 					
-					_template = _.template(_thisViewCardStart.displayPage, {
-						id: _thisViewCardStart.carddata.id,
-						uploader: _thisViewCardStart.uploaderdata.fullname,
-						results: _thisViewCardStart._answersCollection.models,
-						failures: _thisViewCardStart.failures,
-						topic: _thisViewCardStart.carddata.topic,
-						cardurl: _thisViewCardStart.carddata.cardurl,
-						description: _thisViewCardStart.carddata.description,
-						resultArray: _thisViewCardStart.resultArray,
-						
-						title: _thisViewCardStart.carddata.title
-					},{variable: 'card'});
-					// $(this.el).html(_template);
-					_thisViewCardStart.$el.html(_template);
-					_thisViewCardStart.render();
+					if (_thisViewCardStart.failures>0) { var wrong=1; var correct=0; }
+					else { var wrong=0; var correct=1; }
+					dpd.cards.put(_thisViewCardStart.options.cardid,{"completed":{$inc:1},"wrong":{$inc:wrong},"correct":{$inc:correct}}, function(result, err) {
+						if(err) return console.log(err);
+						// console.log(result);
+						_template = _.template(_thisViewCardStart.displayPage, {
+							id: _thisViewCardStart.carddata.id,
+							uploader: _thisViewCardStart.uploaderdata.fullname,
+							results: _thisViewCardStart._answersCollection.models,
+							failures: _thisViewCardStart.failures,
+							topic: _thisViewCardStart.carddata.topic,
+							cardurl: _thisViewCardStart.carddata.cardurl,
+							description: _thisViewCardStart.carddata.description,
+							resultArray: _thisViewCardStart.resultArray,
+							dbObject: result,
+							title: _thisViewCardStart.carddata.title
+						},{variable: 'card'});
+						// $(this.el).html(_template);
+						_thisViewCardStart.$el.html(_template);
+						_thisViewCardStart.render();
+					});
+
+					
 				},
 				
 				insertVariables: function(options) {
 					_thisViewCardStart = this;
-					console.log(_thisViewCardStart.options);
+					// console.log(_thisViewCardStart.options);
 					
 					// _thisViewCardStart.options.page
 					// _thisViewCardStart.cardpageid
@@ -288,7 +308,7 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 							return(false);
 						}
 						
-						console.log(_thisViewCardStart.cardpagedata);
+						// console.log(_thisViewCardStart.cardpagedata);
 						
 						if ( typeof( _thisViewCardStart.uploaderdata ) == "undefined") {
 							var uploader = _thisViewCardStart.carddata.uploader;
@@ -296,7 +316,7 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 								url: "http://dominik-lohmann.de:5000/users/?id="+uploader,
 								async: false
 							}).done(function(uploaderdata) {
-								console.log(uploaderdata);
+								// console.log(uploaderdata);
 								_thisViewCardStart.uploaderdata = uploaderdata;
 							});
 						}
@@ -307,7 +327,7 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 						var pricetext = '';
 						if (_thisViewCardStart.carddata.price==0) pricetext = 'kostenlos';
 						else pricetext = 'für '+_thisViewCardStart.carddata.price+' Coins';
-						console.log(_thisViewCardStart.cardpagedata);
+						// console.log(_thisViewCardStart.cardpagedata);
 						_template = _.template(_thisViewCardStart.displayPage, {
 							id: _thisViewCardStart.carddata.id,
 							uploader: _thisViewCardStart.uploaderdata.fullname,
@@ -315,7 +335,6 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 							answers: _thisViewCardStart.cardpagedata.answers,
 							question: _thisViewCardStart.cardpagedata.question,
 							cardpageid: _thisViewCardStart.cardpagedata.id,
-							page: _thisViewCardStart.options.page,
 							lastpage: (parseInt(_thisViewCardStart.options.page)-1),
 							nextpage: (parseInt(_thisViewCardStart.options.page)+1),
 							topic: _thisViewCardStart.carddata.topic,
@@ -346,9 +365,8 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 					$('#sidebarListViewDiv').html(_.template(sidemenusList, {}));
 					_thisViewCardStart.nestedView = new SidemenuView().fetch();
 					
-					console.log(_thisViewCardStart.options.page +' / '+ _thisViewCardStart.cardcount);
+					// console.log(_thisViewCardStart.options.page +' / '+ _thisViewCardStart.cardcount);
 					if (_thisViewCardStart.options.page >= _thisViewCardStart.cardcount) {
-						// _thisViewCardStart.insertResult(_thisViewCardStart.options);
 						// doAlert('finish');
 						_thisViewCardStart.insertResult(_thisViewCardStart.options);
 					} else {
@@ -371,7 +389,7 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 				
 				render: function() {
 					_thisViewCardStart = this;
-					console.log('return _thisViewCardStart;');
+					// console.log('return _thisViewCardStart;');
 					_thisViewCardStart.$el.trigger('create');
 					hideModal();
 					fontResize();

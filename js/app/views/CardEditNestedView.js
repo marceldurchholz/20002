@@ -51,22 +51,22 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 						$(this).find('input:checkbox').each(function() {
 							if ($(this).hasClass( "activatecardcb" )) {
 								var iscorrect = $(this).is(":checked"); // $(this).val();
-								if (iscorrect==true) var solution = "1"; else solution = "0";
-								newanswerObject.solution = solution;
+								if (iscorrect==true) var cardpageactive = true; else cardpageactive = false;
+								// newanswerObject.solution = solution;
+								dpd.cardpages.put(cardpageid, {"page":''+newpage, "active":cardpageactive}, function(result, err) {
+									if(err) {
+										return console.log(err);
+										// hideModal();
+									}
+									// console.log(result, result.id);
+									// hideModal();
+									// doAlert('Vielen Dank. Sie haben nun ' + newcredits + ' APPinaut Coins.','Kauf erfolgreich');
+									// window.location.reload();
+									// window._thisViewMyProfileNested.initialize();
+								});
 							}
 						});
 
-						dpd.cardpages.put(cardpageid, {"page":''+newpage}, function(result, err) {
-							if(err) {
-								return console.log(err);
-								// hideModal();
-							}
-							// console.log(result, result.id);
-							// hideModal();
-							// doAlert('Vielen Dank. Sie haben nun ' + newcredits + ' APPinaut Coins.','Kauf erfolgreich');
-							// window.location.reload();
-							// window._thisViewMyProfileNested.initialize();
-						});
 					}
 					newpage = newpage+1;
 					// if (newpage==$( "#CardPagesEditList li" ).length) hideModal();
@@ -163,22 +163,11 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 						else {
 							$('#questionemtpywarning').html('');
 							console.log('inserting new cardpage');
-							// console.log(_thisViewCardEditNested.streamData.activePageArray);
-							// console.log('^^ _thisViewCardEditNested.streamData.activePageArray');
-							// console.log(_thisViewCardEditNested.streamData.pagesArray.length+1);
 							dpd.cardpages.post({"question":''+newquestion, "cardid":''+cardsetid, "active":false, "public":true, "uploader": _thisViewCardEditNested.me.id, "page":""+(_thisViewCardEditNested.streamData.pagesArray.length)}, function(result, err) {
 								if(err) {
 									return console.log(err);
-									// hideModal();
 								}
 								console.log(result);
-								// var newcardpageid = result.id;
-								// alert(newcardpageid);
-								// $(this).attr('data-cardpageid',newcardpageid);
-								// window.location.href = e.currentTarget.href;
-								// _thisViewCardEditNested.options.pageid = result.id; 
-								// = data.options;
-								// _thisViewCardEditNested.fetch(_thisViewCardEditNested.options);
 								window.location.href = "#cards/edit/acd1eacd6a69e82e/"+result.id;
 							});
 						}

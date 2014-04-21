@@ -16,13 +16,12 @@
 	<form id="submitform" action="#cards/start/view/<%= card.cardid %>/<%= card.nextpage %>" method="post" class="no-ui-body no-ui-body-a no-ui-corner-all" style="border:0;">
 		
 		<input type="hidden" id="id" name="id" value="<%= card.id %>">
-		<input type="hidden" id="page" name="page" value="<%= card.page %>">
 		
 		<p>
 			<div data-role="controlgroup" style="border:0;">
 				<% _.each(card.answers, function(answer) { %>
-					<input type="checkbox" name="answer-<%= card.cardpageid %>-<%= card.page %>-<%= answer.id %>-<%= answer.solution %>" id="answer-<%= card.cardpageid %>-<%= card.page %>-<%= answer.id %>-<%= answer.solution %>" value="1">
-					<label for="answer-<%= card.cardpageid %>-<%= card.page %>-<%= answer.id %>-<%= answer.solution %>" style="font-weight:normal;font-size:10px !important;" class="resizetext"><%= answer.text %></label>
+					<input type="checkbox" name="answer-<%= card.cardpageid %>-<%= answer.id %>-<%= answer.solution %>" id="answer-<%= card.cardpageid %>-<%= answer.id %>-<%= answer.solution %>" value="1">
+					<label for="answer-<%= card.cardpageid %>-<%= answer.id %>-<%= answer.solution %>" style="font-weight:normal;font-size:10px !important;" class="resizetext"><%= answer.text %></label>
 				<% }); %>
 			</div>
 		</p>
