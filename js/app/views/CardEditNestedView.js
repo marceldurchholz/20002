@@ -113,6 +113,7 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 						$( ".sortableListe" ).sortable({
 							'containment': 'parent',
 							'opacity': 0.6,
+							'delay': 1000, 
 							update: function(e, ui) {
 								// alert("dropped");
 								// console.log(e);
