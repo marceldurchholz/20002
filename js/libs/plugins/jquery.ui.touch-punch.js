@@ -1,4 +1,4 @@
-alert('bla');
+// alert('bla');
 
 /*!
  * jQuery UI Touch Punch 0.2.3

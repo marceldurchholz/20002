@@ -11,7 +11,7 @@
 				<p>Klicken zum Hinzufügen...</p>
 				</a>
 			</li>
-		<ul style="padding:15px;" id="CardEditList" class="sortableListe" data-filter-theme="a" data-count-theme="a" data-role="listview" data-theme="a" data-divider-theme="f" data-role="listview" data-inset="false">
+		<ul style="padding:15px;padding-bottom:100px;margin-bottom:100px;" id="CardEditList" class="sortableListe" data-filter-theme="a" data-count-theme="a" data-role="listview" data-theme="a" data-divider-theme="f" data-role="listview" data-inset="false">
 			<% _.each(stream.data.cardsArray, function(data) { %>
 				<li style="margin-left:15px;margin-right:15px;" data-role="list-divider"><%= data.topic %><!--<span class="ui-li-count">2</span>--></li>
 				<li style="margin-left:15px;margin-right:15px;" data-id="<%= data.id %>" class="noswipeToDelete" ><a href="#cards/edit/<%= data.id %>">
@@ -24,25 +24,56 @@
 		</ul>
 	<% } %>
 	<% if(stream.data.pagetype=="Lernkarte") { %>
-		<ul style="padding-top:15px;" id="CardPagesEditList" class="" data-filter-theme="a" data-count-theme="a" data-role="listview" data-theme="a" data-divider-theme="f" data-role="listview" data-inset="false">
-			<li style="margin-left:15px;margin-right:15px;">
-				<a class="newCardpage" href="#cards/edit/<%= stream.data.cardsArray[0].id %>/0">
-				<!-- <img style="padding:8px 0px 8px 25px;height:40px !important;max-height:40px !important;max-width:40px !important;" src="./images/avatar2.jpg" /> -->
-				<h6 style="margin:0;">Neue Lernkarte erstellen</h6>
-				<p>Klicken zum Hinzufügen...</p>
-				</a>
-			</li>
-		<ul style="padding:15px;" id="CardPagesEditList" class="sortableListe" data-filter-theme="a" data-count-theme="a" data-role="listview" data-theme="a" data-divider-theme="f" data-role="listview" data-inset="false">
-			<% _.each(stream.data.pagesArray, function(data) { %>
-				<li style="margin-left:15px;margin-right:15px;" data-icon="false" data-id="<%= data.id %>" class="noswipeToDelete">
-					<a class="editCardpage" href="#cards/edit/<%= data.id %>/<%= data.id %>" style="font-weight:normal !important;font-size:12px !important;"> <%= data.question %> "</a>
-				</li>
-			<% }); %>
+		
+		<% if(stream.data.view=="edit") { %>
+			<% console.log(_thisViewCardEditNested.options.cardsetid) %>
+			<% console.log(_thisViewCardEditNested.options.pageid) %>
+			<% console.log(stream.data.activePageArray) %>
+			
+			<div style="padding:15px;">
+				<h6 style="font-size:18px;" class="resizetext">Frage an den Wissensdurstigen:</h6>
+				<div class="clear"></div>
+				<input style="width:100%;" data-theme="a" data-mini="true" type="text" name="question" id="question" value="<%= stream.data.activePageArray[0].question %>" placeholder="Frage eingeben..."/>
+				<div class="clear" style="height:10px;"></div>
+				
+				<h6 style="font-size:16px;" class="resizetext">Mögliche Antworten:</h6>
+				<% _.each(stream.data.activePageArray[0].answers, function(data) { %>
+					<div class="clear" style="height:5px;"></div>
+					<input style="width:100%;" data-theme="a" data-mini="true" type="text" name="question" id="question" value="<%= data.text %>" placeholder="Antwort eingeben..."/>
+				<% }); %>
+				<div class="clear" style="height:10px;"></div>
+				
+				<h6 style="font-size:16px;" class="resizetext">Optionen:</h6>
+				<div class="clear" style="height:5px;"></div>
+				<input data-inset="false" CHECKED data-mini="true" type="checkbox" class="interestcb" name="checkbox-v-<%= stream.data.activePageArray[0].id %>" id="checkbox-v-<%= stream.data.activePageArray[0].id %>">
+				<label class="interestcheckbox" for="checkbox-v-<%= stream.data.activePageArray[0].id %>">Countdown für die Beantwortung aktivieren</label>
+				<div class="clear" style="height:10px;"></div>
+				
+			</div>
+			<div class="clear"></div>
 		<% } %>
+			
+		<% if(stream.data.view=="list") { %>
+			<ul style="padding-top:15px;" id="CardPagesEditListHeader" class="" data-filter-theme="a" data-count-theme="a" data-role="listview" data-theme="a" data-divider-theme="f" data-role="listview" data-inset="false">
+				<li style="margin-left:15px;margin-right:15px;">
+					<a class="newCardpage" id="newCardpage" data-cardsetid="<%= stream.data.cardsArray[0].id %>" href="#cards/edit/<%= stream.data.cardsArray[0].id %>/0">
+						<!-- <img style="padding:8px 0px 8px 25px;height:40px !important;max-height:40px !important;max-width:40px !important;" src="./images/avatar2.jpg" /> -->
+						<h6 style="margin:0;">Neue Lernkarte erstellen</h6>
+						<p>Klicken zum Hinzufügen...</p>
+					</a>
+				</li>
+			<ul style="padding:15px;padding-bottom:100px;margin-bottom:100px;" id="CardPagesEditList" class="sortableListe" data-filter-theme="a" data-count-theme="a" data-role="listview" data-theme="a" data-divider-theme="f" data-role="listview" data-inset="false">
+				<% _.each(stream.data.pagesArray, function(data) { %>
+					<li style="margin-left:15px;margin-right:15px;" data-icon="false" data-page="<%= data.page %>" data-cardpageid="<%= data.id %>" class="noswipeToDelete">
+						<a class="editCardpage" data-cardpageid="<%= data.id %>" href="#cards/edit/<%= stream.data.cardsArray[0].id %>/<%= data.id %>" style="font-weight:normal !important;font-size:12px !important;"><!--<%= data.page %>--><%= data.question %> "</a>
+					</li>
+				<% }); %>
+			<% } %>
 
-		<!--
-		<li style="m/ax-height:80px !important;height:150px !important;visibility:hidden;">
-		</li>
-		-->
-	</ul>
+			<!--
+			<li style="m/ax-height:80px !important;height:150px !important;visibility:hidden;">
+			</li>
+			-->
+		</ul>
+	<% } %>
 </div>

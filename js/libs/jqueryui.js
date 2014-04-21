@@ -1,4 +1,4 @@
-alert('jqueryui');
+// alert('jqueryui');
 
 /*! jQuery UI - v1.10.2 - 2013-03-14
 * http://jqueryui.com

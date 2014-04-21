@@ -142,9 +142,9 @@ define(["jquery", "backbone", "models/Profile", "models/System", "views/View", "
 				// new Videosdetailsview({id:id});
 				this.changePage(Cardstartview, {cardid:cardid,page:page});
             },
-            CardEditViewRouter: function(cardid,pageid) {
+            CardEditViewRouter: function(cardsetid,pageid) {
 				// new Videosdetailsview({id:id});
-				this.changePage(CardEditView, {cardid:cardid,pageid:pageid});
+				this.changePage(CardEditView, {cardsetid:cardsetid,pageid:pageid});
             },
             videodetailsview: function(id) {
 				// new Videosdetailsview({id:id});
