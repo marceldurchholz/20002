@@ -11,13 +11,15 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 				initialize: function(options) {
 					_thisViewCardStart = this;
 					_thisViewCardStart.displayPage = cardsStartViewHTML;
-					_thisViewCardStart.fetch(options);
 					_thisViewCardStart._AnswerModel = new AnswerModel();
 					_thisViewCardStart._answersCollection = new answersCollection();
 					_thisViewCardStart.failures = 0;
 					_thisViewCardStart.lastquestion = "";
 					_thisViewCardStart.answerCountdownIntervalStatus = 0;
 					_thisViewCardStart.answerCountdownButtonDelayText = 10;
+					_thisViewCardStart.cardpageid = "0";
+					// _thisViewCardStart.cardcount = 0;
+					_thisViewCardStart.fetch(options);
 				},
 				retryCard: function (event) {
 					event.preventDefault();
@@ -52,9 +54,7 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 				fetch: function(options) {
 					_thisViewCardStart = this;
 					_thisViewCardStart.options = options;
-					_thisViewCardStart.render();
-					_thisViewCardStart.answerCountdownLoopReset();
-					_thisViewCardStart.answerCountdownButtonDelayReset();
+					_thisViewCardStart.prepareRender();
 				},
 				
 				answerCountdownButtonDelayStart: function() {
@@ -112,18 +112,36 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 						_thisViewCardStart._AnswerModel = new AnswerModel({question: n, answer: v});
 						if (n.substr(0,6)=='answer') { _thisViewCardStart._answersCollection.add(_thisViewCardStart._AnswerModel); }
 					});
-					_thisViewCardStart.options.page = parseInt(_thisViewCardStart.cardpagedata.page)+1;					
-					if (_thisViewCardStart.options.page > _thisViewCardStart.cardcount) {
+					
+					console.log(_thisViewCardStart.options.page);
+					_thisViewCardStart.options.page = parseInt(_thisViewCardStart.options.page)+1;
+					console.log(_thisViewCardStart.options.page);
+					
+					/*
+					// find the next active page
+					for (var i = _thisViewCardStart.options.page; i <= _thisViewCardStart.cardcount; i++) {
+						_thisViewCardStart.options.page = parseInt(_thisViewCardStart.cardpagedata.page)+1;
+						// when not active check the next one
+						_.each(_thisViewCardStart.allcardpages, function(cardpage) {
+							console.log(cardpage);
+							if (cardpage.active==true) {
+								return(false);
+							}
+						});
+					}
+					*/
+					
+					if (_thisViewCardStart.options.page >= _thisViewCardStart.cardcount) {
 						// alert('fin');
 						_thisViewCardStart.answerCountdownLoopStop();
 						_thisViewCardStart.answerCountdownButtonDelayStop();
 						_thisViewCardStart.displayPage = cardsFinishViewHTML;
 					}
 					else {
-						_thisViewCardStart.answerCountdownLoopReset();
-						_thisViewCardStart.answerCountdownButtonDelayReset();
+						// _thisViewCardStart.answerCountdownLoopReset();
+						// _thisViewCardStart.answerCountdownButtonDelayReset();
 					}
-					_thisViewCardStart.render();
+					_thisViewCardStart.prepareRender();
 					return(false);
 				},
 				
@@ -134,7 +152,7 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 					_thisViewCardStart.resultArray = new Array();
 					_.each(_thisViewCardStart.allcardpages, function(cardpage) {
 						
-						this.cardpage = cardpage;
+						_thisViewCardStart.cardpage = cardpage;
 						// console.log(this.cardpage);
 						/*
 						console.log('---------------------------------------');
@@ -192,22 +210,12 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 							}
 							
 						});
-
 					});
 					
 					_template = _.template(_thisViewCardStart.displayPage, {
 						id: _thisViewCardStart.carddata.id,
 						uploader: _thisViewCardStart.uploaderdata.fullname,
 						results: _thisViewCardStart._answersCollection.models,
-						/*
-						cardid: _thisViewCardStart.carddata.cardid,
-						answers: _thisViewCardStart.cardpagedata.answers,
-						question: _thisViewCardStart.cardpagedata.question,
-						page_id: _thisViewCardStart.cardpagedata.id,
-						page: _thisViewCardStart.cardpagedata.page,
-						lastpage: (parseInt(_thisViewCardStart.cardpagedata.page)-1),
-						nextpage: (parseInt(_thisViewCardStart.cardpagedata.page)+1),
-						*/
 						failures: _thisViewCardStart.failures,
 						topic: _thisViewCardStart.carddata.topic,
 						cardurl: _thisViewCardStart.carddata.cardurl,
@@ -216,12 +224,17 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 						
 						title: _thisViewCardStart.carddata.title
 					},{variable: 'card'});
-					$(this.el).html(_template);
+					// $(this.el).html(_template);
+					_thisViewCardStart.$el.html(_template);
+					_thisViewCardStart.render();
 				},
 				
 				insertVariables: function(options) {
 					_thisViewCardStart = this;
 					console.log(_thisViewCardStart.options);
+					
+					// _thisViewCardStart.options.page
+					// _thisViewCardStart.cardpageid
 					
 					if ( typeof( _thisViewCardStart.carddata ) == "undefined") {
 						var query = "http://dominik-lohmann.de:5000/cards/?id="+_thisViewCardStart.options.cardid;
@@ -234,7 +247,7 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 					}
 					// console.log(_thisViewCardStart.carddata);
 					
-					var query = "http://dominik-lohmann.de:5000/cardpages/?cardid="+_thisViewCardStart.options.cardid;
+					var query = "http://dominik-lohmann.de:5000/cardpages/?active=true&cardid="+_thisViewCardStart.options.cardid;
 					$.ajax({
 						url: query,
 						async: false
@@ -247,8 +260,11 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 						// console.log(_thisViewCardStart.cardcount);
 					});					
 					
-					var query = "http://dominik-lohmann.de:5000/cardpages/?cardid="+_thisViewCardStart.options.cardid+"&page="+_thisViewCardStart.options.page; // +"&uploader?"+model.get('uploader')
-					console.log(query);
+					// if (_thisViewCardStart.cardpageid=="0") {
+					// }
+					
+					/*
+					var query = "http://dominik-lohmann.de:5000/cardpages/?active=true&cardid="+_thisViewCardStart.options.cardid+"&id="+_thisViewCardStart.cardpageid; // +"&uploader?"+model.get('uploader')
 					$.ajax({
 						url: query,
 						async: false
@@ -257,63 +273,91 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 						// console.log(_thisViewCardStart.cardpagedata);
 					});
 					console.log(_thisViewCardStart.cardpagedata);
+					*/
 					
-					if ( typeof( _thisViewCardStart.uploaderdata ) == "undefined") {
-						var uploader = _thisViewCardStart.carddata.uploader;
-						$.ajax({
-							url: "http://dominik-lohmann.de:5000/users/?id="+uploader,
-							async: false
-						}).done(function(uploaderdata) {
-							// console.log(uploaderdata);
-							_thisViewCardStart.uploaderdata = uploaderdata;
-						});
-					}
-					// console.log(_thisViewCardStart.uploaderdata);
-					// console.log('_thisViewCardStart.carddata');
-					// console.log(_thisViewCardStart.carddata);
-					
-					var pricetext = '';
-					if (_thisViewCardStart.carddata.price==0) pricetext = 'kostenlos';
-					else pricetext = 'für '+_thisViewCardStart.carddata.price+' Coins';
-					_template = _.template(_thisViewCardStart.displayPage, {
-						id: _thisViewCardStart.carddata.id,
-						uploader: _thisViewCardStart.uploaderdata.fullname,
-						cardid: _thisViewCardStart.carddata.cardid,
-						answers: _thisViewCardStart.cardpagedata.answers,
-						question: _thisViewCardStart.cardpagedata.question,
-						cardpageid: _thisViewCardStart.cardpagedata.id,
-						page: _thisViewCardStart.cardpagedata.page,
-						lastpage: (parseInt(_thisViewCardStart.cardpagedata.page)-1),
-						nextpage: (parseInt(_thisViewCardStart.cardpagedata.page)+1),
-						topic: _thisViewCardStart.carddata.topic,
-						cardurl: _thisViewCardStart.carddata.cardurl,
-						title: _thisViewCardStart.carddata.title,
-						description: _thisViewCardStart.carddata.description,
-						price: _thisViewCardStart.carddata.price,
-						pricetext: pricetext
-					},{variable: 'card'});
-					$(this.el).html(_template);
+					var query = {  $skip:_thisViewCardStart.options.page, $limit:1, "active":true, "cardid":""+_thisViewCardStart.options.cardid };
+					dpd.cardpages.get(query, function (result,err) {
+						if(err) {
+							return console.log(err);
+						}
+						_thisViewCardStart.cardpagedata = result[0];
+						
+						if (_thisViewCardStart.cardpagedata==undefined) {
+							console.log('ende');
+							_thisViewCardStart.render();
+							return(false);
+						}
+						
+						console.log(_thisViewCardStart.cardpagedata);
+						
+						if ( typeof( _thisViewCardStart.uploaderdata ) == "undefined") {
+							var uploader = _thisViewCardStart.carddata.uploader;
+							$.ajax({
+								url: "http://dominik-lohmann.de:5000/users/?id="+uploader,
+								async: false
+							}).done(function(uploaderdata) {
+								console.log(uploaderdata);
+								_thisViewCardStart.uploaderdata = uploaderdata;
+							});
+						}
+						// console.log(_thisViewCardStart.uploaderdata);
+						// console.log('_thisViewCardStart.carddata');
+						// console.log(_thisViewCardStart.carddata);
+						
+						var pricetext = '';
+						if (_thisViewCardStart.carddata.price==0) pricetext = 'kostenlos';
+						else pricetext = 'für '+_thisViewCardStart.carddata.price+' Coins';
+						console.log(_thisViewCardStart.cardpagedata);
+						_template = _.template(_thisViewCardStart.displayPage, {
+							id: _thisViewCardStart.carddata.id,
+							uploader: _thisViewCardStart.uploaderdata.fullname,
+							cardid: _thisViewCardStart.carddata.cardid,
+							answers: _thisViewCardStart.cardpagedata.answers,
+							question: _thisViewCardStart.cardpagedata.question,
+							cardpageid: _thisViewCardStart.cardpagedata.id,
+							page: _thisViewCardStart.options.page,
+							lastpage: (parseInt(_thisViewCardStart.options.page)-1),
+							nextpage: (parseInt(_thisViewCardStart.options.page)+1),
+							topic: _thisViewCardStart.carddata.topic,
+							cardurl: _thisViewCardStart.carddata.cardurl,
+							title: _thisViewCardStart.carddata.title,
+							description: _thisViewCardStart.carddata.description,
+							price: _thisViewCardStart.carddata.price,
+							pricetext: pricetext
+						},{variable: 'card'});
+						_thisViewCardStart.$el.html(_template);
+						// _thisViewCardStart.el.html(_template);
+						// console.log(_template);
+						_thisViewCardStart.answerCountdownLoopReset();
+						_thisViewCardStart.answerCountdownButtonDelayReset();
+						// console.log('!!! ENDE !!!');
+						_thisViewCardStart.render();
+					});
 				},
-				render: function() {
+				prepareRender: function() {
 					_thisViewCardStart = this;
 					$(window).resize(function() {
 						window.resizeElement('#card_player_1')
 					});
+					
+					var htmlContent = '';
+					_thisViewCardStart.$el.html(htmlContent);
+
 					$('#sidebarListViewDiv').html(_.template(sidemenusList, {}));
 					_thisViewCardStart.nestedView = new SidemenuView().fetch();
-					var htmlContent = '';
-					$(this.el).html(htmlContent);
 					
-					if (_thisViewCardStart.options.page > _thisViewCardStart.cardcount) {
+					console.log(_thisViewCardStart.options.page +' / '+ _thisViewCardStart.cardcount);
+					if (_thisViewCardStart.options.page >= _thisViewCardStart.cardcount) {
+						// _thisViewCardStart.insertResult(_thisViewCardStart.options);
 						// doAlert('finish');
 						_thisViewCardStart.insertResult(_thisViewCardStart.options);
 					} else {
 						_thisViewCardStart.insertVariables(_thisViewCardStart.options);
 					}
 					
-					_thisViewCardStart.$el.trigger('create');
-					fontResize();
-					hideModal();
+					// _thisViewCardStart.$el.trigger('create');
+					// fontResize();
+					
 					/*
 					_thisViewCardStart.$el.fadeIn( 500, function() {
 						$('.ui-content').scrollTop(0);
@@ -321,7 +365,17 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 						submitAnswerBtn();
 					});
 					*/
-					this.bindEvents();
+					// this.bindEvents();
+					// $("#submitAnswerBtn").button('disable');
+				},
+				
+				render: function() {
+					_thisViewCardStart = this;
+					console.log('return _thisViewCardStart;');
+					_thisViewCardStart.$el.trigger('create');
+					hideModal();
+					fontResize();
+					_thisViewCardStart.bindEvents();
 					$("#submitAnswerBtn").button('disable');
 					return _thisViewCardStart;
 				}

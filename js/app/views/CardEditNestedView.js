@@ -47,6 +47,15 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 					var page = $(this).attr('data-page');
 					// console.log(cardpageid+': '+page+' >> '+newpage);
 					if (page!=newpage && cardpageid != undefined) {
+
+						$(this).find('input:checkbox').each(function() {
+							if ($(this).hasClass( "activatecardcb" )) {
+								var iscorrect = $(this).is(":checked"); // $(this).val();
+								if (iscorrect==true) var solution = "1"; else solution = "0";
+								newanswerObject.solution = solution;
+							}
+						});
+
 						dpd.cardpages.put(cardpageid, {"page":''+newpage}, function(result, err) {
 							if(err) {
 								return console.log(err);
