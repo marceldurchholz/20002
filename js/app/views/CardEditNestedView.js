@@ -33,6 +33,8 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 				_thisViewCardEditNested.streamData.cardsArray = new Array();
 				_thisViewCardEditNested.streamData.pagesArray = new Array();
 				_thisViewCardEditNested.streamData.activePageArray = new Array();
+				_thisViewCardEditNested.streamData.activePageArray[0] = new Object();				
+				_thisViewCardEditNested.streamData.activePageArray[0].id = "0";				
 				_thisViewCardEditNested.checkLogin();
 				// _thisViewCardEditNested.collectStreamData();
 			},
@@ -59,6 +61,49 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 					}
 					newpage = newpage+1;
 					// if (newpage==$( "#CardPagesEditList li" ).length) hideModal();
+				});
+				hideModal();
+			},
+			updateCardPageAnswers: function() {
+				showModal();
+				// alert('updateCardPageAnswers');
+				var newanswerArray = new Array();
+				var answerOrder = 0;
+				$( "#answerList span" ).each(function(index, value) {
+					if ($(this).hasClass( "answerRow" )) {
+						var _thisRow = $(this);
+						// var cardpageid = $(this).attr('data-cardpageid');
+						// console.log(cardpageid);
+						var newanswerObject = new Object();
+						newanswerObject.id = answerOrder;
+						$(this).find('input:text, input:checkbox').each(function() {
+							if ($(this).hasClass( "answercb" )) {
+								var iscorrect = $(this).is(":checked"); // $(this).val();
+								if (iscorrect==true) var solution = "1"; else solution = "0";
+								newanswerObject.solution = solution;
+							}
+							if ($(this).hasClass( "answer" )) {
+								var newanswer = $(this).val();
+								newanswerObject.text = newanswer;
+							}
+						});
+						if (newanswerObject.text!='') {
+							newanswerArray.push(newanswerObject);
+							answerOrder = answerOrder + 1;
+						}
+						else {
+							_thisRow.remove();
+							// delete row in the view
+						}
+					}
+				});
+				// console.log(newanswerArray);
+				// console.log(_thisViewCardEditNested.streamData.activePageArray[0].id);
+				dpd.cardpages.put(_thisViewCardEditNested.streamData.activePageArray[0].id, {"answers":newanswerArray}, function(result, err) {
+					if(err) {
+						return console.log(err);
+						// hideModal();
+					}
 				});
 				hideModal();
 			},
@@ -97,58 +142,64 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 					e.preventDefault();
 					showModal();
 					var cardpageid = $(this).attr('data-cardpageid');
+					var cardsetid = $(this).attr('data-cardsetid');
+					// alert(cardsetid);
+					// return(false);
+					// alert(cardpageid);
 					var newquestion = $(e.currentTarget).val();
-					dpd.cardpages.put(cardpageid, {"question":''+newquestion}, function(result, err) {
-						if(err) {
-							return console.log(err);
-							// hideModal();
+					// alert(newquestion);
+					if(cardpageid=="0") {
+						if (newquestion=='') $('#questionemtpywarning').html('Sie müssen eine Frage eingeben.');
+						else {
+							$('#questionemtpywarning').html('');
+							console.log('inserting new cardpage');
+							// console.log(_thisViewCardEditNested.streamData.activePageArray);
+							// console.log('^^ _thisViewCardEditNested.streamData.activePageArray');
+							// console.log(_thisViewCardEditNested.streamData.pagesArray.length+1);
+							dpd.cardpages.post({"question":''+newquestion, "cardid":''+cardsetid, "active":true, "public":true, "uploader": _thisViewCardEditNested.me.id, "page":""+(_thisViewCardEditNested.streamData.pagesArray.length)}, function(result, err) {
+								if(err) {
+									return console.log(err);
+									// hideModal();
+								}
+								console.log(result);
+								// var newcardpageid = result.id;
+								// alert(newcardpageid);
+								// $(this).attr('data-cardpageid',newcardpageid);
+								// window.location.href = e.currentTarget.href;
+								// _thisViewCardEditNested.options.pageid = result.id; 
+								// = data.options;
+								// _thisViewCardEditNested.fetch(_thisViewCardEditNested.options);
+								window.location.href = "#cards/edit/acd1eacd6a69e82e/"+result.id;
+							});
 						}
-					});
+					}
+					if(cardpageid!="0") {
+						if (newquestion=='') $('#questionemtpywarning').html('Sie müssen eine Frage eingeben.');
+						else {
+							$('#questionemtpywarning').html('');
+							dpd.cardpages.put(cardpageid, {"question":''+newquestion}, function(result, err) {
+								if(err) {
+									return console.log(err);
+									// hideModal();
+								}
+							});
+						}
+					}
 					hideModal();
 					return(false);
 				});
 				
+				
+				_thisViewCardEditNested.$el.off('change','.answercb').on('change','.answercb',function(e){
+					e.preventDefault();
+					// alert('change triggered');
+					_thisViewCardEditNested.updateCardPageAnswers();
+					return(false);
+				});
+	
 				_thisViewCardEditNested.$el.off('blur','.answer').on('blur','.answer',function(e){
 					e.preventDefault();
-					showModal();
-					var newanswerArray = new Array();
-					var answerOrder = 0;
-					$( "#answerList input" ).each(function(index, value) {
-						// [type=text]
-						// alert('bla');
-						var newanswerObject = new Object();
-						// console.log(value);
-						var cardpageid = $(this).attr('data-cardpageid');
-						// console.log(cardpageid);
-						// console.log($(this));
-						
-						if ($(this).hasClass( "answercb" )) {
-							var iscorrect = $(this).val();
-						}
-						if ($(this).hasClass( "answer" )) {
-							var newanswer = $(this).val();
-						}
-						
-						// console.log(newanswer);
-						
-						newanswerObject.id = answerOrder;
-						newanswerObject.text = newanswer;
-						
-						newanswerArray.push(newanswerObject);
-						answerOrder = answerOrder + 1;
-					});
-					console.log(newanswerArray);
-					/*
-					var cardpageid = $(this).attr('data-cardpageid');
-					var newanswer = $(e.currentTarget).val();
-					dpd.cardpages.put(cardpageid, {"answer":''+newanswer}, function(result, err) {
-						if(err) {
-							return console.log(err);
-							// hideModal();
-						}
-					});
-					*/
-					hideModal();
+					_thisViewCardEditNested.updateCardPageAnswers();
 					return(false);
 				});
 				
@@ -156,7 +207,9 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 				_thisViewCardEditNested.$el.off('click','.newCardpage').on('click','.newCardpage',function(e){
 					e.preventDefault();
 					var cardsetid = $(this).attr('data-cardsetid');
-					alert(cardsetid);
+					var href = $(this).attr('href');
+					// alert(cardsetid);
+					window.location.href = href;
 					return(false);
 					// window.location.href = e.currentTarget.hash;
 				});
@@ -175,7 +228,7 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 			},
 			chooseSubPage: function() {
 				_thisViewCardEditNested = this;
-				console.log(_thisViewCardEditNested.options);
+				// console.log(_thisViewCardEditNested.options);
 				
 				_thisViewCardEditNested = this;
 				$.ajax({
@@ -216,7 +269,7 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 						_thisViewCardEditNested.streamData.pagetype = 'Lernkarte';
 						_thisViewCardEditNested.streamData.pagetitle = 'Lernkarte erstellen';
 						_thisViewCardEditNested.displaySubPage = CardEditPagesNestedPage;
-						// _thisViewCardEditNested.collectCardData(_thisViewCardEditNested.options.cardsetid,_thisViewCardEditNested.options.pageid);
+						_thisViewCardEditNested.collectCardData(_thisViewCardEditNested.options.cardsetid,_thisViewCardEditNested.options.pageid);
 					}
 					else {
 						console.log('edit cardpage');
@@ -232,7 +285,7 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 				var requestUrl = "http://dominik-lohmann.de:5000/cards?active=true&deleted=false";
 				if (window.system.master!=true) requestUrl = requestUrl + "&uploader="+window.system.aoid;
 				if (cardsetid!="") requestUrl = requestUrl + "&id="+cardsetid;
-				console.log(requestUrl);
+				// console.log(requestUrl);
 				$.ajax({
 					url: requestUrl,
 					async: false
@@ -244,13 +297,13 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 						cardData = myObj;
 					}
 					// else cardData = cardDataX;
-					console.log(cardData);
+					// console.log(cardData);
 					
 					_.each(cardData, function(value, index, list) {
-						console.log(index+" > "+value);
+						// console.log(index+" > "+value);
 						// console.log(value.uploader,_thisViewCardEditNested.me.id);
 						if ((window.system.master==true && value.public==true) || value.uploader==_thisViewCardEditNested.me.id) { 
-							console.log('bla');
+							// console.log('bla');
 							
 							if (_thisViewCardEditNested.userArray == undefined) _thisViewCardEditNested.userArray = new Array();
 							if (_thisViewCardEditNested.userArray[value.uploader] != undefined) {
@@ -273,7 +326,7 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 					
 					if (cardsetid!="") {
 						if (cardsetid==myObj.cardData.id) { 
-							console.log('foo');
+							// console.log('foo');
 							var requestUrl = "http://dominik-lohmann.de:5000/cardpages?active=true&deleted=false&cardid="+cardsetid;
 							$.ajax({
 								url: requestUrl,
@@ -286,7 +339,7 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 									if (_thisViewCardEditNested.options.pageid!=undefined && _thisViewCardEditNested.options.pageid!=0) {
 										if (_thisViewCardEditNested.options.pageid == pagevalue.id) {
 											pagevalue.selected=true;
-											_thisViewCardEditNested.streamData.activePageArray.push(pagevalue);
+											_thisViewCardEditNested.streamData.activePageArray[0] = pagevalue;
 										}
 										else {
 											pagevalue.selected=false;
@@ -317,7 +370,7 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 			},
 			render: function() {
 				_thisViewCardEditNested = this;
-				console.log(_thisViewCardEditNested.streamData);
+				// console.log(_thisViewCardEditNested.streamData);
 				_thisViewCardEditNested.$el.html(_.template(_thisViewCardEditNested.displaySubPage, {
 					data: _thisViewCardEditNested.streamData
 				},{variable: 'stream'}));

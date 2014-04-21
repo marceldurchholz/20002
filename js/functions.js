@@ -3178,6 +3178,11 @@ try {
 		alert('code: '    + error.code    + '\n' +
 			  'message: ' + error.message + '\n');
 	}
+	
+	function jstripslashes(elin) {
+		elout = elin;
+		return(elout);
+	}
 
 	function scrollBottom() {
 		// $('#page-content').stop().animate({
