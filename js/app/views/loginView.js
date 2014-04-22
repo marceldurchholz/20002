@@ -24,6 +24,27 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 					}
 					setTimeout(function() {
 						// alert(username);
+						var _response = new Array();
+						// 16181348537294980
+						// console.log(username);
+						$.ajax({
+							url: 'http://dominik-lohmann.de:5000/users/?username='+username,
+							async: false,
+							success: function(response, textStatus, XMLHttpRequest) {
+								// console.log(response);
+								_response = response;
+							},
+							error:function (xhr, ajaxOptions, thrownError) { 
+								console.log(thrownError);
+							}
+						});
+						// console.log(_response);
+						if (_response[0] != undefined && _response[0].deleted==true) {
+							doAlert('Es ist ein Problem bei der Anmeldung mit Ihren Zugangsdaten aufgetreten.','Bitte Zugangsdaten überprüfen');
+							hideModal();
+							return(false);
+						}
+
 						dpd.users.login({username: username, password: password}, function(user, error) {
 						// dpd.users.post({username: username, password: password}, function(user, error) {
 							if (error) {

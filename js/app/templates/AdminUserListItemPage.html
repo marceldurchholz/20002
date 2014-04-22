@@ -1,12 +1,19 @@
-<li data-topic="<%= user.username %>">
-	<a href="#admin/users/details/<%= user.id %>">
-		<img style="padding:5px;width:70px !important;height:70px !important;" src="<%= user.pictureurl %>" />
-		<h3><%= user.username %></h3>
-		<p><%= user.fullname %></p>
-		<!--
-		<p><%= user.registered %>: <%= user.pictureurl %></p>
-		<p><%= user.credits %></p>
-		-->
-		<!-- <p class="ui-li-aside"><strong></strong> <%= user.price %> €</p> -->
-	</a>
-</li>
+<div style="margin-bottom:100px;">
+	<% console.log(users.data); %>
+	<ul id="AdminUserListView" data-filter="true" data-filter-placeholder="Suchfilter..." data-filter-theme="a" data-count-theme="none" data-role="listview" data-theme="a" data-autodividers="true" data-divider-theme="a">
+		<% _.each(users.data, function(user) { %>
+			<li data-topic="<%= user.fullname.substr(0,1) %>">
+				<a href="#admin/users/details/<%= user.id %>">
+					<h3><%= user.fullname %></h3>
+					<p><%= dateYmdHisToGerman(user.registered) %></p>
+					<!--
+					<img style="padding:5px;width:70px !important;height:70px !important;" src="<%= user.pictureurl %>" />
+					<p><%= user.registered %>: <%= user.pictureurl %></p>
+					<p><%= user.credits %></p>
+					-->
+					<!-- <p class="ui-li-aside"><strong></strong> <%= user.price %> €</p> -->
+				</a>
+			</li>
+		<% }); %>
+	</ul>
+</div>

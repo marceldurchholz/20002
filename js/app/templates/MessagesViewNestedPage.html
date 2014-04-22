@@ -1,5 +1,5 @@
 <div id="MessagesNestedViewDiv" class="MessagesNestedViewDiv" style="margin-bottom:50px;p/adding:15px;">
-	<ul data-filter="true" data-filter-placeholder="Suchfilter..." data-filter-theme="a" data-count-theme="none" data-role="listview" data-theme="a" data-divider-theme="a" data-role="listview" style="max-height:80px !important;height:80px !important;">
+	<ul data-filter="true" data-filter-placeholder="Suchfilter..." data-filter-theme="a" data-count-theme="none" data-role="listview" data-theme="a" data-divider-theme="a" style="max-height:80px !important;height:80px !important;">
 				
 		<li data-cat="messages" class="" style="max-height:60px !important;">
 			<a class="showMessageDetailsLink" href="#messages/details/view/<% if (checkRole("provider")==true) { %>0<% } else { %><%= window.system.aoid %><% } %>" style="padding-left:80px;">
@@ -23,7 +23,7 @@
 						<p><%= message.content %></p>
 					</a>
 				</li>
-			<% } %>			
+			<% } %>
 		<% }}); %>
 	</ul>
 </div>

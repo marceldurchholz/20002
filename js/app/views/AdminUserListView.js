@@ -1,8 +1,8 @@
 // AdminUserListView.js
 // -------
-define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/SidemenuView", "text!templates/AdminUserListPage.html", "views/AdminUserListItemView"],
+define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/SidemenuView", "text!templates/AdminUserListPage.html", "views/AdminUserListNestedView"],
 
-    function($, Backbone, sidemenusList, SidemenuView, AdminUserListPage, AdminUserListItemView){
+    function($, Backbone, sidemenusList, SidemenuView, AdminUserListPage, AdminUserListNestedView){
 		
 		var AdminUserListViewVar = Backbone.View.extend({
 		
@@ -28,7 +28,7 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 				$('#sidebarListViewDiv').html(_.template(sidemenusList, {}));
 				_thisViewAdminUserListView.nestedView = new SidemenuView().fetch();
 				_thisViewAdminUserListView.$el.html(_.template(AdminUserListPage, {}));
-				_thisViewAdminUserListView.nestedView = new AdminUserListItemView().fetch();
+				_thisViewAdminUserListView.nestedView = new AdminUserListNestedView().fetch();
 				return this;
 			}
 		});

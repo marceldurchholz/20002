@@ -1,0 +1,89 @@
+<div style="width:100%;display:inline-block;float:none;clear:both;">
+	<div style="width:30%;float:left;clear:none;display:inline-block;padding-right:3%;">
+		<img style="width:100%;max-height:100%;max-width:160px;" src="images/avatar.jpg">
+	</div>
+	<div style="width:50%;float:left;clear:none;display:inline-block;padding-right:2%;">
+		<input style="width:100%;" data-theme="a" data-mini="true" type="text" name="fullname" id="fullname" value="<%= user.fullname %>" placeholder="Name erforderlich..."/>
+		<div class="clear resizetext emptyWarningDiv" style="color:red;display:none;">Es muss ein Name hinterlegt werden.</div>
+		<div class="clear"></div>
+		<input style="width:100%;" data-theme="a" data-mini="true" type="text" name="username" id="username" value="<%= user.username %>" placeholder="E-Mail erforderlich..."/>
+		<div class="clear"></div>
+		<div style="display:none;">
+			<input style="width:100%;" data-theme="a" no-data-role="none" data-mini="true" type="text" name="slogan" id="slogan" value="<%= user.slogan %>" placeholder="Motto oder Slogan"/>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div style="width:9%;float:right;clear:none;display:inline-block;">
+		<div style="line-height:1.3em;width:100%;height:auto;max-height:165px;float:left;clear:both;display:inline-block;">
+			<!-- <img style="width:100%;height:auto;max-height:50px;max-width:50px;display:block;clear:both;" src="images/star-half-gold.png"> -->
+			<img style="width:100%;height:auto;max-height:50px;max-width:50px;display:block;clear:both;float:none;" src="images/star-<% if(user.level<3) { %>grey<% } else { %>gold<% } %>.png">
+			<img style="width:100%;height:auto;max-height:50px;max-width:50px;display:block;clear:both;float:none;" src="images/star-<% if(user.level<2) { %>grey<% } else { %>gold<% } %>.png">
+			<img style="width:100%;height:auto;max-height:50px;max-width:50px;display:block;clear:both;float:none;" src="images/star-<% if(user.level<1) { %>grey<% } else { %>gold<% } %>.png">
+		</div>
+	</div>
+</div>
+
+<div class="clear"></div>
+<div class="resizetext" style="font-size:12px;">Über den APPinaut® Wissensdurstigen:</div>
+<div class="clear"></div>
+<div class="resizetext" style="font-size:12px;"><% if (user.perstext=="" || user.perstext==undefined) { %><i>Es wurde noch kein Text hinterlegt.</i><% } else { %><%= user.perstext %><% } %></div>
+<!--
+<textarea style="width:100%;height:<%= Math.round($(window).height()/5) %>px;max-height:300px;min-height:80px;" data-theme="a" no-data-role="none" data-mini="false" type="text" placeholder="<% if( user.provider <= 0 ) { %>Welche Themen begeistern Sie und welches Wissen interessiert Sie?<% } else { %>Zu welchen Expertengebieten werden Sie den Wissensdurstigen Inhalte bieten?<% } %>" name="perstext" id="perstext"><%= user.perstext %></textarea>
+-->
+<div class="clear"></div>
+<hr>
+
+<div class="clear"></div>
+<ul style="display:none;" data-role="listview" data-inset="true" data-theme="a" data-dividertheme="a">
+	<li><a href="#videos"><!--<img src="images/icon-multimedia-bw-16.png" style="height:14px;" alt="Mediathek" class="ui-li-icon">-->Mediathek<!--<span class="ui-li-count">4</span>--></a></li>
+	<li><a href="#cards"><!--<img src="images/icon-calendar-bw-16.png" style="height:14px;" alt="Lernsets" class="ui-li-icon">-->Lernsets<!--<span class="ui-li-count">18</span>--></a></li>
+	<li><a href="#planer"><!--<img src="images/icon-calendar-bw-16.png" style="height:14px;" alt="Veranstaltungen" class="ui-li-icon">-->Veranstaltungen<!--<span class="ui-li-count">8</span>--></a></li>
+</ul>
+
+<div data-role="collapsible" data-theme="b" data-content-theme="a">
+	<h6>Interessenbereiche</h6>
+	<table cellspacing="0" cellpadding="0" class="sortabletable" id="interestsanalysetable">
+		<thead>
+			<tr>
+				<th><span>Kategorie</span></th>
+				<th style="width:auto !important; float:right; text-align:right;"><span style="padding-right:0px !important;"><img style="margin-right:20px !important;" src="./images/icon-multimedia-bw-16.png"></span></th>
+			</tr>
+		</thead>
+		<tbody>
+			<% _.each(user.interests, function(interest) { %>
+				<tr>
+					<td>
+						<input data-inset="false" <%= interest.checked %> data-mini="true" type="checkbox" class="interestcb" name="checkbox-v-<%= interest.id %>" id="checkbox-v-<%= interest.id %>">
+						<label class="interestcheckbox" for="checkbox-v-<%= interest.id %>"><%= interest.name %></label>
+					</td>
+					<td style="width:auto !important; float:right; text-align:right;font-size:11px;">
+						<div style="margin-top:10px;"><%= interest.quantity %></div>
+					</td>
+				</tr>
+			<% }); %>
+		</tbody>
+	</table>
+</div>
+
+<div class="clear"></div>
+
+<hr>
+<div class="clear"></div>
+
+<!--
+<div style="float:right;">
+	<a style="color:red;" href="#logout">Abmelden</a>
+</div>
+-->
+
+<div style="float:left;">
+	<a id="showdeletearea" href="#">Zugang löschen</a>
+</div>
+
+<div class="clear"></div>
+<div id="delaccuntarea">
+	<strong>Achtung! Hiernach werden diese Daten unwiderruflich gelöscht. Ein Login ist nicht mehr möglich!</strong>
+	<ul data-role="listview" data-inset="true" data-theme="d" data-dividertheme="d">
+		<li data-icon="alert" data-mini="true"><a id="deleteaccountbtn" href="#">Ja, meine Daten bitte löschen.</a></li>
+	</ul>
+</div>
