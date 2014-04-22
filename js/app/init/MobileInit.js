@@ -45,19 +45,19 @@ require(["jquery", "backbone", "routers/MobileRouter", "jquerymobile", "backbone
 			
 		// dpd.users.off('changed');
 		
+		/*
 		dpd.users.on('changed', function(changedData) {
-			/*
-			if (msgData.sender==window.system.uid || msgData.receiver==window.system.uid) {
-				msgArray = new Array;
-				msgArray.push(msgData);
-				_thisMessagesDetailsViewNested.messages.push(msgData);
-				_thisMessagesDetailsViewNested.fetch();
-			}
-			*/
+			// if (msgData.sender==window.system.uid || msgData.receiver==window.system.uid) {
+			// 	msgArray = new Array;
+			// 	msgArray.push(msgData);
+			// 	_thisMessagesDetailsViewNested.messages.push(msgData);
+			// 	_thisMessagesDetailsViewNested.fetch();
+			// }
 			// window.me = me;
 			console.log('changed');
 			console.log(changedData);
 		});
+		*/
 		
 		/*
 		dpd.users.get(window.system.aoid, function (result) {

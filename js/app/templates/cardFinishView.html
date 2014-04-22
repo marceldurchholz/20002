@@ -36,7 +36,7 @@
 			<div class="clear"></div>
 			-->
 			<div style="width:100%;">
-				<img style="width:100%;" src="http://chart.apis.google.com/chart?chs=500x500&chd=t:8,4&cht=p&chco=CD0000,629632&chf=bg,s,65432100">
+				<img style="width:100%;" src="http://chart.apis.google.com/chart?chs=500x500&chd=t:<%= card.dbObject.correct %>,<%= card.dbObject.wrong %>&cht=p&chco=629632,CD0000&chf=bg,s,65432100">
 			</div>
 			<div style="font-size:12px;" class="resizetext"><!--<%= card.dbObject.correct %>--><%= (Math.round(card.dbObject.correct/card.dbObject.completed*100,0)/100)*100 %> % schafften dieses Lernset fehlerfrei.</div>
 			<div class="clear"></div>
