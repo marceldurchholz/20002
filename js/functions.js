@@ -2541,7 +2541,10 @@ try {
 								var message = messages[key];
 								dpd.messages.put(message.id, {"deleted":true}, function(result, err) {
 									count++;
-									if (count==messages.length) deleteMessageFlowDone();
+									if (count==messages.length) {
+										window._thisMessagesViewNested.fetch();
+										deleteFlowDone();
+									}
 								});
 							}
 						});
@@ -2559,15 +2562,15 @@ try {
 						hideModal();
 					});
 					window._thisViewCardEditNested.initialize();
+					deleteFlowDone();
 				}
 			}
 		});
 	}
 	
-	function deleteMessageFlowDone() {
+	function deleteFlowDone() {
 		console.log('done');
 		hideModal();
-		window._thisMessagesViewNested.fetch();
 		showDeleteBar(false);
 	}
 	

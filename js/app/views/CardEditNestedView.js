@@ -264,6 +264,35 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 					return(false);
 				});
 				
+				_thisViewCardEditNested.$el.off('click','.deleteCardPageBtn').on('click','.deleteCardPageBtn',function(e){
+					e.preventDefault();
+					showModal();
+					var cardpageid = $(this).attr('data-cardpageid');
+					// alert(cardpageid);
+					var cardsetid = $(this).attr('data-cardsetid');
+					// alert(cardsetid);
+					dpd.cardpages.put(cardpageid, {"deleted":true}, function(result, err) {
+						if(err) {
+							return console.log(err);
+							hideModal();
+						}
+						var href = $(this).attr('href');
+						window.location.href = '#cards/edit/'+cardsetid;
+					});
+
+					return(false);					
+				});
+				
+				_thisViewCardEditNested.$el.off('click','.newCard').on('click','.newCard',function(e){
+					e.preventDefault();
+					var cardsetid = $(this).attr('data-cardsetid');
+					// var href = $(this).attr('href');
+					// alert(cardsetid);
+					// window.location.href = href;
+					doAlert('Das Hinzufügen eines Lernsets ist derzeit nicht erlaubt.','Aktion nicht möglich');
+					return(false);
+					// window.location.href = e.currentTarget.hash;
+				});
 				
 				_thisViewCardEditNested.$el.off('click','.newCardpage').on('click','.newCardpage',function(e){
 					e.preventDefault();
@@ -275,11 +304,6 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 					// window.location.href = e.currentTarget.hash;
 				});
 				
-				_thisViewCardEditNested.$el.off('click','.newCard').on('click','.newCard',function(e){
-					e.preventDefault();
-					return(false);
-					// window.location.href = e.currentTarget.hash;
-				});
 				/*
 				dpd.videos.once('create', function(videoData) {
 					_thisViewCardEditNested.collectStreamData();

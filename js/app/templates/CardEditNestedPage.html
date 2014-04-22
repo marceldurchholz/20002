@@ -6,7 +6,7 @@
 		<div style="padding:15px;">
 			<ul id="CardEditList" class="" data-filter-theme="a" data-count-theme="a" data-role="listview" data-theme="a" data-divider-theme="f" data-inset="false">
 				<li>
-					<a class="newCard" href="#cards/edit/0">
+					<a class="newCard" id="newCard" data-cardsetid="<%= stream.data.cardsArray[0].id %>" href="#cards/edit/<%= stream.data.cardsArray[0].id %>/0">
 					<!-- <img style="padding:8px 0px 8px 25px;height:40px !important;max-height:40px !important;max-width:40px !important;" src="./images/avatar2.jpg" /> -->
 					<h6 style="margin:0;">Neues Lernset erstellen</h6>
 					<p>Klicken zum Hinzufügen...</p>
@@ -34,7 +34,7 @@
 					<li>
 						<a class="newCardpage" id="newCardpage" data-cardsetid="<%= stream.data.cardsArray[0].id %>" href="#cards/edit/<%= stream.data.cardsArray[0].id %>/0">
 							<!-- <img style="padding:8px 0px 8px 25px;height:40px !important;max-height:40px !important;max-width:40px !important;" src="./images/avatar2.jpg" /> -->
-							<h6 style="margin:0;">Neue Lernkarte erstellen</h6>
+							<h6 style="margin:0;">Neue Lernkarte hinzufügen</h6>
 							<p>Klicken zum Hinzufügen...</p>
 						</a>
 					</li>
@@ -87,13 +87,19 @@
 				<div class="clear"></div>
 				
 				<div class="clear" style="height:10px;"></div>
-				<h6 style="font-size:16px;" class="resizetext">Zusätzliche Optionen:</h6>
+				<!-- <h6 style="font-size:16px;" class="resizetext">Zusätzliche Optionen:</h6> -->
 				<div class="clear" style="height:5px;"></div>
 				<input data-cardpageid="<%= stream.data.activePageArray[0].id %>" data-corners="false" data-inset="false" <% if(stream.data.activePageArray[0].active==true) { %>CHECKED<% } %> data-mini="true" type="checkbox" class="activatecardcb" name="checkbox-activatecardcb-<%= stream.data.activePageArray[0].id %>" id="checkbox-activatecardcb-<%= stream.data.activePageArray[0].id %>">
 				<label class="activatecardcheckbox" for="checkbox-activatecardcb-<%= stream.data.activePageArray[0].id %>" style="font-weight:normal;">Lernkarte aktivieren</label>
+
 				<div class="clear" style="height:10px;"></div>
+				<input name="navigateButton" class="navigateButton" data-theme="b" data-mini="true" type="button" value="&#10003; &nbsp; Lernset anzeigen" href="#cards/edit/<%= _thisViewCardEditNested.options.cardsetid %>" />				
 				
-				<input name="navigateButton" class="navigateButton" data-theme="b" data-mini="true" type="button" value="&#10003; &nbsp; Lernset anzeigen" href="#cards/edit/<%= _thisViewCardEditNested.options.cardsetid %>" />
+				<div class="clear" style="height:10px;"></div>
+				<h6 style="font-size:16px;color:red;" class="resizetext">Lernkarte löschen</h6>
+				<div class="clear" style="height:5px;"></div>
+				<input name="deleteCardPageBtn" class="deleteCardPageBtn" data-cardpageid="<%= stream.data.activePageArray[0].id %>" data-cardsetid="<%= _thisViewCardEditNested.options.cardsetid %>" data-theme="d" data-mini="true" type="button" value="&#10007; &nbsp; Lernkarte jetzt löschen"/>
+				<div class="clear" style="height:10px;"></div>
 				
 				<!--
 				<input data-inset="false" CHECKED data-mini="true" type="checkbox" class="countdowncb" name="checkbox-v-<%= stream.data.activePageArray[0].id %>" id="checkbox-v-<%= stream.data.activePageArray[0].id %>">
