@@ -26,9 +26,11 @@
 	<% if(stream.data.pagetype=="Lernkarte") { %>
 		
 		<% if(stream.data.view=="edit") { %>
+			<!--
 			<% console.log(_thisViewCardEditNested.options.cardsetid) %>
 			<% console.log(_thisViewCardEditNested.options.pageid) %>
 			<% console.log(stream.data.activePageArray) %>
+			-->
 			<div style="padding:15px;">
 				<h6 style="font-size:18px;" class="resizetext">Frage an den Wissensdurstigen:</h6>
 				<div class="clear"></div>
@@ -37,17 +39,34 @@
 				<h6 style="font-size:16px;" class="resizetext">Mögliche Antworten:</h6>
 				<div id="answerList">
 					<% _.each(stream.data.activePageArray[0].answers, function(data) { %>
-						<span class="answerRow" data-cardpageid="<%= stream.data.activePageArray[0].id %>">
+						<div id="answerRow-<%= data.id %>" class="answerRow" data-cardpageid="<%= stream.data.activePageArray[0].id %>" style="display:inline-block;width:100%;">
+							<div id="delbar-<%= data.id %>" data-delbarid="delbar-<%= data.id %>" style="opacity:0.5;overflow:hidden;position:absolute;left:<%= $(window).width()-30 %>px;float:right;width:170px;height:50px;background-color:red;b/order:1px solid #000;font-size:16px;text-align:center;z-index:999;" class="swipeToDeleteHover">
+								<div style="float:right;clear:none;width:40px;height:50px;background-color:red;b/order:1px solid #fff;padding-top:12px;">
+									<a class="hideDelBarBtn" data-delbarid="<%= data.id %>" href="">X</a>
+								</div>
+								<div style="float:right;clear:none;width:110px;height:50px;background-color:red;b/order:1px solid #fff;padding-top:12px;b/order-left:1px solid #fff;">
+									<a class="delAnswerBtn" data-answerrowid="answerRow-<%= data.id %>" href="">Löschen</a>
+								</div>
+								<div style="float:right;clear:none;width:20px;height:50px;b/ackground-color:yellow;b/order:1px solid #fff;padding-top:12px;">
+									&nbsp;
+								</div>
+							</div>
 							<div class="clear" style="height:5px;"></div>
 							<div style="float:left;width:40px;">
 								<input data-inset="false" <% if(data.solution=="1") { %>CHECKED<% } %> data-mini="true" type="checkbox" class="answercb" name="checkbox-answer-<%= data.id %>" id="checkbox-answer-<%= data.id %>" data-cardpageid="<%= stream.data.activePageArray[0].id %>"><label class="answercheckbox" for="checkbox-answer-<%= data.id %>" style="font-weight:normal;width:40px;">&nbsp;</label>
 							</div>
 							<div style="float:left;width:<%= $(window).width()-30-40-40 %>px;padding-left:20px;">
-								<input style="width:100%;" data-theme="a" data-mini="true" type="text" name="answer-<%= data.id %>" id="answer-<%= data.id %>" class="answer" data-cardpageid="<%= stream.data.activePageArray[0].id %>" value="<%= data.text %>" placeholder="Antwort eingeben..."/>
+								<input style="max-width:100%;" data-theme="a" data-mini="true" type="text" name="answer-<%= data.id %>" id="answer-<%= data.id %>" class="answer" data-cardpageid="<%= stream.data.activePageArray[0].id %>" value="<%= data.text %>" placeholder="Antwort eingeben..."/>
 							</div>
-						</span>
+						</div>
 					<% }); %>
 				</div>
+				
+				<!-- todo here: implement a add a new answer button -->
+				<div class="clear" style="height:10px;"></div>
+				<input id="addAnswerBtn" name="addAnswerBtn" data-theme="f" data-mini="true" type="button" value="Weitere Antwort hinzufügen" />
+				<div class="clear"></div>
+				
 				<div class="clear" style="height:10px;"></div>
 				<!--
 				<h6 style="font-size:16px;" class="resizetext">Zusätzliche Optionen:</h6>

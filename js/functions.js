@@ -2411,11 +2411,64 @@ try {
 		checkTopNaviAppConfig();
 	});
 	
+	// $('body').off( "swipeleft", ".swipeToDelete").on( "swipeleft", ".swipeToDelete", function( e ) {
+	$('body').off( "click", ".swipeToDeleteHover").on( "click", ".swipeToDeleteHover", function( e ) {
+		e.preventDefault();
+		alert('swiped on element to hover');
+		var delbarid = $(this).attr('data-delbarid');
+		alert(delbarid);
+		var delbar = $('#'+delbarid);
+		// deleteMessageSwitch(listitem);
+		var delwidth = $(this).width();
+		alert(delwidth);
+		var posleft = $(window).width()-15-delwidth;
+		alert(posleft);
+		delbar.css("left",posleft+"px"); // .css("z-index","auto");
+		delbar.css("opacity","1.0"); // .css("z-index","auto");
+		$(this).removeClass( 'swipeToDeleteHover' );
+		$(this).addClass( 'swipeToDeleteHoverActive' );
+		// $(this).find('input:text, input:checkbox').each(function() {
+	});
+	// $('body').off( "swipeleft", ".swipeToDelete").on( "swipeleft", ".swipeToDelete", function( e ) {
+	$('body').off( "click", ".swipeToDeleteHoverActive").on( "click", ".swipeToDeleteHoverActive", function( e ) {
+		e.preventDefault();
+		alert('swiped on element to hover deactivate');
+		var delbarid = $(this).attr('data-delbarid');
+		alert(delbarid);
+		var delbar = $('#'+delbarid);
+		// deleteMessageSwitch(listitem);
+		var delwidth = $(this).width();
+		alert(delwidth);
+		var posleft = $(window).width()-30;
+		// alert(posleft);
+		delbar.css("left",posleft+"px"); // .css("z-index","auto");
+		delbar.css("opacity","0.5"); // .css("z-index","auto");
+		$(this).removeClass( 'swipeToDeleteHoverActive' );
+		$(this).addClass( 'swipeToDeleteHover' );
+	});
+	
+	$('body').off( "click", ".hideDelBarBtn").on( "click", ".hideDelBarBtn", function( e ) {
+		e.preventDefault();
+		alert('clicked on element to hover deactivate');
+		var delbarid = $(this).attr('data-delbarid');
+		alert(delbarid);
+		var delbar = $('#'+delbarid);
+		// deleteMessageSwitch(listitem);
+		var delwidth = $(this).width();
+		alert(delwidth);
+		var posleft = $(window).width()-30;
+		// alert(posleft);
+		delbar.css("left",posleft+"px"); // .css("z-index","auto");
+		delbar.css("opacity","0.5"); // .css("z-index","auto");
+		$(this).removeClass( 'swipeToDeleteHoverActive' );
+		$(this).addClass( 'swipeToDeleteHover' );
+	});
+	
 	
 	$('body').off( "swipeleft", ".swipeToDelete").on( "swipeleft", ".swipeToDelete", function( e ) {
 	// $('body').off( "click", ".swipeToDelete").on( "click", ".swipeToDelete", function( e ) {
 		e.preventDefault();
-		// alert('swiped on element');
+		alert('swiped on element');
 		var listitem = $(this);
 		deleteMessageSwitch(listitem);
 	});
@@ -3179,11 +3232,6 @@ try {
 			  'message: ' + error.message + '\n');
 	}
 	
-	function jstripslashes(elin) {
-		elout = elin;
-		return(elout);
-	}
-
 	function scrollBottom() {
 		// $('#page-content').stop().animate({
 		setTimeout(function() {

@@ -78,7 +78,7 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 				// alert('updateCardPageAnswers');
 				var newanswerArray = new Array();
 				var answerOrder = 0;
-				$( "#answerList span" ).each(function(index, value) {
+				$( "#answerList div" ).each(function(index, value) {
 					if ($(this).hasClass( "answerRow" )) {
 						var _thisRow = $(this);
 						// var cardpageid = $(this).attr('data-cardpageid');
@@ -113,6 +113,7 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 						return console.log(err);
 						// hideModal();
 					}
+					// _thisViewCardEditNested.render();
 				});
 				hideModal();
 			},
@@ -139,11 +140,47 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 				// this.$el.off('click','.clickRow').on('click','.clickRow',function(){_thisViewLearningStreamNested.clicked(e);});
 				
 				
+				_thisViewCardEditNested.$el.off('click','#addAnswerBtn').on('click','#addAnswerBtn',function(e){
+					e.preventDefault();
+					if ((_thisViewCardEditNested.streamData.activePageArray[0].answers.length+1)>5) {
+						doAlert('Mehr als 5 Antworten pro Lernkarte sind derzeit nicht erlaubt.','Aktion nicht möglich');
+						return(false);
+					}
+					// var cardpageid = $(this).attr('data-cardpageid');
+					// alert(cardpageid);
+					// window.location.href = e.currentTarget.href;
+					var answers = _thisViewCardEditNested.streamData.activePageArray[0].answers;
+					console.log(answers);
+					var newanswerObject = new Object();
+					newanswerObject.id = (_thisViewCardEditNested.streamData.activePageArray[0].answers.length+1);
+					newanswerObject.solution = "0";
+					newanswerObject.text = "";
+					console.log(newanswerObject);
+					_thisViewCardEditNested.streamData.activePageArray[0].answers.push(newanswerObject);
+					console.log(answers);
+					_thisViewCardEditNested.render();
+					return(false);
+					// window.location.href = e.currentTarget.hash;
+				});
+				
 				_thisViewCardEditNested.$el.off('click','.editCardpage').on('click','.editCardpage',function(e){
 					e.preventDefault();
 					var cardpageid = $(this).attr('data-cardpageid');
 					// alert(cardpageid);
 					window.location.href = e.currentTarget.href;
+					return(false);
+					// window.location.href = e.currentTarget.hash;
+				});
+				
+				_thisViewCardEditNested.$el.off('click','.delAnswerBtn').on('click','.delAnswerBtn',function(e){
+					e.preventDefault();
+					var answerrowid = $(this).attr('data-answerrowid');
+					alert(answerrowid);
+					var answerrow = $('#'+answerrowid);
+					answerrow.remove();
+					// window.location.href = e.currentTarget.href;
+					// activePageArray
+					_thisViewCardEditNested.updateCardPageAnswers();
 					return(false);
 					// window.location.href = e.currentTarget.hash;
 				});
