@@ -267,7 +267,7 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 					}
 					// console.log(_thisViewCardStart.carddata);
 					
-					var query = "http://dominik-lohmann.de:5000/cardpages/?active=true&cardid="+_thisViewCardStart.options.cardid;
+					var query = "http://dominik-lohmann.de:5000/cardpages/?active=true&deleted=false&cardid="+_thisViewCardStart.options.cardid;
 					$.ajax({
 						url: query,
 						async: false
@@ -295,7 +295,7 @@ define(["jquery", "backbone", "collections/answersCollection", "models/AnswerMod
 					console.log(_thisViewCardStart.cardpagedata);
 					*/
 					
-					var query = {  $skip:_thisViewCardStart.options.page, $limit:1, "active":true, "cardid":""+_thisViewCardStart.options.cardid };
+					var query = {  $skip:_thisViewCardStart.options.page, $limit:1, "active":true, "deleted":false, "cardid":""+_thisViewCardStart.options.cardid };
 					dpd.cardpages.get(query, function (result,err) {
 						if(err) {
 							return console.log(err);

@@ -34,7 +34,8 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 				_thisViewCardEditNested.streamData.pagesArray = new Array();
 				_thisViewCardEditNested.streamData.activePageArray = new Array();
 				_thisViewCardEditNested.streamData.activePageArray[0] = new Object();				
-				_thisViewCardEditNested.streamData.activePageArray[0].id = "0";				
+				_thisViewCardEditNested.streamData.activePageArray[0].id = "0";
+				_thisViewCardEditNested.streamData.activePageArray[0].answers = new Array();
 				_thisViewCardEditNested.checkLogin();
 				// _thisViewCardEditNested.collectStreamData();
 			},
@@ -113,6 +114,8 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 						return console.log(err);
 						// hideModal();
 					}
+					console.log(result.answers);
+					_thisViewCardEditNested.streamData.activePageArray[0].answers = result.answers;
 					// _thisViewCardEditNested.render();
 				});
 				hideModal();
@@ -142,6 +145,7 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 				
 				_thisViewCardEditNested.$el.off('click','#addAnswerBtn').on('click','#addAnswerBtn',function(e){
 					e.preventDefault();
+					if (_thisViewCardEditNested.streamData.activePageArray[0].answers==undefined) _thisViewCardEditNested.streamData.activePageArray[0].answers = new Array();
 					if ((_thisViewCardEditNested.streamData.activePageArray[0].answers.length+1)>5) {
 						doAlert('Mehr als 5 Antworten pro Lernkarte sind derzeit nicht erlaubt.','Aktion nicht möglich');
 						return(false);
@@ -175,12 +179,17 @@ define(["jquery", "backbone", "text!templates/CardEditNestedPage.html", "text!te
 				_thisViewCardEditNested.$el.off('click','.delAnswerBtn').on('click','.delAnswerBtn',function(e){
 					e.preventDefault();
 					var answerrowid = $(this).attr('data-answerrowid');
-					alert(answerrowid);
+					// alert(answerrowid);
 					var answerrow = $('#'+answerrowid);
-					answerrow.remove();
+					// answerrow.fadeOut();
+					answerrow.fadeOut( "fast", function(e,o) {
+						// Animation complete.
+						console.log(this);
+						this.remove();
+						_thisViewCardEditNested.updateCardPageAnswers();
+					});
 					// window.location.href = e.currentTarget.href;
 					// activePageArray
-					_thisViewCardEditNested.updateCardPageAnswers();
 					return(false);
 					// window.location.href = e.currentTarget.hash;
 				});

@@ -22,7 +22,7 @@ define(["jquery", "backbone", "text!templates/MessagesViewNestedPage.html"],
 					if (me) {
 						// console.log(me.id);
 						// http://dominik-lohmann.de:5000/messages?{"$or":[{"sender":"009505631619d88e"},{"receiver":"009505631619d88e"}],$sort:{cdate:-1}}
-						var query = {$or:[{"sender":me.id},{"receiver":me.id}],$sort:{cdate:1}};
+						var query = {$or:[{"sender":me.id},{"receiver":me.id}],"deleted":false,$sort:{cdate:1}};
 						// var query = {$or:[{"sender":me.id},{"receiver":me.id}]};
 						dpd.messages.get(query, function (allmessagesdata) {
 							_thisMessagesViewNested.messages = new Array;

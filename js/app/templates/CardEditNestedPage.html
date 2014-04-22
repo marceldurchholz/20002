@@ -35,27 +35,26 @@
 				<h6 style="font-size:18px;" class="resizetext">Frage an den Wissensdurstigen:</h6>
 				<div class="clear"></div>
 				<input style="width:100%;" data-theme="a" data-mini="true" type="text" data-cardpageid="<%= stream.data.activePageArray[0].id %>" name="question" id="question" class="questiontext" value="<%= stream.data.activePageArray[0].question %>" placeholder="Frage eingeben..."/>
-				<div class="clear" style="color:red;padding-bottom:20px;" id="questionemtpywarning"></div>
+				<div class="clear" style="height:auto;padding-bottom:10px;">
+					<div style="color:red;height:auto;" id="questionemtpywarning"></div>
+				</div>
 				<h6 style="font-size:16px;" class="resizetext">Mögliche Antworten:</h6>
 				<div id="answerList">
 					<% _.each(stream.data.activePageArray[0].answers, function(data) { %>
 						<div id="answerRow-<%= data.id %>" class="answerRow" data-cardpageid="<%= stream.data.activePageArray[0].id %>" style="display:inline-block;width:100%;">
-							<div id="delbar-<%= data.id %>" data-delbarid="delbar-<%= data.id %>" style="opacity:0.5;overflow:hidden;position:absolute;left:<%= $(window).width()-30 %>px;float:right;width:170px;height:50px;background-color:red;b/order:1px solid #000;font-size:16px;text-align:center;z-index:999;" class="swipeToDeleteHover">
-								<div style="float:right;clear:none;width:40px;height:50px;background-color:red;b/order:1px solid #fff;padding-top:12px;">
-									<a class="hideDelBarBtn" data-delbarid="<%= data.id %>" href="">X</a>
+							<div id="delbar-<%= data.id %>" data-delbarid="delbar-<%= data.id %>" style="opacity:0.5;overflow:hidden;position:absolute;right:15px;float:right;width:40px;height:40px;margin:6px 0px;b/ackground-color:white;b/order:1px solid #000;font-size:16px;text-align:center;z-index:999;" class="swipeToDeleteHover">
+								<div style="float:right;clear:none;width:40px;height:34px;overflow:hidden;background-color:red;b/order:1px solid #fff;padding-top:6px;-webkit-border-radius:7px;-moz-border-radius: 7px;border-radius: 7px;">
+									<a style="color:#fff;margin-top:4px;" class="showDelBarBtn" data-delbarid="delbar-<%= data.id %>" href="">&#10007;</a>
 								</div>
-								<div style="float:right;clear:none;width:110px;height:50px;background-color:red;b/order:1px solid #fff;padding-top:12px;b/order-left:1px solid #fff;">
-									<a class="delAnswerBtn" data-answerrowid="answerRow-<%= data.id %>" href="">Löschen</a>
-								</div>
-								<div style="float:right;clear:none;width:20px;height:50px;b/ackground-color:yellow;b/order:1px solid #fff;padding-top:12px;">
-									&nbsp;
+								<div class="delAnswerBtn" data-answerrowid="answerRow-<%= data.id %>" style="float:right;clear:none;width:<%= $(window).width()-100 %>px;-webkit-border-radius:7px;-moz-border-radius: 7px;border-radius: 7px;height:34px;background-color:red;b/order:1px solid #fff;padding-top:6px;b/order-left:1px solid #fff;margin-right:15px;">
+									<a style="color:#fff;margin-top:4px;width:<%= $(window).width()-120 %>px;">Löschen</a>
 								</div>
 							</div>
 							<div class="clear" style="height:5px;"></div>
 							<div style="float:left;width:40px;">
 								<input data-inset="false" <% if(data.solution=="1") { %>CHECKED<% } %> data-mini="true" type="checkbox" class="answercb" name="checkbox-answer-<%= data.id %>" id="checkbox-answer-<%= data.id %>" data-cardpageid="<%= stream.data.activePageArray[0].id %>"><label class="answercheckbox" for="checkbox-answer-<%= data.id %>" style="font-weight:normal;width:40px;">&nbsp;</label>
 							</div>
-							<div style="float:left;width:<%= $(window).width()-30-40-40 %>px;padding-left:20px;">
+							<div style="float:left;width:<%= $(window).width()-30-40-40-60 %>px;padding-left:20px;">
 								<input style="max-width:100%;" data-theme="a" data-mini="true" type="text" name="answer-<%= data.id %>" id="answer-<%= data.id %>" class="answer" data-cardpageid="<%= stream.data.activePageArray[0].id %>" value="<%= data.text %>" placeholder="Antwort eingeben..."/>
 							</div>
 						</div>
@@ -68,9 +67,15 @@
 				<div class="clear"></div>
 				
 				<div class="clear" style="height:10px;"></div>
-				<!--
 				<h6 style="font-size:16px;" class="resizetext">Zusätzliche Optionen:</h6>
 				<div class="clear" style="height:5px;"></div>
+				<input data-cardpageid="<%= stream.data.activePageArray[0].id %>" data-corners="false" data-inset="false" <% if(stream.data.activePageArray[0].active==true) { %>CHECKED<% } %> data-mini="true" type="checkbox" class="activatecardcb" name="checkbox-activatecardcb-<%= stream.data.activePageArray[0].id %>" id="checkbox-activatecardcb-<%= stream.data.activePageArray[0].id %>">
+				<label class="activatecardcheckbox" for="checkbox-activatecardcb-<%= stream.data.activePageArray[0].id %>" style="font-weight:normal;">Lernkarte aktivieren</label>
+				<div class="clear" style="height:10px;"></div>
+				
+				<input name="navigateButton" class="navigateButton" data-theme="b" data-mini="true" type="button" value="&#10003; &nbsp; Lernset anzeigen" href="#cards/edit/<%= _thisViewCardEditNested.options.cardsetid %>" />
+				
+				<!--
 				<input data-inset="false" CHECKED data-mini="true" type="checkbox" class="countdowncb" name="checkbox-v-<%= stream.data.activePageArray[0].id %>" id="checkbox-v-<%= stream.data.activePageArray[0].id %>">
 				<label class="countdowncheckbox" for="checkbox-v-<%= stream.data.activePageArray[0].id %>" style="font-weight:normal;">Countdown aktivieren</label>
 				<div class="clear" style="height:10px;"></div>
@@ -88,6 +93,7 @@
 				<div class="clear"></div>
 				<input style="width:100%;" data-theme="a" data-mini="true" type="text" data-cardsetid="<%= stream.data.cardsArray[0].id %>" data-cardpageid="<%= stream.data.activePageArray[0].id %>" name="question" id="question" class="questiontext" value="<%= stream.data.activePageArray[0].question %>" placeholder="Frage eingeben..."/>
 				<div class="clear" style="color:red;padding-bottom:20px;" id="questionemtpywarning"></div>
+				<!--
 				<h6 style="font-size:16px;" class="resizetext">Mögliche Antworten:</h6>
 				<div id="answerList">
 					<% _.each(stream.data.activePageArray[0].answers, function(data) { %>
@@ -103,6 +109,7 @@
 					<% }); %>
 				</div>
 				<div class="clear" style="height:10px;"></div>
+				-->
 				<!--
 				<h6 style="font-size:16px;" class="resizetext">Zusätzliche Optionen:</h6>
 				<div class="clear" style="height:5px;"></div>
@@ -125,7 +132,7 @@
 				</li>
 			<ul style="padding:15px;padding-bottom:100px;margin-bottom:100px;" id="CardPagesEditList" class="sortableListe" data-corners="false" data-filter-theme="a" data-count-theme="a" data-role="listview" data-theme="a" data-divider-theme="f" data-role="listview" data-inset="true">
 				<% _.each(stream.data.pagesArray, function(data) { %>
-					<li style="margin-left:15px;margin-right:15px;padding-left:10px;w/idth:100px;overflow:hidden;" data-icon="false" data-page="<%= data.page %>" data-cardpageid="<%= data.id %>" class="swipeToDelete">
+					<li data-cat="cardpages" style="margin-left:15px;margin-right:15px;padding-left:10px;w/idth:100px;overflow:hidden;" data-icon="false" data-page="<%= data.page %>" data-cardpageid="<%= data.id %>" class="swipeToDelete">
 						<input style="float:left;display:none;" data-cardpageid="<%= data.id %>" data-corners="false" data-inset="false" <% if(data.active==true) { %>CHECKED<% } %> data-mini="true" type="checkbox" class="activatecardcb" name="checkbox-activatecardcb-<%= data.id %>" id="checkbox-activatecardcb-<%= data.id %>" data-cardpageid="<%= stream.data.activePageArray[0].id %>">
 						<label class="activatecardcheckbox" for="checkbox-activatecardcb-<%= data.id %>" style="font-weight:normal;width:40px;float:left;">&nbsp;</label>
 						<a class="editCardpage" data-cardpageid="<%= data.id %>" href="#cards/edit/<%= stream.data.cardsArray[0].id %>/<%= data.id %>" style="font-weight:normal !important;font-size:12px !important;b/order:1px solid red;width:<%= $(window).width()-30-30-80 %>px;float:left;"><%= data.question %></a>

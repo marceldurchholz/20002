@@ -15,12 +15,10 @@
 					<% if(message.unread>0) { %> <span class="ui-li-count" style="font-weight:normal;f/ont-size:12px;"><!--<%= message.unread %> / -->&nbsp;<%= message.anzahl %>&nbsp;</span><% } %>
 					<a class="showMessageDetailsLink" href="#messages/details/view/<%= message.replyto %>" style="padding-left:80px;">
 						<img style="padding:8px 0px 8px 20px;height:40px !important;max-height:40px !important;max-width:40px !important;" src="<% if(message.unread>0) { %>images/icon-message-unread-60.png<% } else { %>images/icon-message-read-60.png<% } %>" />
-						<h6 style="padding:0px 0px 10px 0px;margin:0;"><!-- <%= message.unread %> / <%= message.sender %> / <%= message.receiver %> / --><%= message.fullname %>
-						
-						<!--
-						<% if(message.receiver==me.id) { %>  <%= message.fullname %>  <% } else { %>  <%= me.fullname %>  <% } %>
-						-->
-						
+						<h6 style="padding:0px 0px 10px 0px;margin:0;">
+							<!-- <%= message.unread %> / <%= message.sender %> / <%= message.receiver %> / -->
+							<%= message.fullname %>
+							<!-- <% if(message.receiver==me.id) { %>  <%= message.fullname %>  <% } else { %>  <%= me.fullname %>  <% } %> -->
 						</h6>
 						<p><%= message.content %></p>
 					</a>

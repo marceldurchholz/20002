@@ -57,8 +57,9 @@ define(["jquery", "backbone", "text!templates/MessagesDetailsViewNestedPage.html
 							if (me) {
 								window.me = me;
 								_thisMessagesDetailsViewNested.receiver = receiver.id;
-								var query = { $or:[{"sender":receiver.id,"receiver":me.id}  ,  {"sender":me.id,"receiver":receiver.id}]  ,$sort:{cdate:1}};
+								var query = { $or:[{"sender":receiver.id,"receiver":me.id}  ,  {"sender":me.id,"receiver":receiver.id}]  , "deleted":false  ,   $sort:{cdate:1}};
 								dpd.messages.get(query, function (allmessagesdata) {
+									// console.log(allmessagesdata);
 									_thisMessagesDetailsViewNested.messages = new Array;
 									$.each( allmessagesdata, function( key, message ) {
 										if (message.unread==undefined) message.unread=0;
