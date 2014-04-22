@@ -5,7 +5,7 @@
 	<% if(stream.data.pagetype=="Lernset") { %>
 		<div style="padding:15px;">
 			<ul id="CardEditList" class="" data-filter-theme="a" data-count-theme="a" data-role="listview" data-theme="a" data-divider-theme="f" data-inset="false">
-				<li style="margin-left:15px;margin-right:15px;">
+				<li>
 					<a class="newCard" href="#cards/edit/0">
 					<!-- <img style="padding:8px 0px 8px 25px;height:40px !important;max-height:40px !important;max-width:40px !important;" src="./images/avatar2.jpg" /> -->
 					<h6 style="margin:0;">Neues Lernset erstellen</h6>
@@ -14,8 +14,8 @@
 				</li>
 			<ul style="padding:15px;padding-bottom:100px;margin-bottom:100px;" id="CardEditList" class="sortableListe" data-filter-theme="a" data-count-theme="a" data-role="listview" data-theme="a" data-divider-theme="f" data-role="listview" data-inset="false">
 				<% _.each(stream.data.cardsArray, function(data) { %>
-					<li style="margin-left:15px;margin-right:15px;" data-role="list-divider"><%= data.topic %><!--<span class="ui-li-count">2</span>--></li>
-					<li style="margin-left:15px;margin-right:15px;" data-id="<%= data.id %>" class="noswipeToDelete" ><a href="#cards/edit/<%= data.id %>">
+					<li data-role="list-divider"><%= data.topic %></li>
+					<li data-id="<%= data.id %>" class="noswipeToDelete" ><a href="#cards/edit/<%= data.id %>">
 						<h2><%= data.title %></h2>
 						<p><%= data.description %></p>
 						<p><i><%= data.uploaderdata.fullname %> am <%= dateYmdHisToGerman(data.cdate) %></i></p>
