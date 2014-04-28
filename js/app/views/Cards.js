@@ -1,8 +1,8 @@
 // Cards.js
 // -------
-define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/SidemenuView", "text!templates/cardsList.html", "views/CardView"],
+define(["jquery", "backbone", "views/SidemenuView", "text!templates/cardsList.html", "views/CardView"],
 
-    function($, Backbone, sidemenusList, SidemenuView, cardsList, CardView){
+    function($, Backbone, SidemenuView, cardsList, CardView){
 		
 		var CardsVar = Backbone.View.extend({
 		

@@ -49,7 +49,7 @@
 <div class="clear"></div>
 
 <% if(Math.round(video.price)>0) { %>
-	<% if( _.indexOf(video.purchases, video.id)==-1 && video.uploaderid != me.id) { %>
+	<% if( _.indexOf(video.purchases, video.id)==-1 && video.uploaderdata.id != me.id) { %>
 		<div style="padding:0px 20px 0px 20px;"><a data-videoid="<%= video.id %>" id="loadvideobutton" class="loadvideobutton" data-theme="b" data-role="button"><%= video.pricetext %></a></div>
 	<% } else  { %>
 			<% if (video.offlineurl=="") { %>
@@ -59,6 +59,12 @@
 <% } %>
 
 
+<% if (video.uploaderdata.id==window.me.id || window.me.master==true) { %>
+	<div class="clear" style="padding:10px 0px 10px 0px;">
+	<div style="padding:0px 20px 0px 20px;"><a data-mini="true" data-videoid="<%= video.id %>" id="setusergroupbtn" class="setusergroupbtn" data-theme="b" data-role="button">Zugriffrechte einschränken</a></div>
+<% } %>
+
+<div class="clear"></div>
 <div style="padding:0px 20px 60px 20px;">
 	
 	<div class="title">
@@ -70,13 +76,10 @@
 	
 
 	<div class="description resizetext" style="line-height:1.5em;">
-		<!--
-		<a href="" id="connectToLink" class="connectToLink" data-id="<%= video.uploaderdata.id %>">
-			<img src="images/icon-flat-connect-18.png" style="padding-right:10px;">
-		</a>
-		-->
-		<strong><div class="readmorename"><%= video.uploader %></div></strong>
-		<div class="clear"></div>
+		<% if (window.me.id != video.uploaderdata.id) { %>
+			<strong><div class="readmorename"><%= video.uploader %></div></strong>
+			<div class="clear"></div>
+		<% } %>
 		
 		<div style="padding-top:10px;">
 			<a id="detailsvideolink" class="detailsvideolink" style="font-weight:normal;" data-videoid="<%= video.id %>">
@@ -84,11 +87,13 @@
 			</a>
 			<div id="videodetailsdiv" style="display:none;">
 				<!-- Länge: <% if( _.indexOf(video.purchases, video.id)==-1 && video.uploaderid != me.id) { %>max. 60 Sekunden (Vorschau)<% } else  { %><%= video.vlength %><% } %> -->
-				Länge: ca. <%= Math.ceil(video.vlength/60) %> Minuten
+				Länge: <% if(video.vlength==undefined || Math.ceil(video.vlength/60)==0) { %>Unbekannt<% } else { %>ca. <%= Math.ceil(video.vlength/60) %> Minuten<% } %>
 				<div class="clear"></div>
-				Dateigröße: <%= Math.round(video.vsize*100/1024/1024)/100 %> Mbyte
+				Dateigröße: <% if(video.vsize==undefined || Math.round(video.vsize*100/1024/1024)/100==0) { %>Unbekannt<% } else { %>ca. <%= Math.round(video.vsize*100/1024/1024)/100 %> Mbyte<% } %>
 				<div class="clear"></div>
 				Bereitstellung: <%= video.cdate %>
+				<div class="clear"></div>
+				Preis: <% if(video.price==undefined || Math.ceil(video.price==0)) { %><% } else { %><%= video.price %> APPinaut&reg; Coins<% } %>
 				<div class="clear"></div>
 				<div class="clear" style="padding-bottom:10px;"></div>
 			</div>

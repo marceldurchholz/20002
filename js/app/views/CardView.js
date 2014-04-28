@@ -1,8 +1,8 @@
 // CardView.js
 // -------
-define(["jquery", "backbone", "collections/cardsCollection", "text!templates/cardsViewPage.html"],
+define(["jquery", "backbone", "text!templates/cardsViewPage.html"],
 
-    function($, Backbone, cardsCollection, cardsViewPage){
+    function($, Backbone, cardsViewPage){
 		
 		var CardViewVar = Backbone.View.extend({
 			
@@ -35,7 +35,8 @@ define(["jquery", "backbone", "collections/cardsCollection", "text!templates/car
 					if (_thisViewCards.me.interests == undefined) _thisViewCards.me.interests = new Array();
 				});
 
-				var requestUrl = "http://dominik-lohmann.de:5000/cards?active=true&deleted=false";
+				var requestUrl = "http://dominik-lohmann.de:5000/cards?deleted=false";
+				// active=true&
 				if (window.system.master==false) requestUrl = requestUrl + "&uploader="+window.system.aoid;
 				else requestUrl = requestUrl + "&public=true";
 				$.ajax({
@@ -44,50 +45,51 @@ define(["jquery", "backbone", "collections/cardsCollection", "text!templates/car
 				}).done(function(cardData) {
 					_thisViewCards.uploaderArray = new Array();
 					_.each(cardData, function(value, index, list) {
-						var exists = $.inArray( value.topic, _thisViewCards.me.interests );
-						if (_thisViewCards.me.interests == undefined) exists=1;
-						else if (_thisViewCards.me.interests.length==0) exists=1;
-						if (exists>-1 || value.uploader == me.id) {
+						var exists = 1;
+						// exists = $.inArray( value.topic, _thisViewCards.me.interests );
+						// if (_thisViewCards.me.interests == undefined) exists=1;
+						// else if (_thisViewCards.me.interests.length==0) exists=1;
+
+						if (value.usergroups == undefined) value.usergroups = new Array();
+						if (window.me.usergroups == undefined) window.me.usergroups = new Array();
+						if (value.usergroups.length>0) {
+							var exists=-1;
+							$.each( value.usergroups, function( key, role ) {
+								$.each( window.me.usergroups, function( keyme, valueme ) {
+									if (role==valueme) {
+										exists=1;
+										return(false);
+									}
+								});
+							});
+						}
+						
+						if (value.uploader == me.id) exists=1;
+
+						if (exists>-1) {
 							value.ccat = 'card';
 							value.icon = 'images/icon-cards-60.png';
 							value.href = '#cards/details/view/'+value.id;
-							// if (window.system.master==true && value.public==true) { 
-								// _thisViewCards.streamData.push(value);
-							// }
 							var uploader = value.uploader;
-							// console.log(uploader);
-							// console.log(_thisViewCards.uploaderArray[uploader]);
 							if (_thisViewCards.uploaderArray[uploader]==undefined) {
 								$.ajax({
 									url: 'http://dominik-lohmann.de:5000/users/?id='+uploader,
 									async: false,
 									success: function(data, textStatus, XMLHttpRequest) {
-										console.log(data);
+										// console.log(data);
 										value.uploaderdata = data;
 										_thisViewCards.uploaderArray[data.id]==data;
-										console.log(_thisViewCards.uploaderArray[data.id]);
-										// _thisViewCards.streamData.push(value);
-										// _thisViewCards.rowContent = _thisViewCards.rowContent + _thisViewCards.insertData(value);
+										// console.log(_thisViewCards.uploaderArray[data.id]);
 									},
 									error:function (xhr, ajaxOptions, thrownError) {
 										console.log(xhr.responseText);
-										/*
-										if (xhr.responseText=='{"message":"not found","statusCode":404,"status":404}') {
-											dpd.videos.put(model.attributes.id, {"active":false}, function(result, err) {
-											  if(err) return console.log(err);
-											});
-										}
-										*/
 									}
 								});
 							}
 							else {
 								value.uploaderdata = _thisViewCards.uploaderArray[uploader];
-							}
-							
-							// if ((window.system.master==true && value.public==true) || (window.system.master==false && window.system.aoid==value.uploader)) { 
-								_thisViewCards.streamData.push(value);
-							// }
+							}							
+							_thisViewCards.streamData.push(value);
 						}
 					});
 				});
@@ -121,88 +123,54 @@ define(["jquery", "backbone", "collections/cardsCollection", "text!templates/car
 			bindEvents: function() {
 				var _thisViewCards = this;
 				// this.$el.off('click','.clickRow').on('click','.clickRow',function(){_thisViewCards.clicked(e);});
+				
 				this.$el.off('click','.showCardDetailsLink').on('click','.showCardDetailsLink',function(event){
 					event.preventDefault();
 					window.location.href = event.currentTarget.hash;
 				});
+				
+				_thisViewCards.$el.off( "swipeleft", ".swipetodeletetd").on( "swipeleft", ".swipetodeletetd", function( e ) {
+					e.preventDefault();
+					var _thisEl = $(this);
+					var cardsetid = $(this).attr('data-cardsetid');
+					var dbtype = $(this).attr('data-dbtype');
+					if (dbtype=="card") {
+						doConfirm('Möchten Sie dieses Lernset wirklich löschen?', 'Wirklich löschen?', function (clickevent) { 
+							if (clickevent=="1") {
+								_thisViewCards.deleteCardset(_thisEl,cardsetid);
+							}
+						}, "Ja,Nein");
+					}
+				});
 			},
-			/*
-			insertData: function(model) {
-				_thisViewCards = this;
-				var uploader = model.get('uploader');
-				rowContent = '';
-				// if (model.get('uploader') == window.system.aoid) {
-				//	if (window.system.master!=true) {
-						rowContent = _.template(cardsViewPage, {
-							id: model.get('id'),
-							// uploader: model.get('uploader'),
-							uploader: model.get('uploaderdata').fullname,
-							url: model.get('url'),
-							title: model.get('title'),
-							description: model.get('description'),
-							price: model.get('price'),
-							thumbnailurl: model.get('thumbnailurl'),
-							topic: model.get('topic')
-						},{variable: 'card'});
-				//	}
-				// }
-				return(rowContent);
+			deleteCardset: function(_thisEl,cardsetid) {
+				showModal();
+				// alert('deleting now: '+cardsetid);
+				dpd.cards.put(cardsetid, {"deleted":true}, function(result, err) {
+					if(err) return console.log(err);
+					// console.log(result, result.id);
+					_thisEl.remove();
+					hideModal();
+				});
 			},
-			*/
+
 			render: function() {
 				var _thisViewCards = this;
-				console.log(_thisViewCards.streamData);
-				/*
-				_thisViewCards.htmlContent = '';
-				_thisViewCards.rowContent = '';
-				_.each(this._cardsCollection.models, function(model) {
-					var uploader = model.attributes.uploader; // "ed568841af69d94d";
-					$.ajax({
-						url: 'http://dominik-lohmann.de:5000/users/?id='+uploader,
-						async: false,
-						success: function(data, textStatus, XMLHttpRequest){
-							model.attributes.uploaderdata = data;
-							_thisViewCards.rowContent = _thisViewCards.rowContent + _thisViewCards.insertData(model);
-						},
-						error:function (xhr, ajaxOptions, thrownError) {
-							if (xhr.responseText=='{"message":"not found","statusCode":404,"status":404}') {
-								dpd.cards.put(model.attributes.id, {"active":false}, function(result, err) {
-								  if(err) return console.log(err);
-								});
-							}
-						}
-					});
-				});
-				_thisViewCards.htmlContent = '<ul id="cardsListView" data-filter="true" data-filter-placeholder="Suchfilter..." data-filter-theme="a" data-role="listview" data-theme="a" data-divider-theme="f" data-autodividers="true">'+_thisViewCards.rowContent+'</ul>';
-				$(this.el).html(_thisViewCards.htmlContent);
-				$("#cardsListView").listview({
-				  autodividers: true,
-				  autodividersSelector: function ( li ) {
-					// console.log(li);
-					var rowTopic = li.data( "topic" );
-					var out = rowTopic;
-					return out;
-				  }
-				});
-				*/
-				
+				// console.log(_thisViewCards.streamData);
 				_thisViewCards.$el.html(_.template(cardsViewPage, {
 					data: _thisViewCards.streamData
 				},{variable: 'stream'}));
-				
 				$("#cardsListView").listview({
 				  autodividers: true,
 				  autodividersSelector: function ( li ) {
-					// console.log(li);
 					var rowTopic = li.data( "topic" );
 					var out = rowTopic;
 					return out;
 				  }
 				});
-				
-				hideModal();
 				this.$el.trigger('create');
 				new FastClick(document.body);
+				hideModal();
 				/*
 				this.$el.fadeIn( 500, function() {
 					// $('.ui-content').scrollTop(0);

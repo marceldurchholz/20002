@@ -1,0 +1,22 @@
+<div style="padding:0px;">			
+	<div class="ui-field-contain" style="margin:0px;padding:0px;width:100%;">
+		<fieldset style="width:100% !important;" data-inset="false" data-corners="false" data-mini="true">
+			<!--
+			<%= streamdata.data.objid %>
+			<% console.log(streamdata); %>
+			-->
+			<% if(streamdata.data.objactive!=undefined) { %>
+				<input data-theme="d" data-id="<%= streamdata.data.objid %>" data-dbtype="<%= streamdata.data.dbtype %>" data-inset="false" <% if(streamdata.data.objactive==true) { %>CHECKED<% } %> data-mini="true" data-corners="false" type="checkbox" class="activecb" name="checkbox-activecb-<%= streamdata.data.objid %>" id="checkbox-activecb-<%= streamdata.data.objid %>">
+					<label style="width:100% !important;" data-corners="false" for="checkbox-activecb-<%= streamdata.data.objid %>">Zugriff aktivieren</label>
+			<% } %>
+			<% if(streamdata.data.objpublic!=undefined) { %>
+				<input data-theme="d" data-id="<%= streamdata.data.objid %>" data-dbtype="<%= streamdata.data.dbtype %>" data-inset="false" <% if(streamdata.data.objpublic==true) { %>CHECKED<% } %> data-mini="true" data-corners="false" type="checkbox" class="publiccb" name="checkbox-publiccb-<%= streamdata.data.objid %>" id="checkbox-publiccb-<%= streamdata.data.objid %>">
+					<label style="width:100% !important;" data-corners="false" for="checkbox-publiccb-<%= streamdata.data.objid %>">Auch im öffentlichen APPinaut</label>
+			<% } %>
+			<% _.each(streamdata.data.allusergroups, function(usergroup) { %>
+				<input data-usergroupid="<%= usergroup.id %>" data-id="<%= streamdata.data.objid %>" data-id="<%= streamdata.data.objid %>" data-inset="false" <% if($.inArray( $.trim(usergroup.id), streamdata.data.activeusergroups )>-1) { %>CHECKED<% } %> data-mini="true" style="w/idth:100% !important;" data-corners="false" type="checkbox" class="usergroupcb" name="checkbox-usergroupcb-<%= usergroup.id %>" id="checkbox-usergroupcb-<%= usergroup.id %>">
+					<label style="width:100% !important;" data-corners="false" for="checkbox-usergroupcb-<%= usergroup.id %>"><%= usergroup.name %></label>
+			<% }); %>
+		</fieldset>
+	</div>
+</div>

@@ -1,8 +1,8 @@
 // VideoView.js
 // -------
-define(["jquery", "backbone", "models/VideoModel", "collections/videosCollection", "text!templates/videoView.html"],
+define(["jquery", "backbone", "text!templates/videoView.html"],
 
-    function($, Backbone, VideoModel, videosCollection, videoPage){
+    function($, Backbone, videoPage){
 		
 		var VideoViewVar = Backbone.View.extend({
 			
@@ -88,7 +88,7 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videosCollection
 				if (_thisViewVideo.me.interests == undefined) _thisViewVideo.me.interests = new Array();
 				});
 				
-				var requestUrl = "http://dominik-lohmann.de:5000/videos?active=true&deleted=false";
+				var requestUrl = "http://dominik-lohmann.de:5000/videos?deleted=false";
 				// if (window.system.master!=true) requestUrl = requestUrl + "&uploader="+window.system.aoid;
 				if (window.system.master==false) requestUrl = requestUrl + "&uploader="+window.system.aoid;
 				else requestUrl = requestUrl + "&public=true";
@@ -98,9 +98,10 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videosCollection
 				}).done(function(videoData) {
 					_thisViewVideo.uploaderArray = new Array();
 					_.each(videoData, function(value, index, list) {
-						var exists = $.inArray( value.topic, _thisViewVideo.me.interests );
-						if (_thisViewVideo.me.interests == undefined) exists=1;
-						else if (_thisViewVideo.me.interests.length==0) exists=1;
+						// var exists = $.inArray( value.topic, _thisViewVideo.me.interests );
+						// if (_thisViewVideo.me.interests == undefined) exists=1;
+						// else if (_thisViewVideo.me.interests.length==0) exists=1;
+						var exists = 1;
 						if (exists>-1 || value.uploader == me.id) {
 							value.ccat = 'video';
 							value.icon = 'images/icon-multimedia-60.png';
@@ -148,9 +149,40 @@ define(["jquery", "backbone", "models/VideoModel", "collections/videosCollection
 				var _thisViewVideo = this;
 				this.$el.off('click','.showVideoDetailsLink').on('click','.showVideoDetailsLink',function(event){
 					event.preventDefault();
-					window.location.href = event.currentTarget.hash;
+					// window.location.href = event.currentTarget.hash;
+				});
+				
+				_thisViewVideo.$el.off( "swipeleft", ".swipetodeletetd").on( "swipeleft", ".swipetodeletetd", function( e ) {
+					e.preventDefault();
+					var _thisEl = $(this);
+					var dbtype = $(this).attr('data-dbtype');
+					if (dbtype=="card") {
+						var cardsetid = $(this).attr('data-cardsetid');
+						doConfirm('Möchten Sie dieses Lernset wirklich löschen?', 'Wirklich löschen?', function (clickevent) { 
+							if (clickevent=="1") {
+								_thisViewVideo.deleteCardset(_thisEl,cardsetid);
+							}
+						}, "Ja,Nein");
+					}
+					if (dbtype=="video") {
+						var videoid = $(this).attr('data-videoid');
+						doConfirm('Möchten Sie dieses Video wirklich löschen?', 'Wirklich löschen?', function (clickevent) { 
+							if (clickevent=="1") {
+								_thisViewVideo.deleteVideo(_thisEl,videoid);
+							}
+						}, "Ja,Nein");
+					}
 				});
 			},
+			deleteVideo: function(_thisEl,videoid) {
+				showModal();
+				dpd.videos.put(videoid, {"deleted":true}, function(result, err) {
+					if(err) return console.log(err);
+					_thisEl.remove();
+					hideModal();
+				});
+			},
+			
 			/*
 			insertData: function(value) {
 				_thisViewVideo = this;

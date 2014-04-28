@@ -1,17 +1,13 @@
 <h3 class="ui-bar ui-bar-f" style="border-top-width:0px;text-align:center;">Lernsetinformationen</h3>
 
-<% if (card.thumbnailurl!="") { %>
-	<!-- <img src="<%= card.thumbnailurl %>" style="width:100%;"> -->
+<% if (card.thumbnailurl=="") { %>
 	<div style="width:100%;text-align:center;padding-top:0px;max-height:<%= $(window).height()/2 %>px;overflow:hidden;">
 		<img src="./images/avatar2.jpg" style="width:100%;max-width:800px;">
 	</div>
-	<!--
-	<div style="width:100%;height:0px;overflow:visible;">
-		<div style="width:100%;height:0px;overflow:visible;text-align:center;">
-			<img src="images/shadow.png" style="width:100%;height:20px;">
-		</div>
+<% } else { %>
+	<div style="width:100%;text-align:center;padding-top:0px;max-height:<%= $(window).height()/2 %>px;overflow:hidden;">
+		<img src="<%= card.thumbnailurl %>" style="width:100%;max-width:800px;">
 	</div>
-	-->
 <% } %>
 
 <div style="margin-bottom:50px;padding:15px;padding-top:0px;width;100%;">

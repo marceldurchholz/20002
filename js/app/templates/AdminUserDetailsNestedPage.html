@@ -41,26 +41,72 @@
 </ul>
 
 <div data-role="collapsible" data-theme="b" data-content-theme="a">
-	<h6>Interessenbereiche</h6>
-	<table cellspacing="0" cellpadding="0" class="sortabletable" id="interestsanalysetable">
+	<h6>Interessen</h6>
+	<table cellspacing="0" cellpadding="0" style="width:100%;">
+		<!--
 		<thead>
 			<tr>
 				<th><span>Kategorie</span></th>
-				<th style="width:auto !important; float:right; text-align:right;"><span style="padding-right:0px !important;"><img style="margin-right:20px !important;" src="./images/icon-multimedia-bw-16.png"></span></th>
+				<th><span>bla</span></th>
 			</tr>
 		</thead>
+		-->
 		<tbody>
-			<% _.each(user.interests, function(interest) { %>
+				<% _.each(user.interests, function(interest) { %>
+					<tr>
+						<td style="text-align:left;">
+							<%= interest.name %>
+						</td>
+					<!--
+						<td style="text-align:right;">
+							<div style="margin-top:10px;"><%= interest.name %></div>
+						</td>
+					-->
+					</tr>
+				<% }); %>
+		</tbody>
+	</table>
+</div>
+
+<div class="clear"></div>
+
+<div data-role="collapsible" data-theme="b" data-content-theme="a">
+	<h6>Einstellungen</h6>
+	<table cellspacing="0" cellpadding="0" style="width:100%;">
+		<tbody>
+			<tr>
+				<td style="text-align:left;">
+					<input data-userid="<%= user.id %>" data-inset="false" <% if(user.active==true) { %>CHECKED<% } %> data-mini="true" type="checkbox" class="activateusercb" name="checkbox-v-activate" id="checkbox-v-activate">
+					<label class="activateusercb" for="checkbox-v-activate">Zugang aktivieren</label>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<div class="clear"></div>
+
+<div data-role="collapsible" data-theme="b" data-content-theme="a">
+	<h6>Gruppen-/Zugriffsrechte</h6>
+	<table cellspacing="0" cellpadding="0" style="width:<%= $(window).width()-30-30-30 %>px !important;">
+		<tbody>
+			<% _.each(user.allusergroups, function(usergroup) { %>
 				<tr>
-					<td>
-						<input data-inset="false" <%= interest.checked %> data-mini="true" type="checkbox" class="interestcb" name="checkbox-v-<%= interest.id %>" id="checkbox-v-<%= interest.id %>">
-						<label class="interestcheckbox" for="checkbox-v-<%= interest.id %>"><%= interest.name %></label>
-					</td>
-					<td style="width:auto !important; float:right; text-align:right;font-size:11px;">
-						<div style="margin-top:10px;"><%= interest.quantity %></div>
+					<td class="swipetodeletetd" style="text-align:left;" colspan="2" data-usergroupid="<%= usergroup.id %>">
+						<input data-usergroupid="<%= usergroup.id %>" data-userid="<%= user.id %>" data-inset="false" <% if($.inArray( $.trim(usergroup.id), user.usergroups )>-1) { %>CHECKED<% } %> data-mini="true" type="checkbox" class="usergroupcb" name="checkbox-v-usergroup-<%= usergroup.id %>" id="checkbox-v-usergroup-<%= usergroup.id %>">
+						<label class="usergroupcb" for="checkbox-v-usergroup-<%= usergroup.id %>"><%= usergroup.name %></label>
 					</td>
 				</tr>
 			<% }); %>
+			<tr style="display:none;" id="insertrowbeforehere"><td colspan="2"></td></tr>
+			<tr>
+				<td style="text-align:left;width:<%= $(window).width()-30-30-50 %>px !important;">
+					<input id="newgroupinput" name="newgroupinput" data-theme="a" data-mini="true" type="text" value="" placeholder="Neue Gruppe..."/>
+				</td>
+				<td style="width:50px;">
+					<span id="addusergrouprow" class="textalignleft"><a href="#" data-role="button">&#10003;</a></span>
+				</td>
+			</tr>
 		</tbody>
 	</table>
 </div>
@@ -77,13 +123,13 @@
 -->
 
 <div style="float:left;">
-	<a id="showdeletearea" href="#">Zugang löschen</a>
+	<a id="showdeletearea" style="color:red;" href="#">Zugang löschen</a>
 </div>
 
 <div class="clear"></div>
 <div id="delaccuntarea">
 	<strong>Achtung! Hiernach werden diese Daten unwiderruflich gelöscht. Ein Login ist nicht mehr möglich!</strong>
 	<ul data-role="listview" data-inset="true" data-theme="d" data-dividertheme="d">
-		<li data-icon="alert" data-mini="true"><a id="deleteaccountbtn" href="#">Ja, Benutzerdaten bitte löschen.</a></li>
+		<li data-icon="alert" data-mini="true"><a id="deleteaccountbtn" href="#">Benutzerdaten löschen.</a></li>
 	</ul>
 </div>

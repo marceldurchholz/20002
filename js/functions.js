@@ -2352,8 +2352,14 @@ try {
 		}
 	};
 
+	function clearIntervals() {
+		if (window._thisViewCardStart) {
+			_thisViewCardStart.answerCountdownLoopStop();
+			_thisViewCardStart.answerCountdownButtonDelayStop();
+		}
+	}
+	
 	function bindSwipeBack() {
-		// alert('bindSwipeBack');
 		$('#body').off( "swiperight", "#page-content").on( "swiperight", "#page-content", function( e ) {
 			e.preventDefault();
 			// alert('swiped on body');
@@ -2361,6 +2367,7 @@ try {
 			return(false);
 		});
 	}
+	bindSwipeBack();
 
 	window.addEventListener('load', function () {
 		new FastClick(document.body);
@@ -2372,6 +2379,7 @@ try {
 		checkTopNaviAppConfig();
 		// checkTopNaviRoles();
 		bindSwipeBack();
+		clearIntervals();
 		showDeleteBar(false);
 		$("#flexiblecontent").animate({
 			marginLeft: "0px",
@@ -2381,6 +2389,25 @@ try {
 		});
 	});
 
+	/*
+	$('body').off('click','#captureVideoLinkButton').on('click','#captureVideoLinkButton',function(e) { 
+		e.preventDefault();
+		// $('#linkVideoUrl').val('bla');
+		var videoLink = $('#linkVideoUrl').val();
+		var popupid = 'popupBasic';
+		// var el = $( "#"+popupid );
+		var activepage = $('#popupBasic-popup');
+		var el = activepage.find('#popupBasic');
+		console.log(el);
+		el.popup( "close" );
+		$('#body').find('#popupBasic').each(function() {
+			console.log($(this));
+			$(this).remove();
+		});
+		// $('#popupBasic').remove();
+	});
+	*/
+	
 	$('body').off('click','#closewelcomepopupbtn').on('click','#closewelcomepopupbtn',function(e) { 
 		e.preventDefault();
 		setTimeout(function() {
@@ -2574,9 +2601,6 @@ try {
 		showDeleteBar(false);
 	}
 	
-	
-	
-	bindSwipeBack();
 	$('body').off( "click", ".messagesendbutton").on( "click", ".messagesendbutton", function( e ) {
 		e.preventDefault();
 		// alert('bla');
@@ -2655,6 +2679,26 @@ try {
 		}
 	}
 	
+	$('#body').off('change','.activecb').on('change','.activecb',function(e) { 
+		e.preventDefault();
+		var id = $(this).attr('data-id');
+		// alert(id);
+		var status = e.currentTarget.checked;
+		var dbtype = $(this).attr('data-dbtype');
+		if (dbtype=="video") dpd.videos.put(id, {"active":status});
+		else if (dbtype=="card") dpd.cards.put(id, {"active":status});
+		return(false);
+	});
+	
+	$('#body').off('change','.publiccb').on('change','.publiccb',function(e) { 
+		e.preventDefault();
+		var id = $(this).attr('data-id');
+		var status = e.currentTarget.checked;
+		var dbtype = $(this).attr('data-dbtype');
+		if (dbtype=="video") dpd.videos.put(id, {"public":status});
+		else if (dbtype=="card") dpd.cards.put(id, {"public":status});
+		return(false);
+	});
 	
 	$('#body').off( "keyup", "#messagetextarea").on( "keyup", "#messagetextarea", function( e ) {
 		/*
@@ -2927,7 +2971,7 @@ try {
 	function showModal() {
 		// if ($('.modalWindow')) return(false);
 		// console.log('showModal');
-		window.system.modaltimeout = 5000;
+		window.system.modaltimeout = 15000;
 		window.clearInterval(window.modaltimeoutvar);
 		window.modaltimeoutvar = window.setInterval(function() {
 			// console.log(window.system.modaltimeout);
@@ -2937,7 +2981,7 @@ try {
 				$('#breaktoDashboard').html(breaktoDashboardText);
 				$('#breaktoDashboard').show();
 				window.clearInterval(window.modaltimeoutvar);
-				window.system.modaltimeout = 5000;
+				window.system.modaltimeout = 15000;
 			}
 		},1000);
 		$("#body").append('<div class="modalWindow"/>');

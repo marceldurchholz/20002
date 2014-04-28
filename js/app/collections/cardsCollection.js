@@ -19,7 +19,8 @@ define(["jquery", "backbone", "models/CardModel"],
 			var offlineData = this.offlineData = this._localStorage_cards.findAll();
 			this.localStorage = this._localStorage_cards;
 			if (_thisCollectionCards.online==1) {
-				this.url = 'http://dominik-lohmann.de:5000/cards/?active=true&deleted=false';
+				this.url = 'http://dominik-lohmann.de:5000/cards/?deleted=false';
+				// active=true&
 				if (window.system.master!=true) this.url = this.url + "&uploader=" + window.system.aoid;
 				if (this.options.cardid!=undefined) {
 					this.url = this.url+this.options.cardid;

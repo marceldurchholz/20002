@@ -1,15 +1,15 @@
 <ul id="videosListView" data-filter="true" data-filter-placeholder="Suchfilter..." data-filter-theme="a" data-role="listview" data-theme="a" data-divider-theme="b" data-autodividers="true">
-
-	<% _.each(videos.data, function(video) { %>
-		
-		<li data-id="<%= video.id %>" class="swipeToDelete" data-topic="<%= video.topic %>">
-			<a href="#videos/details/view/<%= video.id %>">
-				<h3><%= video.title %></h3>
-				<p><%= video.uploaderdata.fullname %></p>
-				<p><%= video.description %></p>
-			</a>
-		</li>		
-		
+	<% _.each(videos.data, function(data) { %>
+		<% if (data.active==true || window.me.id == data.uploader) { %>
+			<li data-videoid="<%= data.id %>" data-dbtype="video" class="<% if(window.me.id == data.uploader) { %>swipetodeletetd<% } %>" data-topic="<%= data.topic %>">
+				<a href="#videos/details/view/<%= data.id %>">
+					<h3 <% if(data.active!=true) { %>style="color:red;"<% } %>><%= data.title %></h3>
+					<% if (window.me.id != data.uploader) { %>
+						<p><%= data.uploaderdata.fullname %></p>
+					<% } %>
+					<p><%= data.description %></p>
+				</a>
+			</li>
+		<% } %>
 	<% }); %>
-
 </ul>

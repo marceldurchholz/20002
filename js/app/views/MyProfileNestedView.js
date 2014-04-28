@@ -57,19 +57,12 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 							_thisViewMyProfileNested.videos = videos;
 					});
 					
-					/*
-					$.ajax({
-						url: "http://dominik-lohmann.de:5000/interests",
-						async: false
-					}).done(function(interests) {
-					*/
 					dpd('interests').get(function(interests, err) {
 						// console.log(interests);
 						_.each(interests, function(interest) {
 							var exists = $.inArray( $.trim(interest.name), _thisViewMyProfileNested.me.interests );
 							if (exists>-1) interest.checked = "checked";
 						});
-						// interests.quantity=new Array();
 						interests.sort(function(a, b){
 						 var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
 						 if (nameA < nameB) //sort string ascending
@@ -81,7 +74,6 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 						
 						_thisViewMyProfileNested.interests = interests;
 						_.each(_thisViewMyProfileNested.interests, function(interest, index, list) {
-							// if (_thisViewMyProfileNested.interests.quantity[video.topic]==undefined) _thisViewMyProfileNested.interests.quantity=0;
 							if (interest.quantity==undefined) interest.quantity=0;
 							_.each(_thisViewMyProfileNested.videos, function(video, index, list) {
 								if (video.topic==interest.name) {
@@ -266,8 +258,8 @@ define(["jquery", "backbone", "text!templates/sidemenusList.html", "views/Sideme
 							// console.log(exists);
 							// if (event.delegateTarget.checked==false && exists>-1) dpd.users.put(_thisViewMyProfileNested.me.id, {"interests": {$pull:$.trim(o.label)}} );
 							// else if (event.delegateTarget.checked==true && exists==-1) dpd.users.put(_thisViewMyProfileNested.me.id, {"interests": {$push:$.trim(o.label)}} );
-							if (o.status=="checked" && exists==-1) dpd.users.put(_thisViewMyProfileNested.me.id, {"interests": {$push:$.trim(o.id)}} );
-							else dpd.users.put(_thisViewMyProfileNested.me.id, {"interests": {$pull:$.trim(o.id)}} );
+							if (o.status=="checked" && exists==-1) dpd.users.put(_thisViewMyProfileNested.me.id, {"interests": {$push:$.trim(o.label)}} );
+							else dpd.users.put(_thisViewMyProfileNested.me.id, {"interests": {$pull:$.trim(o.label)}} );
 						});
 					}
 					else if (event.currentTarget.className=="appviewscb") {

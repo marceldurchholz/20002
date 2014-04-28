@@ -3,7 +3,7 @@
 	<ul data-role="listview" data-theme="a" data-icon="false">
 		<li>
 			<a href="#myprofile" style="padding-top:0px;padding-bottom:0px;">
-				<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="<%= user.pictureurl %>" /></div>
+				<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;width:60px;" src="<%= user.pictureurl %>" /></div>
 				<h5 style="padding-top:2px;padding-bottom:4px;margin-left:80px;">Mein Profil</h5>
 				<p style="margin-left:80px;">Persönliche Daten, Beschreibung und Fachbereiche</p>
 				<!-- <p class="ui-li-aside"><strong>6:24</strong>PM</p> -->
@@ -13,7 +13,7 @@
 		<% if (checkAppConfig("wall")==true) { %>
 			<li>
 				<a href="#learningstreamview" style="padding-top:0px;padding-bottom:0px;">
-					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-cloud-storage-001-60x60.png" /></div>
+					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;width:60px;" src="images/icon-cloud-storage-001-60x60.png" /></div>
 					<h5 style="padding-top:2px;padding-bottom:4px;margin-left:80px;">Pinnwand</h5>
 					<p style="margin-left:80px;">Ausgewählte Inhalte (chronologisch)</p>
 					<!-- <p class="ui-li-aside"><strong>6:24</strong>PM</p> -->
@@ -24,7 +24,7 @@
 		<% if (checkAppConfig("videos")==true) { %>
 			<li>
 				<a href="#videos" style="padding-top:0px;padding-bottom:0px;">
-					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-multimedia-60.png" /></div>
+					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;width:60px;" src="images/icon-multimedia-60.png" /></div>
 					<h5 style="padding-top:2px;padding-bottom:4px;margin-left:80px;">Mediathek</h5>
 					<p style="margin-left:80px;">Multimediainhalte (nach Kategorien gelistet)</p>
 					<!-- <p class="ui-li-aside"><strong>6:24</strong>PM</p> -->
@@ -35,7 +35,7 @@
 		<% if (checkAppConfig("cards")==true) { %>
 			<li>
 				<a href="#cards" style="padding-top:0px;padding-bottom:0px;">
-					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-cards-60.png" /></div>
+					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;width:60px;" src="images/icon-cards-60.png" /></div>
 					<h5 style="padding-top:2px;padding-bottom:4px;margin-left:80px;">Lernsets</h5>
 					<p style="margin-left:80px;">Lernkarten zum interaktiven Lernen</p>
 					<!-- <p class="ui-li-aside"><strong>6:24</strong>PM</p> -->
@@ -46,7 +46,7 @@
 		<% if (checkAppConfig("messages")==true) { %>
 			<li>
 				<a href="#messages" style="padding-top:0px;padding-bottom:0px;">
-					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-message-<% if(user.newmsgs>0) { %>unread<% } else { %>read<% } %>-60.png" /></div>
+					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;width:60px;" src="images/icon-message-<% if(user.newmsgs>0) { %>unread<% } else { %>read<% } %>-60.png" /></div>
 					<h5 style="padding-top:2px;padding-bottom:4px;margin-left:80px;">Nachrichten <% if(user.newmsgs>0) { %>(<%= user.newmsgs %>) <% } %></h5>
 					<p style="margin-left:80px;">Mitteilungen an und von Wissensanbieter</p>
 					<!-- <p class="ui-li-aside"><strong>6:24</strong>PM</p> -->
@@ -57,7 +57,7 @@
 		<% if (checkAppConfig("events")==true) { %>
 			<li>
 				<a href="#planer" style="padding-top:0px;padding-bottom:0px;">
-					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-calendar-002-resized-60.png" /></div>
+					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;width:60px;" src="images/icon-calendar-002-resized-60.png" /></div>
 					<h5 style="padding-top:2px;padding-bottom:4px;margin-left:80px;">Meine Termine</h5>
 					<p style="margin-left:80px;">Veranstaltungstermine, -orte und -zeiten</p>
 					<!-- <p class="ui-li-aside"><strong>6:24</strong>PM</p> -->
@@ -68,7 +68,7 @@
 		<% if (checkRole("provider")==true) { %>
 			<li>
 				<a href="#admin/users" style="padding-top:0px;padding-bottom:0px;">
-					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-usergroup-60.png" /></div>
+					<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;width:60px;" src="images/icon-usergroup-60.png" /></div>
 					<h5 style="padding-top:2px;padding-bottom:4px;margin-left:80px;">Nutzerverwaltung</h5>
 					<p style="margin-left:80px;">Benutzer dieses Personal APPinaut&reg;</p>
 					<!-- <p class="ui-li-aside"><strong>6:24</strong>PM</p> -->
@@ -79,7 +79,7 @@
 		<!--
 		<li>
 			<a href="#preferences" style="padding-top:0px;padding-bottom:0px;">
-				<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;" src="images/icon-preferences-60.png" /></div>
+				<div style="float:left;position:relative;top:0px;left:0px;"><img style="margin:7px;height:60px;width:60px;" src="images/icon-preferences-60.png" /></div>
 				<h5 style="padding-top:2px;padding-bottom:4px;margin-left:80px;">Einstellungen</h5>
 				<p style="margin-left:80px;">Benutzer-, Sicherheits- und Datenschutzeinstellungen</p>
 				<p class="ui-li-aside"><strong>6:24</strong>PM</p>

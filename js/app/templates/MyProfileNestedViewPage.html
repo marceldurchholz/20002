@@ -28,7 +28,7 @@
 <div class="clear"></div>
 <div class="resizetext" style="font-size:12px;"><% if( user.provider <= 0 ) { %>Helfen Sie den APPinaut® Wissensanbietern:<% } else { %>Informieren Sie die APPinaut® Wissensdurstigen:<% } %></div>
 <div class="clear"></div>
-<textarea style="width:100%;height:<%= Math.round($(window).height()/5) %>px;max-height:300px;min-height:80px;" data-theme="a" no-data-role="none" data-mini="false" type="text" placeholder="<% if( user.provider <= 0 ) { %>Welche Themen begeistern Sie und welches Wissen interessiert Sie?<% } else { %>Zu welchen Expertengebieten werden Sie den Wissensdurstigen Inhalte bieten?<% } %>" name="perstext" id="perstext"><%= user.perstext %></textarea>
+<textarea style="width:100%;height:<%= Math.round($(window).height()/5) %>px;max-height:300px;min-height:80px;" data-theme="a" no-data-role="none" data-mini="true" type="text" placeholder="<% if( user.provider <= 0 ) { %>Welche Themen begeistern Sie und welches Wissen interessiert Sie?<% } else { %>Zu welchen Expertengebieten werden Sie den Wissensdurstigen Inhalte bieten?<% } %>" name="perstext" id="perstext"><%= user.perstext %></textarea>
 <div class="clear"></div>
 <hr>
 
@@ -69,7 +69,7 @@
 -->
 
 <div data-role="collapsible" data-theme="b" data-content-theme="a">
-	<h6>Interessenbereiche</h6>
+	<h6>Meine Interessen</h6>
 	<table cellspacing="0" cellpadding="0" class="sortabletable" id="interestsanalysetable">
 		<thead>
 			<tr>
